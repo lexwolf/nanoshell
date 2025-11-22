@@ -1,15 +1,21 @@
-# Ignore everything inside data/output and img
+# Ignore everything inside data/output and img/output
 data/output/*
 data/output/oGp/*
 data/output/rho/*
-img/*
+img/output/*
+img/output/oGp/*
+img/output/oGp/pdf/*
+img/output/rho/*
 bin/*
 
 # But track the directories themselves
 !data/output/.gitkeep
 !data/output/oGp/.gitkeep
 !data/output/rho/.gitkeep
-!img/.gitkeep
+!img/output/.gitkeep
+!img/output/oGp/.gitkeep
+!img/output/oGp/pdf/.gitkeep
+!img/output/rho/.gitkeep
 !bin/.gitkeep
 
 # Ignore metadata file

@@ -300,9 +300,9 @@ int main(){
     cemi<<omeB*ns.Ome_p<< " "<<0.<<" "<<0.<<" "<<0.<<endl;
     cemi<<omema<<" "<<0.<<" "<<0.<<" "<<0.<<endl;
     cemi<<endl;
-    cemi<<omemi<<" "<<fro[1]-dG<<" "<<0.<<" "<<(fro[1]-dG)/fro[1]<<endl;
-    cemi<<omeB*ns.Ome_p<< " "<<fro[1]-dG<<" "<<0.<<" "<<(fro[1]-dG)/fro[1]<<endl;
-    cemi<<omema<<" "<<fro[1]-dG<<" "<<0.<<" "<<(fro[1]-dG)/fro[1]<<endl;
+    cemi<<omemi<<" "<<fro[1]+dG<<" "<<0.<<" "<<(fro[1]+dG)/fro[1]<<endl;
+    cemi<<omeB*ns.Ome_p<< " "<<fro[1]+dG<<" "<<0.<<" "<<(fro[1]+dG)/fro[1]<<endl;
+    cemi<<omema<<" "<<fro[1]+dG<<" "<<0.<<" "<<(fro[1]+dG)/fro[1]<<endl;
     cemi<<endl;
     
     for (int jG=0; jG<=GN; jG++){
