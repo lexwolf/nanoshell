@@ -1,5 +1,5 @@
 set term pdf color enhanced size 10cm, 8cm;
-set output "../img/models.pdf"
+set output "../img/output/models.pdf"
 set xlabel "Quantity of gain G/G_{th}"
 set ylabel "Emission Intensity (n.u.)"
 set logscale y

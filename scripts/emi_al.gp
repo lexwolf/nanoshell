@@ -51,7 +51,7 @@ set term pdf color enhanced size 10cm, 8cm;
 sz=1.
 set size sz
 
-set output "../img/emi_al.pdf"
+set output "../img/output/emi_al.pdf"
 
 
 
@@ -101,3 +101,4 @@ plot[omin:omax]  "../data/output/oGp/ome_al.dat"  w l lw 2 lc rgb "black" t "{/S
                  "../data/output/oGp/ome_al.dat" u ($1-$5):($4) axis x1y2  w l lw 2 lc rgb "orange" t "Re({/Symbol k})";
 
 unset multiplot
+unset output
