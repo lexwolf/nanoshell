@@ -33,7 +33,7 @@ ColorValues = "0xffffff 0x000000 0xa0a0a0 0xff0000 0x00c000 0x0080ff 0xc000ff 0x
 omeB = 2.8121972
  
 set term pdf color enhanced size 20cm, 26cm font ",22";
-set output '../img/rangeE0.pdf';
+set output '../img/output/rangeE0.pdf';
 set style line 6 lt 1 lc 0 lw 3;
 set style line 7 lt 1 lc 8 lw 3;
 set style line 8 lc rgb "purple" lw 4;

@@ -40,7 +40,7 @@ unset colorbox
 
 set term pdf color enhanced size 10cm, 8cm;
 # 
-set output "../img/rho.pdf"
+set output "../img/output/[nanoph-2024-0491]_rho.pdf"
 
 set multiplot
 # PLOTTING THE VISIBLE SPECTRUM

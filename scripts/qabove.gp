@@ -11,7 +11,7 @@ myColor(c) = (idx=NaN, sum [i=1:words(ColorNames)] \
 myTColor(c,a) = sprintf("0x%x%s",a, myColor(c)[3:])
 
 set term pdf color enhanced size 20cm, 20cm font ",22";
-set output '../img/qabove.pdf';
+set output '../img/output/qabove.pdf';
 set style line 6 lt 1 lc 0 lw 3;
 set style line 7 lt 1 lc 8 lw 3;
 set style line 8 dt (18,6) lc rgb myTColor("blue",180) lw 4;

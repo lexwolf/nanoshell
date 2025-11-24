@@ -38,7 +38,7 @@ for rho in 0.4 0.5 0.6 0.7 0.8; do
     ./../bin/oap
     cp "../data/output/oGp/ome_p3.dat" "../data/output/rho/$rho.dat"
     echo $omeG > "../data/output/rho/omeB-$rho.dat"
-    bash nano-shell-sketch_no-flare-homo.bash $rho
+    bash nano-shell-sketch.bash $rho
     mv "../img/nanoshell.png" "../data/output/rho/$rho.png"
 done
 
@@ -46,5 +46,8 @@ echo "> Resetting the original input file..."
 echo $a $Dome $ome21 $G $omemi $omema $metal $model $gain_model $solvent $E0 $rap $host> ../data/input/nanosphere_eV.dat
 echo "> ...Done!"
 
+echo "> Producing the image..."
+gnuplot "[nanoph-2024-0491]_rho_emi.gp"
+echo "image ready in img/output/"
 exit
 

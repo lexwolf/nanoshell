@@ -30,12 +30,12 @@ unset colorbox
 # DONE
 
 set term pdf color enhanced size 10cm, 8cm;
-set output "../img/valinumOme.pdf"
+set output "../img/output/valinumOme.pdf"
 
 # set term postscript eps enhanced color
 sz=1.
 set size sz
-# set output "../img/spectrum.eps"
+# set output "../img/output/spectrum.eps"
 set multiplot
 
 # PLOTTING THE VISIBLE SPECTRUM

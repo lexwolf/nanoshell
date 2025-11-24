@@ -1,34 +1,16 @@
-# Ignore everything under data/ and img/
-data/*
-img/*
+# Ignore everything under data/, img/ and bin/
+data/**
+img/**
+bin/**
 
-# But allow input trees
-!data/input/
+# But track all input trees (and their contents)
 !data/input/**
-!img/input/
 !img/input/**
 
-# Ignore all output directories
-data/output/*
-data/output/oGp/*
-data/output/rho/*
-img/output/*
-img/output/oGp/*
-img/output/oGp/pdf/*
-img/output/rho/*
-bin/*
+# Keep .gitkeep placeholders anywhere in these trees
+!data/**/.gitkeep
+!img/**/.gitkeep
+!bin/**/.gitkeep
 
-# Keep the tree structure
-!data/.gitkeep
-!data/output/.gitkeep
-!data/output/oGp/.gitkeep
-!data/output/rho/.gitkeep
-!img/.gitkeep
-!img/output/.gitkeep
-!img/output/oGp/.gitkeep
-!img/output/oGp/pdf/.gitkeep
-!img/output/rho/.gitkeep
-!bin/.gitkeep
-
-# Ignore metadata
+# Ignore metadata file everywhere
 .conversion_metadata
