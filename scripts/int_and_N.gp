@@ -1,6 +1,6 @@
 reset
 set term pdf color enhanced size 20cm, 10cm font ",22";
-set output '../img/int_and_N.pdf';
+set output '../img/output/int_and_N.pdf';
 set style line 6 lt 1 lc 0 lw 3;
 set style line 7 lt 1 lc 8 lw 3;
 set style line 8 lc rgb "purple" lw 4;

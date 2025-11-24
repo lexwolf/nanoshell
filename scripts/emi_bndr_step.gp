@@ -30,10 +30,10 @@ set rmargin screen  0.75
 set tmargin screen  0.95
 set tmargin screen  0.95
 set bmargin screen  0.15
-set output "../img/oGp/iso_alka.pdf"
+set output "../img/output/oGp/iso_alka.pdf"
 set arrow nohead from graph 0, first wG to graph 1, first wG lc rgb "red" dt 4 lw 2 front; 
 plot "../data/output/oGp/iso_al.dat" u ($1):(-$2) w filledcurves fs transparent solid 0.3 lw 2 lc rgb "black" t "{/Symbol a}' < 0 and {/Symbol a}'' < 0", \
      "../data/output/oGp/iso_ka.dat" u ($1):(-$2) w filledcurves fs transparent solid 0.3 lw 2 lc rgb "gold" t "Re({/Symbol k}) > 0";
 unset output
-!convert -density 300 "../img/oGp/iso_alka.pdf" "../img/oGp/iso_alka_step.png"
-!mv "../img/oGp/iso_alka.pdf" "../img/oGp/pdf/iso_alka_step.pdf"
+!convert -density 300 "../img/output/oGp/iso_alka.pdf" "../img/output/oGp/iso_alka_step.png"
+!mv "../img/output/oGp/iso_alka.pdf" "../img/output/oGp/pdf/iso_alka_step.pdf"

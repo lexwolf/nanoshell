@@ -59,7 +59,7 @@ set term pdf color enhanced size 10cm, 8cm;
 sz=1.
 set size sz
 
-set output "../img/emi_wh.pdf"
+set output "../img/output/emi_wh.pdf"
 
 x1=0.12;  y1=0.95;
 x0=0.06;  y0=0.95;
@@ -126,7 +126,7 @@ set term pdf color enhanced size 10cm, 8cm;
 
 sz=1.
 set size sz
-set output "../img/kmi_wh.pdf"
+set output "../img/output/kmi_wh.pdf"
 if (abs(omax - omeG) < abs(omin-omeG)) set key left bottom
 set multiplot
 # PLOTTING THE VISIBLE SPECTRUM

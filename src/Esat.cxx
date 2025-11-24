@@ -58,14 +58,14 @@ int main(int argc, char** argv){
 
   fro=ns.frohlich(omemi, omema, eps_b, eps3, rho);
 
-  double ntau1, ntau2, tildeN=1.;
+  double ntau1, ntau2;
   ntau2 = 2./ns.Dome;
   ntau1 = 5.*ntau2;
 
   
   cout<<endl;
-  cout<<" > nEsat    = "<<sqrt(tildeN/(fabs(alpha*fro[1])*ntau1))<<endl;
-  cout<<" > |nEsat|² = "<<tildeN/(fabs(alpha*fro[1])*ntau1)<<endl;
+  cout<<" > nEsat    = "<<sqrt(1./(fabs(alpha*fro[1])*ntau1))<<endl;
+  cout<<" > |nEsat|² = "<<1./(fabs(alpha*fro[1])*ntau1)<<endl;
   cout<<endl;
   
   return 0;
