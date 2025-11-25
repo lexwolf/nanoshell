@@ -197,12 +197,13 @@ class nanosphere{
 	  double eps_0;
 	  if(strcmp(hst,"silica")==0) eps_0 = 2.1316; // Si02
 	  else if(strcmp(hst,"solgel")==0) eps_0 = 2.1331;//3.8
+	  else if(strcmp(hst,"vacuum")==0) eps_0 = 1.0;//3.8
 	  else if(strcmp(hst,"water")==0) eps_0 = 1.7689;
 	  else if(strcmp(hst,"glass")==0) eps_0 = 1.2247;
 	  else if(strcmp(hst,"PMMA")==0) eps_0 = 2.2201;
 	  else if(strcmp(hst,"ethanol")==0) eps_0 = 1.8496;//1.1662;
 	  else{
-		std::cout<<"option are: silica, solgel, water, glass, PMMA, ethanol"<<std::endl;
+		std::cout<<"option are: silica, solgel, vacuum, water, glass, PMMA, ethanol"<<std::endl;
 		exit(1);
 		}
 	  return eps_0;
@@ -353,9 +354,9 @@ std::complex<double> metal(double ome) {
 
 	std::vector<std::pair<double,double>>  cross_sections(char* mdl , char* mtl ,char* hst ,double omemi, double omema, int omeN=10000, char* sol=0, double rho=0){
 			int omi, ns=0;
-			double pG = fabs(G), omeeV, dome  = (omema-omemi)/omeN, lam_nm, lam;
+			double pG = fabs(G), omeeV, dome  = (omema-omemi)/omeN, lam_nm, lam, eps3;
 			double Csca, Cext, Cabs, eps_s, eps_b;
-			std::complex<double> alph, eps1, eps2, k, n2;
+			std::complex<double> alph, eps1, eps2, k, enne;
 			std::ofstream crsc;
 
 			crsc.open("../data/output/sts/cross_sections.dat");
@@ -374,31 +375,32 @@ std::complex<double> metal(double ome) {
 			if (sol != NULL) {
 			eps_s = set_host(sol);
 			ns = 1;
-			} else  eps_s=0;
+			} else {
+ 			eps_s=0;
+			ns = 0;
+			} 
 			eps_b = set_host(hst);
-			double rE;
-			lam_nm  = h * cc * 1.e9 / (omeeV * eV2j); // lam in nm
-			if (ns == 0){
-				eps1 = metal(omeeV);
-				eps2 = active(omeeV, eps_b);
-				rE   = r1;
-			}
-			if (ns == 1){
-				eps1 = active(omeeV, eps_b);
-				eps2 = metal(omeeV);
-				eps3 = eps_s;
-				rE   = r2;
-			}
-			lam = lam_nm / rE; // lam normalized
-			n2 = sqrt(eps2);
-			k = 2. * M_PI * n2 / lam;
+
 
 	// 	    std::complex<double> eps1, eps2, m, x, k, n1, n2;
 			for (omi = 0; omi <= omeN; omi++){
-				omeeV = omemi + omi * dome;
-				lam_nm  = h * cc * 1.e9 / (omeeV * eV2j); // lam in nm
-				
-				alph = polarizability(eps1, eps2);
+					omeeV = omemi + omi * dome;
+					lam_nm  = h * cc * 1.e9 / (omeeV * eV2j); // lam in nm
+				if (ns == 0){
+					eps1 = metal(omeeV);
+					eps2 = active(omeeV, eps_b);
+					enne = sqrt(eps2);
+				}
+				if (ns == 1){
+					eps1 = active(omeeV, eps_b);
+					eps2 = metal(omeeV);
+					eps3 = eps_s;
+					enne = sqrt(eps1);
+				}
+				lam = lam_nm / r1; // lam normalized
+
+				k = 2. * M_PI * enne / lam;
+				alph = polarizability(eps1, eps2, eps3, rho);
 
 				double kreal = k.real();
 				double kimag = k.imag();
