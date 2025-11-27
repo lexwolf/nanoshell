@@ -3,11 +3,17 @@ data/**
 img/**
 bin/**
 
-# But track all input trees (and their contents)
+# Track all input trees (dirs + contents)
+!data/input/
 !data/input/**
+!img/input/
 !img/input/**
 
-# Keep .gitkeep placeholders anywhere in these trees
+# Allow output top-level dirs so we can keep skeletons with .gitkeep
+!data/output/
+!img/output/
+
+# Track .gitkeep placeholders anywhere in these trees
 !data/**/.gitkeep
 !img/**/.gitkeep
 !bin/**/.gitkeep

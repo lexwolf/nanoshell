@@ -1,2 +1,2 @@
-20 .15   2.2    0 2.    4.5 silver spline lorentz vacuum 1.e-30 0.6 vacuum
+10 .15   2.8122 .2 2.0    4.5 silver drude lorentz water 1.e-30 0.6 silica
 # a Dome ome21  G omemi omema metal model gain_model solvent E0 rap host
