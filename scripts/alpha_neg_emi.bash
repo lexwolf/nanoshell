@@ -119,6 +119,12 @@ none=1.e-30
 read  a  Dome  ome21  G  omemi  omema  metal  model  gain_model  solvent E0 rap host < ../data/input/nanosphere_eV.dat
 rap_tmp=$rap
 
+if [ $model == "spline" ]; then
+    echo "Error: Current system is buggy with interpolated metal permittivity."
+    echo "Change model to drudein data/input/nanosphere_eV.dat!"
+    exit 1
+fi
+
 if [ -n "$range_override" ]; then
     IFS=: read -r omi oma <<< "$range_override"
     if [ -z "$omi" ] || [ -z "$oma" ]; then

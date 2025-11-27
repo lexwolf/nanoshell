@@ -30,56 +30,6 @@
 g++ -Wall -I/usr/include/ -L/usr/local/lib ../src/nanoshell_omeG_p3.cxx -o ../bin/oGp -lgsl -lgslcblas -lm -larmadillo
 */
 
-double interpolate(double x1, double x2, double f1, double f2, double x) {
-    // Perform linear interpolation
-    return f1 + (f2 - f1) * (x - x1) / (x2 - x1);
-}
-
-std::pair<double, double> find_zeros(const std::vector<double>& x, const std::vector<double>& fx, double epsilon = 1e-6, int max_iterations = 100) {
-    double zero_1 = 0.0;
-    double zero_2 = 0.0;
-    double c, fc;
-    
-    for (int i = 0; i < int(x.size()); i++) {
-        double x1 = x[i];
-        double x2 = x[i + 1];
-        double f1 = fx[i];
-        double f2 = fx[i + 1];
-        
-        
-        if (f1 * f2 < 0) {
-            double a = x1;
-            double b = x2;
-            int iterations = 0;
-            while (std::abs(b - a) > epsilon && iterations < max_iterations) {
-                iterations++;
-                c = (a + b) / 2.0;
-                fc = interpolate(x1, x2, f1, f2, c);
-
-                if (f1 * fc < 0) {
-                    b = c;
-                }
-                else {
-                    a = c;
-                }
-            }
-
-            if (zero_1 == 0.0) {
-                zero_1 = c;
-            }
-            else {
-                zero_2 = c;
-                break;
-            }
-        }
-        if (i==int(x.size()) - 1 && zero_2 == 0.0) {
-            zero_2 = x[i];
-            break;
-            }
-        
-    }
-    return std::make_pair(zero_1, zero_2);
-}
 
 std::vector<double> extract_ome(std::vector<std::pair<double,std::complex<double>>> vectorOfPairs){
     std::vector<double> extractFirst;
