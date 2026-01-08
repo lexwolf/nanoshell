@@ -2,49 +2,31 @@ CC = g++
 CFLAGS = -Wall -I/usr/include/ -L/usr/local/lib
 LIBS = -lgsl -lgslcblas -lm -larmadillo
 
-all: bin/anl bin/nss bin/oGp bin/eV2nm bin/sgl bin/eV2ex bin/nsISS bin/sGp bin/sap bin/oap bin/rho2ome_sp bin/nsh bin/vrb bin/Esat bin/Gap bin/lyns bin/nom bin/sfr bin/fro
+all: bin/crs bin/delta2tau bin/distribute bin/eV2ex bin/eV2nm bin/eV2rads bin/Esat bin/fro bin/Gap bin/lyns bin/nom bin/nsISS bin/nsh bin/nsn bin/nsx bin/nss bin/oap bin/oGp bin/rho2ome_sp bin/sap bin/sfr bin/sgl bin/sGp bin/two_zero bin/vrb
 
-bin/anl: src/QS_OB_anl_time.cxx
-	$(CC) $(CFLAGS) src/QS_OB_anl_time.cxx -o bin/anl $(LIBS)
+bin/crs: src/cross_section.cxx
+	$(CC) $(CFLAGS) src/cross_section.cxx -o bin/crs $(LIBS)
 
-bin/nss: src/nanoshell_ss_spe.cxx
-	$(CC) $(CFLAGS) src/nanoshell_ss_spe.cxx -o bin/nss $(LIBS)
+bin/delta2tau: src/delta2tau.cxx
+	$(CC) src/delta2tau.cxx -o bin/delta2tau
 
-bin/oGp: src/nanoshell_omeG_p3.cxx
-	$(CC) $(CFLAGS) src/nanoshell_omeG_p3.cxx -o bin/oGp $(LIBS)
-
-bin/eV2nm: src/eV2nm.cxx
-	$(CC) $(CFLAGS) src/eV2nm.cxx -o bin/eV2nm $(LIBS)
-
-bin/sgl: src/single.cxx
-	$(CC) $(CFLAGS) src/single.cxx -o bin/sgl $(LIBS)
+bin/distribute: src/distribute.cxx
+	$(CC) src/distribute.cxx -o bin/distribute
 
 bin/eV2ex: src/eV2ex.cxx
 	$(CC) $(CFLAGS) src/eV2ex.cxx -o bin/eV2ex $(LIBS)
 
-bin/nsISS: src/nanoshell_ISS.cxx
-	$(CC) $(CFLAGS) src/nanoshell_ISS.cxx -o bin/nsISS $(LIBS)
+bin/eV2nm: src/eV2nm.cxx
+	$(CC) $(CFLAGS) src/eV2nm.cxx -o bin/eV2nm $(LIBS)
 
-bin/sGp: src/single_omeG_p3.cxx
-	$(CC) $(CFLAGS) src/single_omeG_p3.cxx -o bin/sGp $(LIBS)
-
-bin/sap: src/single_ome_al_p3.cxx
-	$(CC) $(CFLAGS) src/single_ome_al_p3.cxx -o bin/sap $(LIBS)
-
-bin/oap: src/nanoshell_ome_al_p3.cxx
-	$(CC) $(CFLAGS) src/nanoshell_ome_al_p3.cxx -o bin/oap $(LIBS)
-
-bin/rho2ome_sp: src/rho2ome_sp.cxx
-	$(CC) $(CFLAGS) src/rho2ome_sp.cxx -o bin/rho2ome_sp $(LIBS)
-
-bin/nsh: src/nanoshell_num.cxx
-	$(CC) $(CFLAGS) src/nanoshell_num.cxx -o bin/nsh $(LIBS)
-
-bin/vrb: src/variables.cxx
-	$(CC) $(CFLAGS) src/variables.cxx -o bin/vrb $(LIBS)
+bin/eV2rads: src/eV2rads.cxx
+	$(CC) src/eV2rads.cxx -o bin/eV2rads
 
 bin/Esat: src/Esat.cxx
 	$(CC) $(CFLAGS) src/Esat.cxx -o bin/Esat $(LIBS)
+
+bin/fro: src/frohlich.cxx
+	$(CC) $(CFLAGS) src/frohlich.cxx -o bin/fro $(LIBS)
 
 bin/Gap: src/nanoshell_G_p3.cxx
 	$(CC) $(CFLAGS) src/nanoshell_G_p3.cxx -o bin/Gap $(LIBS)
@@ -55,11 +37,47 @@ bin/lyns: src/lycurguseV_ns.cxx
 bin/nom: src/numOme_gsl.cxx
 	$(CC) $(CFLAGS) src/numOme_gsl.cxx -o bin/nom $(LIBS)
 
+bin/nsISS: src/nanoshell_ISS.cxx
+	$(CC) $(CFLAGS) src/nanoshell_ISS.cxx -o bin/nsISS $(LIBS)
+
+bin/nsh: src/nanoshell.cxx
+	$(CC) $(CFLAGS) src/nanoshell.cxx -o bin/nsh $(LIBS)
+
+bin/nsn: src/nanoshell_num.cxx
+	$(CC) $(CFLAGS) src/nanoshell_num.cxx -o bin/nsn $(LIBS)
+
+bin/nsx: src/nanoshell_num_anl.cxx
+	$(CC) $(CFLAGS) src/nanoshell_num_anl.cxx -o bin/nsx $(LIBS)
+
+bin/nss: src/nanoshell_ss_spe.cxx
+	$(CC) $(CFLAGS) src/nanoshell_ss_spe.cxx -o bin/nss $(LIBS)
+
+bin/oap: src/nanoshell_ome_al_p3.cxx
+	$(CC) $(CFLAGS) src/nanoshell_ome_al_p3.cxx -o bin/oap $(LIBS)
+
+bin/oGp: src/nanoshell_omeG_p3.cxx
+	$(CC) $(CFLAGS) src/nanoshell_omeG_p3.cxx -o bin/oGp $(LIBS)
+
+bin/rho2ome_sp: src/rho2ome_sp.cxx
+	$(CC) $(CFLAGS) src/rho2ome_sp.cxx -o bin/rho2ome_sp $(LIBS)
+
+bin/sap: src/single_ome_al_p3.cxx
+	$(CC) $(CFLAGS) src/single_ome_al_p3.cxx -o bin/sap $(LIBS)
+
 bin/sfr: src/sfrohlich.cxx
 	$(CC) $(CFLAGS) src/sfrohlich.cxx -o bin/sfr $(LIBS)
 
-bin/fro: src/frohlich.cxx
-	$(CC) $(CFLAGS) src/frohlich.cxx -o bin/fro $(LIBS)
+bin/sgl: src/single.cxx
+	$(CC) $(CFLAGS) src/single.cxx -o bin/sgl $(LIBS)
+
+bin/sGp: src/single_omeG_p3.cxx
+	$(CC) $(CFLAGS) src/single_omeG_p3.cxx -o bin/sGp $(LIBS)
+
+bin/two_zero: src/two_zero.cxx
+	$(CC) src/two_zero.cxx -o bin/two_zero
+
+bin/vrb: src/variables.cxx
+	$(CC) $(CFLAGS) src/variables.cxx -o bin/vrb $(LIBS)
 
 clean:
-	rm -f bin/anl bin/nss bin/oGp bin/eV2nm bin/sgl bin/eV2ex bin/nsISS bin/sGp bin/sap bin/oap bin/rho2ome_sp bin/nsh bin/vrb bin/Esat bin/Gap bin/lyns bin/nom bin/sfr bin/fro
+	rm -f bin/crs bin/delta2tau bin/distribute bin/eV2ex bin/eV2nm bin/eV2rads bin/Esat bin/fro bin/Gap bin/lyns bin/nom bin/nsISS bin/nsh bin/nsn bin/nsx bin/nss bin/oap bin/oGp bin/rho2ome_sp bin/sap bin/sfr bin/sgl bin/sGp bin/two_zero bin/vrb
