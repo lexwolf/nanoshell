@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug active file (single-file)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${fileDirname}/${fileBasenameNoExtension}.run",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "build active (nanoshell flags)",
+      "MIMode": "gdb",
+      "externalConsole": false
+    },
+    {
+      "name": "Debug oGp (Makefile)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/bin/oGp",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "build (make)",
+      "MIMode": "gdb",
+      "externalConsole": false
+    }
+  ]
+}
