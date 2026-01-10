@@ -484,7 +484,7 @@ std::complex<double> metal(double ome) {
 	    egva<<"# G = "<<pG<<std::endl;
 	    egva<<"# a "<<mdl<<" model was used for "<<mtl<<std::endl;
 	    egva<<"# ------------- "<<std::endl;
-	    egva<<"# ome (eV)\treal(k1)\timag(k1)\treal(k2)\timag(k2)\treal(k3)\timag(k3)"<<std::endl;
+	    egva<<"# ome (eV)\treal(k1)\timag(k1)\treal(k2)\timag(k2)\treal(k3)\timag(k3)\treal(k_em)\timag(k_em)"<<std::endl;
 	    egva<<"#"<<std::endl;
 
 	    /** STEADY STATE **/
@@ -538,6 +538,12 @@ std::complex<double> metal(double ome) {
 		A    = coefficients(OmeH, OmeP, GG, GamP, p0, p1, p2);
 		detA = determinant(A);
 		kap  = eigenvalues(A);
+		std::complex<double> kap_em(0.0, 0.0);
+		for (int i=0; i<3; i++){
+		    if (real(kap[i]) >= 0){
+			kap_em = kap[i];
+		    }
+		}
 		egva<<"  "<<std::setw(8)<<std::setiosflags (std::ios::left)<<omeeV<<              // 1 ome
 		    "\t"<<std::setw(11)<<std::setiosflags (std::ios::left)<<Ome_p*real(kap[0])<<  // 2 Re(kap1)
 		    "\t"<<std::setw(11)<<std::setiosflags (std::ios::left)<<Ome_p*imag(kap[0])<<  // 3 Im(kap1)
@@ -547,6 +553,8 @@ std::complex<double> metal(double ome) {
 		    "\t"<<std::setw(11)<<std::setiosflags (std::ios::left)<<Ome_p*imag(kap[2])<<  // 7 Im(kap3)
 		    "\t"<<std::setw(11)<<std::setiosflags (std::ios::left)<<real(detA)<<	  // 8 real(detA)
 		    "\t"<<std::setw(11)<<std::setiosflags (std::ios::left)<<imag(detA)<<	  // 9 imag(detA)
+		    "\t"<<std::setw(11)<<std::setiosflags (std::ios::left)<<Ome_p*real(kap_em)<<  // 10 Re(kap_em)
+		    "\t"<<std::setw(11)<<std::setiosflags (std::ios::left)<<Ome_p*imag(kap_em)<<  // 11 Im(kap_em)
 		std::endl;
 		}
 	    return valph;

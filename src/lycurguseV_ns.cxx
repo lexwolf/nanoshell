@@ -81,7 +81,7 @@ int main(){
   cout<<endl;
   cout<<"    L Y C U R G U S"<<endl<<endl;
   cout<<"    .............    * Polarizability of a "<<mtl<<" [x] shell"<<endl;
-  cout<<"    ....xxxxx....    * incapsulating a"<<hst<<" [o] nanosphere "<<endl;
+  cout<<"    ....xxxxx....    * incapsulating a "<<hst<<" [o] nanosphere "<<endl;
   cout<<"    ...xxoooxx...    * dissolved in "<<sol<<" [.]"<<endl;
   cout<<"    ..xxoooooxx..    * "<<mdl<<" model utilized for metal"<<endl;
   cout<<"    ..xxoooooxx..    * permittivity of "<<hst<<" eps = "<<eps1_0<<endl;
