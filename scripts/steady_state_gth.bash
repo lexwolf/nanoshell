@@ -115,6 +115,8 @@ if [ -n "$range_override" ]; then
     omema="$oma"
 fi
 
+printf "set xrange [%s:%s]\n" "$omemi" "$omema" > ../data/output/emission_range.gp
+
 cp "$file_path" "${file_path}.bak"
 
 write_input() {
