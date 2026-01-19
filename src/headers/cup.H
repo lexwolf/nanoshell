@@ -307,10 +307,10 @@ std::complex<double> metal(double ome) {
 	return reso;
 	}
 
-    std::complex<double> set_GG(double G, double tau2){
-		std::complex<double> GG;
-		GG   = -img*fabs(G)/tau2;
-		return GG;
+    std::complex<double> set_GamG(double G, double tau2){
+		std::complex<double> GamG;
+		GamG   = -img*fabs(G)/tau2;
+		return GamG;
 		}
     
 	double *normalized_variables (){
@@ -337,17 +337,17 @@ std::complex<double> metal(double ome) {
 		}
 		
 	 std::complex<double> *set_ome_dep_vrbls(double ome, double ome0, double tau2, double gamd){
-		std::complex<double> OmeH, GamP, OmeP;
+		std::complex<double> OmeG, GamM, OmeM;
 		std::complex<double> *odv;
 		odv = new std::complex<double> [3];
 		
-		OmeH = img*(ome-ome0)-1./tau2;
-		GamP = 1./(2.*(gamd-img*ome));
-		OmeP = (ome*(ome+2.*img*gamd))*GamP; 
+		OmeG = img*(ome-ome0)-1./tau2;
+		GamM = 1./(2.*(gamd-img*ome));
+		OmeM = (ome*(ome+2.*img*gamd))*GamM; 
 		
-		odv[0] = OmeH;
-		odv[1] = OmeP;
-		odv[2] = GamP;
+		odv[0] = OmeG;
+		odv[1] = OmeM;
+		odv[2] = GamM;
 		
 		return odv;
 		}
@@ -438,7 +438,7 @@ std::complex<double> metal(double ome) {
 	    std::vector<std::pair<double,std::complex<double>>> valph;
 	    
 	    double tau2, gamd, ome0, eps3, pG = fabs(G), *nv;
-	    std::complex<double> GG, OmeH, GamP, OmeP, **A, detA, *p0, *p1, *p2, *kap, *odv;
+	    std::complex<double> GamG, OmeG, GamM, OmeM, **A, detA, *p0, *p1, *p2, *kap, *odv;
 	    
 	    A = new std::complex<double>*[3];
 	    for(int i = 0; i <= 2; i++)
@@ -494,7 +494,7 @@ std::complex<double> metal(double ome) {
 		tau2 = nv[1];
 		gamd = nv[2];
 		ome0 = nv[3];
-		GG = set_GG(G, tau2);
+		GamG = set_GamG(G, tau2);
 
 	    for (omi=0; omi<=omeN; omi++){
 		omeeV = omemi + omi*dome;
@@ -531,11 +531,11 @@ std::complex<double> metal(double ome) {
 		
 		odv  = set_ome_dep_vrbls(ome, ome0, tau2, gamd);
 
-		OmeH = odv[0];
-		OmeP = odv[1];
-		GamP = odv[2];
+		OmeG = odv[0];
+		OmeM = odv[1];
+		GamM = odv[2];
 
-		A    = coefficients(OmeH, OmeP, GG, GamP, p0, p1, p2);
+		A    = coefficients(OmeG, OmeM, GamG, GamM, p0, p1, p2);
 		detA = determinant(A);
 		kap  = eigenvalues(A);
 		std::complex<double> kap_em(0.0, 0.0);
@@ -623,7 +623,7 @@ std::complex<double> metal(double ome) {
 		int steste=0;
 		std::complex<double> eps1e, eps2e, eps1, eps2, alph;
 		double omep, t, tau1, tau2, gamd, ome0, pG = fabs(G), *nv, tildeN;
-		std::complex<double> GG, OmeH, chiH, GamP, OmeP, chiP, **A, *B, *p0, *p1, *p2, *p3, *p, dip, po, *odv;
+		std::complex<double> GamG, OmeG, chiH, GamM, OmeM, chiP, **A, *B, *p0, *p1, *p2, *p3, *p, dip, po, *odv;
 
 		double dpTOT=0, t0;
 		double omeR;
@@ -680,7 +680,7 @@ std::complex<double> metal(double ome) {
 		tau2 = nv[1];
 		gamd = nv[2];
 		ome0 = nv[3];
-		GG = set_GG(G, tau2);
+		GamG = set_GamG(G, tau2);
 
 		
 		p0 = pcfc0(ceps_inf, eps_b, eps_s, rho);
@@ -694,12 +694,12 @@ std::complex<double> metal(double ome) {
 		
 		odv  = set_ome_dep_vrbls(ome, ome0, tau2, gamd);
 		
-		OmeH = odv[0];
-		OmeP = odv[1];
-		GamP = odv[2];
+		OmeG = odv[0];
+		OmeM = odv[1];
+		GamM = odv[2];
 
-		chiH = -GG/OmeH;
-		chiP = -GamP/OmeP;
+		chiH = -GamG/OmeG;
+		chiP = -GamM/OmeM;
 
 		eps1e = eps_inf + chiP;
 		eps2e = eps_b   + chiH;
@@ -720,7 +720,7 @@ std::complex<double> metal(double ome) {
 		if(Nt > 50000) Nprint=50000;    
 // 		if(Nt > 500000) Nprint=500000;    
 		int iprint=Nt/Nprint;
-		GG = set_GG(G, tau2);
+		GamG = set_GamG(G, tau2);
 		// let's begin without pump
 		tildeN = 0;
 	    
@@ -731,15 +731,15 @@ std::complex<double> metal(double ome) {
 		    i++;
 		    if(t*1.e+12/omep >= tpump && pip ==0) {
 				tildeN =1.;
-// 				GG = set_GG(G, tau2);
+// 				GamG = set_GamG(G, tau2);
 				pip = 1.;
 				}
 		    if (ns == 1) {
 				po  = numerical_output(E0, q, p0);
 				N   = Runge_Kutta_mono_4 (N, -1./tau1, tildeN/tau1+imag(q[0]*conj(po)), dt);
 				} else N = 1;
-		    A   = coefficients(OmeH, OmeP, GG*N, GamP, p0, p1, p2); 
-		    B   = inhomogeneous(GG*N, GamP, E0, p0, p1, p2);
+		    A   = coefficients(OmeG, OmeM, GamG*N, GamM, p0, p1, p2); 
+		    B   = inhomogeneous(GamG*N, GamM, E0, p0, p1, p2);
 		    q   = Runge_Kutta_4 (q, A, B, dt);
 		    
 		    for(int ix = 0; ix <= 2; ix++) delete [] A[ix];
@@ -813,7 +813,7 @@ std::complex<double> metal(double ome) {
 		int steste=0, amp=0;
 		std::complex<double> eps1e, eps2e, eps1, eps2, alph;
 		double omep, t, tau1, tau2, gamd, ome0, pG = fabs(G), *nv, N, tildeN;
-		std::complex<double> GG, OmeH, chiH, GamP, OmeP, chiP, **A, *B, *p0, *p1, *p2, *p3, *p, dip, *odv;
+		std::complex<double> GamG, OmeG, chiH, GamM, OmeM, chiP, **A, *B, *p0, *p1, *p2, *p3, *p, dip, *odv;
 				
 		A = new std::complex<double>*[3];
 		for(int i = 0; i <= 2; i++)
@@ -865,7 +865,7 @@ std::complex<double> metal(double ome) {
 		tau2 = nv[1];
 		gamd = nv[2];
 		ome0 = nv[3];
-		GG = set_GG(G, tau2);
+		GamG = set_GamG(G, tau2);
 
 		p0 = pcfc0(ceps_inf, eps_b, eps_s, rho);
 		p1 = pcfc1(ceps_inf, eps_b, eps_s, rho);
@@ -878,19 +878,19 @@ std::complex<double> metal(double ome) {
 			
 		odv  = set_ome_dep_vrbls(ome, ome0, tau2, gamd);
 		
-		OmeH = odv[0];
-		OmeP = odv[1];
-		GamP = odv[2];
+		OmeG = odv[0];
+		OmeM = odv[1];
+		GamM = odv[2];
 
-		chiH = -GG/OmeH;
-		chiP = -GamP/OmeP;
+		chiH = -GamG/OmeG;
+		chiP = -GamM/OmeM;
 
 		eps1e = eps_inf + chiP;
 		eps2e = eps_b   + chiH;
 
 		// coefficients of the differential system of equations
-// 		A  = coefficients(OmeH, OmeP, GG, GamP, p0, p1, p2);  
-// 		B  = inhomogeneous(GG, GamP, E0, p0, p1, p2);
+// 		A  = coefficients(OmeG, OmeM, GamG, GamM, p0, p1, p2);  
+// 		B  = inhomogeneous(GamG, GamM, E0, p0, p1, p2);
 
 		// ANALYTICAL SOLUTIONS
 		T=T*omep*1.e-12; // in ome_p
@@ -917,9 +917,9 @@ std::complex<double> metal(double ome) {
 		// let's begin without pump
 		tildeN = 0;
 		N      = 0;
-		GG  = set_GG(G*N, tau2);; 
-		A   = coefficients(OmeH, OmeP, GG, GamP, p0, p1, p2); 
-		B   = inhomogeneous(GG, GamP, E0, p0, p1, p2);
+		GamG  = set_GamG(G*N, tau2);; 
+		A   = coefficients(OmeG, OmeM, GamG, GamM, p0, p1, p2); 
+		B   = inhomogeneous(GamG, GamM, E0, p0, p1, p2);
 		qss = steady_state_solution(A, B);
 		kap = eigenvalues(A);
 		EVE = eigenvectors(A);
@@ -934,11 +934,11 @@ std::complex<double> metal(double ome) {
 			tildeN = 1.;
 			t0  = t;
 			pip = 1.;
-			GG  = set_GG(G*tildeN, tau2);
-			A   = coefficients(OmeH, OmeP, GG, GamP, p0, p1, p2);
+			GamG  = set_GamG(G*tildeN, tau2);
+			A   = coefficients(OmeG, OmeM, GamG, GamM, p0, p1, p2);
 			kap = eigenvalues(A);
 			EVE = eigenvectors(A);
-			B   = inhomogeneous(GG, GamP, E0, p0, p1, p2);
+			B   = inhomogeneous(GamG, GamM, E0, p0, p1, p2);
 			qss = steady_state_solution(A, B);
 			C   = constants(A, B, q);
 			if (steste == 1){
