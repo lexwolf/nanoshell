@@ -1,2 +1,3 @@
-10 .15 2.8122 .1483977 2.0 4.5 silver drude lorentz water 1.e-30 0.6 silica
-# a Dome ome21 G omemi omema metal model gain_model solvent E0 rap host
+10 .15 2.8122 0 2.6 3.0 silver drude lorentz water 1.e-30 0.6 silica
+# a Dome ome0 G omemi omema mtl mdl atv sol E0 rap host
+
