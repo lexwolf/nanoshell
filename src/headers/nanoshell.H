@@ -61,31 +61,31 @@ inline std::complex<double>* pcfc3(std::complex <double> eps_inf, double eps_b, 
       return p;
     }
     
-std::complex<double>** coefficients(std::complex<double> OmeH, std::complex<double> OmeP, std::complex<double> GG, std::complex<double> GamP, std::complex<double>* p0, std::complex<double>* p1 = nullptr, std::complex<double>* p2 = nullptr, int J=0){
+std::complex<double>** coefficients(std::complex<double> OmeG, std::complex<double> OmeM, std::complex<double> GamGxN, std::complex<double> GamM, std::complex<double>* p0, std::complex<double>* p1 = nullptr, std::complex<double>* p2 = nullptr, int J=0){
       std::complex<double>** A = 0;
       A = new std::complex<double>*[3];
       for (int j = 0; j <= 2; j++)  A[j] = new std::complex<double>[3];
 
-      A[0][0] =   GG*p0[0] + OmeH;
-      A[0][1] =   GG*p0[1];
-      A[0][2] =   GG*p0[2];
+      A[0][0] =   GamGxN*p0[0] + OmeG;
+      A[0][1] =   GamGxN*p0[1];
+      A[0][2] =   GamGxN*p0[2];
       
-      A[1][0] =   GamP*p1[0];
-      A[1][1] =   GamP*p1[1] + OmeP;
-      A[1][2] =   GamP*p1[2];
+      A[1][0] =   GamM*p1[0];
+      A[1][1] =   GamM*p1[1] + OmeM;
+      A[1][2] =   GamM*p1[2];
 
-      A[2][0] =   GamP*p2[0];
-      A[2][1] =   GamP*p2[1];
-      A[2][2] =   GamP*p2[2] + OmeP;
+      A[2][0] =   GamM*p2[0];
+      A[2][1] =   GamM*p2[1];
+      A[2][2] =   GamM*p2[2] + OmeM;
       return A;
     }
 
-std::complex<double>* inhomogeneous(std::complex<double> GG, std::complex<double> GamP, double E0, std::complex<double>* p0, std::complex<double>* p1 = nullptr, std::complex<double>* p2 = nullptr){
+std::complex<double>* inhomogeneous(std::complex<double> GamGxN, std::complex<double> GamM, double E0, std::complex<double>* p0, std::complex<double>* p1 = nullptr, std::complex<double>* p2 = nullptr){
       std::complex<double>* B = 0;
       B = new std::complex<double>[3];
-      B[0] = GG*p0[3]*E0;
-      B[1] = GamP*p1[3]*E0;
-      B[2] = GamP*p2[3]*E0;
+      B[0] = GamGxN*p0[3]*E0;
+      B[1] = GamM*p1[3]*E0;
+      B[2] = GamM*p2[3]*E0;
       return B;
     }
     

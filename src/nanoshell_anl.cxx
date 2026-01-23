@@ -27,7 +27,7 @@
 #include "headers/ns_ISS.H"
 
 /*
-g++ -Wall -I/usr/include/ -L/usr/local/lib ../src/nanoshell_num.cxx -o ../bin/nsn -lgsl -lgslcblas -lm -larmadillo
+g++ -Wall -I/usr/include/ -L/usr/local/lib ../src/nanoshell_anl.cxx -o ../bin/nsa -lgsl -lgslcblas -lm -larmadillo
 */
 
 using namespace std;
@@ -82,19 +82,19 @@ int main(int argc, char** argv){
     ns.set_active(active);
     
     fro=ns.frohlich(omemi, omema, eps_b, eps3, rho);
-
-    frlc<<fro[0]<<" "<<fro[1]<<endl;    
+    cout.precision(10);
+    cout.setf(ios::fixed);
+    frlc<<fro[0]<<" "<<fro[1]<<endl;
+    
 
     ns.ome_0=fro[0];
     
     ns.steady_state(mdl, mtl, hst, omemi, omema, 1000, sol, rho);
-    alph_num=ns.numerical(mdl, mtl, hst, E0, omeeV, T, tpump, sol, rho)/E0;
-    
+    alph_anl=ns.analytical(mdl, mtl, hst, E0, omeeV, T, tpump, sol, rho)/E0;
     eps1 = ns.active(omeeV,eps_b);
     eps2 = ns.metal(omeeV);
     alph = polarizability(eps1,eps2,eps3,rho);
-    alfa<<real(alph)<<" "<<imag(alph)<<" "<<real(alph_num)<<" "<<imag(alph_num)<<" "<<real(eps1)<<" "<<imag(eps1)<<endl<<endl;
-
+    alfa<<real(alph)<<" "<<imag(alph)<<" "<<real(alph_anl)<<" "<<imag(alph_anl)<<" "<<real(eps1)<<" "<<imag(eps1)<<endl;    
     return 0;
     }
     

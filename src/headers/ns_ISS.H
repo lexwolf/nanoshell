@@ -192,7 +192,7 @@ std::vector<std::pair<double,std::complex<double>>> gimme_emi_kap(nanosphere ns,
         tau2 = nv[1];
         gamd = nv[2];
         ome0 = nv[3];
-        GG   = ns.set_GG(ns.G, tau2);
+        GG   = ns.set_GamG(ns.G, tau2);
 
         p0 = pcfc0(ns.eps_inf, eps_b, eps_s, rho);
         p1 = pcfc1(ns.eps_inf, eps_b, eps_s, rho);
@@ -260,7 +260,7 @@ double find_Omega(nanosphere ns, double omeeV, char* hst, char* sol=0, double rh
     tau2 = nv[1];
     gamd = nv[2];
     ome0 = nv[3];
-    GG   = ns.set_GG(ns.G, tau2);
+    GG   = ns.set_GamG(ns.G, tau2);
 
     ome  = omeeV/ns.Ome_p;
 
@@ -347,7 +347,7 @@ double find_Omega1(nanosphere ns, double omeeV, char* hst, char* sol, double rho
     gamd = nv[2];
     ome0 = nv[3];
 
-    GG   = ns.set_GG(ns.G, tau2);
+    GG   = ns.set_GamG(ns.G, tau2);
     
     ome  = omeeV/ns.Ome_p;
 
@@ -423,7 +423,7 @@ double *ISS_results(nanosphere ns, double Ome, double ome1, double ome2, double 
     tau2 = nv[1];
     gamd = nv[2];
     ome0 = nv[3];
-    GG = ns.set_GG(ns.G, tau2);
+    GG = ns.set_GamG(ns.G, tau2);
     
     ome  = omeeV/ns.Ome_p;
 

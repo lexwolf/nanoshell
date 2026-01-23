@@ -21,6 +21,8 @@
 #include <vector>
 #include <cmath>
 
+double interpolate(double x1, double x2, double f1, double f2, double x);
+
 std::pair<double, double> find_zeros(const std::vector<double>& x, const std::vector<double>& fx, double epsilon = 1e-6, int max_iterations = 100) {
     double zero_1 = 0.0;
     double zero_2 = 0.0;
@@ -35,10 +37,11 @@ std::pair<double, double> find_zeros(const std::vector<double>& x, const std::ve
         if (f1 * f2 < 0) {
             double a = x1;
             double b = x2;
+            double c = a;
 
             while (std::abs(b - a) > epsilon && iterations < max_iterations) {
                 iterations++;
-                double c = (a + b) / 2.0;
+                c = (a + b) / 2.0;
                 double fc = interpolate(x1, x2, f1, f2, c);
 
                 if (f1 * fc < 0) {

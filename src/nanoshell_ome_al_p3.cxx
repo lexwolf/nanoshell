@@ -25,65 +25,27 @@
 #include "headers/nanoshell.H"
 #include "headers/cup.H"
 #include "headers/ns_ISS.H"
+#include "headers/Zx_tools.H"
 
 /*
 g++ -Wall -I/usr/include/ -L/usr/local/lib ../src/nanoshell_ome_al_p3.cxx -o ../bin/oap -lgsl -lgslcblas -lm -larmadillo
 */
 
-std::vector<double> extract_ome(std::vector<std::pair<double,std::complex<double>>> vectorOfPairs){
-    std::vector<double> extractFirst;
-        int i =0;
-        for (const auto& pair : vectorOfPairs) {
-            i++;
-            extractFirst.push_back(pair.first);
-            if (i==int(vectorOfPairs.size())-1) break;
-        }
-        return extractFirst;
-        }
-    
-std::vector<double> extract_ralph(std::vector<std::pair<double,std::complex<double>>> vectorOfPairs){
-    std::vector<double> extractSecnd;
-    int i =0;
-    for (const auto& pair : vectorOfPairs) {
-        i++;
-        extractSecnd.push_back(real(pair.second));
-        if (i==int(vectorOfPairs.size())-1) break;
-        }
-    return extractSecnd;
-    }
+std::vector<double> extract_ome(const ZxSeries& vectorOfPairs) {
+    return extract_x(vectorOfPairs);
+}
 
+std::vector<double> extract_ralph(const ZxSeries& vectorOfPairs) {
+    return extract_rZ(vectorOfPairs);
+}
 
-std::pair<double, double> fnd_extrm(std::vector<std::pair<double,std::complex<double>>> vkape, double Ome_p){
-    std::vector<double> tmp;
-    double extr_1, extr_2;
-    int never=1;
-    for (int ii=0; ii<int(vkape.size()); ii++){
-        if (real(vkape[ii].second)>=0) {
-            tmp.push_back(vkape[ii].first-imag(vkape[ii].second)*Ome_p);
-            never=0;
-            }
-        }
-    sort(tmp.begin(), tmp.end());
-    if (never ==0 ){
-        extr_1=tmp[0];
-        extr_2=tmp[tmp.size()-1];
-        } else{
-        extr_1=666;
-        extr_2=777;
-        } 
-    return std::make_pair(extr_1, extr_2);
-    }
-    
-std::vector<double> extract_ialph(std::vector<std::pair<double,std::complex<double>>> vectorOfPairs){
-    std::vector<double> extractSecnd;
-    int i =0;
-    for (const auto& pair : vectorOfPairs) {
-        i++;
-        extractSecnd.push_back(imag(pair.second));
-        if (i==int(vectorOfPairs.size())-1) break;
-        }
-    return extractSecnd;
-    }
+std::vector<double> extract_ialph(const ZxSeries& vectorOfPairs) {
+    return extract_iZ(vectorOfPairs);
+}
+
+std::pair<double, double> fnd_extrm(const ZxSeries& vkape, double Ome_p) {
+    return find_extrema(vkape, Ome_p);
+}
         
 using namespace std;
 

@@ -25,75 +25,38 @@
 #include "headers/single.H"
 #include "headers/cup.H"
 #include "headers/ns_ISS.H"
+#include "headers/Zx_tools.H"
 
 /*
 g++ -Wall -I/usr/include/ -L/usr/local/lib ../src/single_omeG_p3.cxx -o ../bin/sGp -lgsl -lgslcblas -lm -larmadillo
 */
 
-std::vector<double> extract_ome(std::vector<std::pair<double,std::complex<double>>> vectorOfPairs){
-    std::vector<double> extractFirst;
-        int i =0;
-        for (const auto& pair : vectorOfPairs) {
-            i++;
-            extractFirst.push_back(pair.first);
-            if (i==int(vectorOfPairs.size())-1) break;
-        }
-        return extractFirst;
-        }
-    
-std::vector<double> extract_ralph(std::vector<std::pair<double,std::complex<double>>> vectorOfPairs){
-    std::vector<double> extractSecnd;
-    int i =0;
-    for (const auto& pair : vectorOfPairs) {
-        i++;
-        extractSecnd.push_back(real(pair.second));
-        if (i==int(vectorOfPairs.size())-1) break;
-        }
-    return extractSecnd;
-    }
+std::vector<double> extract_ome(const ZxSeries& vectorOfPairs) {
+    return extract_x(vectorOfPairs);
+}
 
+std::vector<double> extract_ralph(const ZxSeries& vectorOfPairs) {
+    return extract_rZ(vectorOfPairs);
+}
 
-std::pair<double, double> fnd_extrm(std::vector<std::pair<double,std::complex<double>>> vkape, double Ome_p){
-    std::vector<double> tmp;
-    double extr_1, extr_2;
-    int never=1;
-    for (int ii=0; ii<int(vkape.size()); ii++){
-        if (real(vkape[ii].second)>=0) {
-            tmp.push_back(vkape[ii].first-imag(vkape[ii].second)*Ome_p);
-            never=0;
-            }
-        }
-    sort(tmp.begin(), tmp.end());
-    if (never ==0 ){
-        extr_1=tmp[0];
-        extr_2=tmp[tmp.size()-1];
-        } else{
-        extr_1=666;
-        extr_2=777;
-        } 
-    return std::make_pair(extr_1, extr_2);
-    }
-    
-std::vector<double> extract_ialph(std::vector<std::pair<double,std::complex<double>>> vectorOfPairs){
-    std::vector<double> extractSecnd;
-    int i =0;
-    for (const auto& pair : vectorOfPairs) {
-        i++;
-        extractSecnd.push_back(imag(pair.second));
-        if (i==int(vectorOfPairs.size())-1) break;
-        }
-    return extractSecnd;
-    }
+std::vector<double> extract_ialph(const ZxSeries& vectorOfPairs) {
+    return extract_iZ(vectorOfPairs);
+}
+
+std::pair<double, double> fnd_extrm(const ZxSeries& vkape, double Ome_p) {
+    return find_extrema(vkape, Ome_p);
+}
 
 bool compareSecond(const std::pair<double, double>& a, const std::pair<double, double>& b) {
-    return fabs(a.second) > fabs(b.second);
-    }
+    return compare_by_abs_second(a, b);
+}
 
 using namespace std;
 
 int main(){
     double   omemi, omema, E0, eps_b, *fro, ome1, ome2, kex1, kex2, dG, wG;
-    int omeN = 10000, dome, GN=500;
+    int omeN = 10000, GN=500;
+    double dome;
     
     char mtl[16], mdl[16],  sol[16], active[16];
     std::vector<std::pair<double,std::complex<double>>> valph;
@@ -207,8 +170,10 @@ int main(){
     visok = move(tmp);
     tmp.clear();
 
-    complete(visoa, omemi, omema, dome, 2.*fro[1]);
-    complete(visok, omemi, omema, dome, 2.*fro[1]);
+    if (!visoa.empty()) complete(visoa, omemi, omema, dome, 2.*fro[1]);
+    else cout<<"frequency range not wide enough to calculate the eigenvalue zeroes"<<endl;
+    if (!visok.empty()) complete(visok, omemi, omema, dome, 2.*fro[1]);
+    else cout<<"frequency range not wide enough to calculate the eigenvalue zeroes"<<endl;
     
     ofstream isoa("../data/output/oGp/iso_al.dat");
     if (!isoa) {
