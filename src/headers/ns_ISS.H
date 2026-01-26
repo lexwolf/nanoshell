@@ -16,8 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-
-std::complex<double> img = std::complex<double> (0., 1.);
+#include "extract.H"
 
 std::complex<double> gammaD (std::complex<double>** A, double Ome){
     std::complex<double> gamdD = (A[1][1]-img*Ome)*(A[2][2]-img*Ome)-A[1][2]*A[2][1];
@@ -487,14 +486,6 @@ double *ISS_results(nanosphere ns, double Ome, double ome1, double ome2, double 
     return res;
     }
 
-    void complete(std::vector<std::pair<double, double>>& vec, double omemi, double omema, double dome, double value=0.) {
-        vec.insert(vec.begin(), std::make_pair(vec[0].first - dome, value));
-        vec.insert(vec.begin(), std::make_pair(omemi, value));
-
-        vec.push_back(std::make_pair(vec[vec.size() - 1].first + dome, value));
-
-        vec.push_back(std::make_pair(omema, value));
-        }
 
     double find_omeB(nanosphere ns, char* hst, char* sol, double rho, double omemi, double omema, int omeN=1000){
         double omeB, omeeV, dome  = (omema-omemi)/omeN, Ome, Omem=0.;

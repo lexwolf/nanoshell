@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "> Compiling code..."
-g++ -Wall -I/usr/include/ -L/usr/local/lib ../src/nanoshell_num.cxx -o ../bin/nsh -lgsl -lgslcblas -lm -larmadillo
+g++ -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/nanoshell_num.cxx -o ../bin/nsh -lgsl -lgslcblas -lm -larmadillo
 echo "> Done!"
 omemi=2.615
 omema=3.02

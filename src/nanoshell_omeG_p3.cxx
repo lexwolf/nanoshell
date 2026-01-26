@@ -21,14 +21,16 @@
 #include <iomanip>
 #include <fstream>
 #include <armadillo>
-#include "headers/math33.H"
+#include "headers/mathNN.H"
 #include "headers/nanoshell.H"
 #include "headers/cup.H"
+#include "headers/extract.H"
 #include "headers/ns_ISS.H"
 #include "headers/Zx_tools.H"
 
+
 /*
-g++ -Wall -I/usr/include/ -L/usr/local/lib ../src/nanoshell_omeG_p3.cxx -o ../bin/oGp -lgsl -lgslcblas -lm -larmadillo
+g++ -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/nanoshell_omeG_p3.cxx -o ../bin/oGp -lgsl -lgslcblas -lm -larmadillo
 */
 
 

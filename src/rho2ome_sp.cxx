@@ -21,14 +21,14 @@
 #include <iomanip>
 #include <fstream>
 #include <armadillo>
-#include "headers/math33.H"
+#include "headers/mathNN.H"
 #include "headers/nanoshell.H"
 #include "headers/cup.H"
 
 using namespace std;
 
 /** Compila con: 
-g++ -Wall -I/usr/include/ -L/usr/local/lib ../src/rho2ome_sp.cxx -o ../bin/rho2ome_sp -lgsl -lgslcblas -lm -larmadillo
+g++ -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/rho2ome_sp.cxx -o ../bin/rho2ome_sp -lgsl -lgslcblas -lm -larmadillo
 **/
 
 int main(int argc, char ** argv){

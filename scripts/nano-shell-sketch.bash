@@ -37,7 +37,7 @@ if [ -z "$radius_ratio" ]; then
 fi
 
 g++ ../src/eV2ex.cxx -o ../bin/eV2ex
-g++ -Wall -I/usr/include/ -L/usr/local/lib ../src/rho2ome_sp.cxx -o ../bin/rho2ome_sp -lgsl -lgslcblas -lm -larmadillo
+g++ -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/rho2ome_sp.cxx -o ../bin/rho2ome_sp -lgsl -lgslcblas -lm -larmadillo
 resu=($(./../bin/rho2ome_sp "$radius_ratio"))
 
 inner_circle_color=$(./../bin/eV2ex "${resu[0]}")

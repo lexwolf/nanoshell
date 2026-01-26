@@ -92,8 +92,8 @@ fi
 if [ "$compile_requested" = true ]; then
     echo
     echo "> Compiling codes..."
-    g++ -Wall -I/usr/local/include -L/usr/local/lib ../src/frohlich.cxx -o ../bin/fro -lgsl -lgslcblas -lm -larmadillo
-    g++ -Wall -I/usr/local/include -L/usr/local/lib ../src/steady_state.cxx -o ../bin/sts -lgsl -lgslcblas -lm -larmadillo
+    g++ -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib ../src/frohlich.cxx -o ../bin/fro -lgsl -lgslcblas -lm -larmadillo
+    g++ -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib ../src/steady_state.cxx -o ../bin/sts -lgsl -lgslcblas -lm -larmadillo
     echo "> ...Done!"
     echo
 fi

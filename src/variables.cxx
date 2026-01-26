@@ -21,13 +21,13 @@
 #include <iomanip>
 #include <fstream>
 #include <armadillo>
-#include "headers/math33.H"
+#include "headers/mathNN.H"
 #include "headers/nanoshell.H"
 #include "headers/cup.H"
 
 using namespace std;
 /*
-g++ -Wall -I/usr/local/include -L/usr/local/lib ../src/variables.cxx -o ../bin/vrb -lgsl -lgslcblas -lm -larmadillo
+g++ -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib ../src/variables.cxx -o ../bin/vrb -lgsl -lgslcblas -lm -larmadillo
 */
 
     

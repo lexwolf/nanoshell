@@ -21,13 +21,14 @@
 #include <iomanip>
 #include <fstream>
 #include <armadillo>
-#include "headers/math33.H"
+#include "headers/mathNN.H"
 #include "headers/nanoshell.H"
 #include "headers/cup.H"
+#include "headers/extract.H"
 #include "headers/ns_ISS.H"
 
 /*
-g++ -Wall -I/usr/include/ -L/usr/local/lib ../src/nanoshell_ss_spe.cxx -o ../bin/nss -lgsl -lgslcblas -lm -larmadillo
+g++ -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/nanoshell_ss_spe.cxx -o ../bin/nss -lgsl -lgslcblas -lm -larmadillo
 */
 
 using namespace std;

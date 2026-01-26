@@ -1,12 +1,21 @@
 /*
- * Unified cup.H for both nanoshell and single-particle projects.
+ * This file is part of the Nano-Shell Simulation Project.
+ * 
+ * Copyright (C) 2025 Alessandro Veltri
  *
- * Default Frohlich mode: OPTIMAL (omega21 = omega).
- * Self-consistent and current modes remain available.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef CUP_H
-#define CUP_H
 
 #include <complex>
 #include <math.h>
@@ -18,19 +27,6 @@
 #define REAL(z,i) ((z)[2*(i)])
 #define IMAG(z,i) ((z)[2*(i)+1])
 #include <vector>
-#include <iostream>
-#include <fstream>
-#include <iomanip>
-#include <cstdlib>
-#include <cmath>
-#include <limits>
-
-using std::complex;
-using std::conj;
-using std::imag;
-using std::real;
-using std::norm;
-
 
 #define cc  299792458.
 /** c [m/s] Speed of light **/
@@ -51,23 +47,8 @@ double eV2nm(double ome){
   return lam;
   }
 
-// Joule heating proxy (single metal sphere only for now).
-// Returns quantity proportional to ∫_metal ω Im{ Π~_m · E*_m } dV.
-// For ns==1 (nanoshell), returns NaN until full shell-volume integral is implemented.
-inline double joule_heating(int ns,
-                            double ome,
-                            const std::complex<double>& p0,
-                            const std::complex<double>& q0)
-{
-  if (ns != 0) {
-    // TODO(nanoshell): implement metal-shell integral from r=rho*a to r=a,
-    // including angular P2(cosθ) terms and radial weights ~ (a^3/r^3), (a^6/r^6).
-    return std::numeric_limits<double>::quiet_NaN();
-  }
-  return 0.5 * ome * std::imag(std::conj(p0) * q0);
-}
-
 class nanosphere{
+    private:
 	gsl_interp_accel *acc;
 	gsl_interp_accel *ach;
 	gsl_spline *reeps;
@@ -88,7 +69,6 @@ class nanosphere{
 	double ome_o2, ome, f, n, enne, omeB;
 	double Ome_p, Gam_d, Gam, eps_inf, Ome_L, Gam_L, Deps, DELTAOme;
 	std::complex<double> eps3, ceps_inf;
-	std::vector<std::pair<double,std::complex<double>>> vkap;
 	void init(){
 	  /** all values are in MKS **/
 	  img = std::complex<double> (0., 1.);
@@ -217,7 +197,7 @@ class nanosphere{
 	  double eps_0;
 	  if(strcmp(hst,"silica")==0) eps_0 = 2.1316; // Si02
 	  else if(strcmp(hst,"solgel")==0) eps_0 = 2.1331;//3.8
-	  else if(strcmp(hst,"vacuum")==0) eps_0 = 1.0;
+	  else if(strcmp(hst,"vacuum")==0) eps_0 = 1.0;//3.8
 	  else if(strcmp(hst,"water")==0) eps_0 = 1.7689;
 	  else if(strcmp(hst,"glass")==0) eps_0 = 1.2247;
 	  else if(strcmp(hst,"PMMA")==0) eps_0 = 2.2201;
@@ -256,10 +236,12 @@ std::complex<double> metal(double ome) {
         eps.imag(gsl_spline_eval(imeps, ome, acc));
     } else {
         eps = eps_inf - ome_p2 / (ome * (ome + img * Gam_d));
-    } 
+    }
+
     ceps_inf = eps + ome_p2 / (ome * (ome + img * Gam_d));
     return eps;
 }
+
 	  
 	std::complex<double> confinement(double ome){
 	  std::complex<double> dlt;
@@ -267,121 +249,63 @@ std::complex<double> metal(double ome) {
 	  return dlt;
 	  }
 
+
 	std::complex<double> active(double ome, double epsh){
 	  std::complex<double> eps;
       double nG = fabs(G);
       eps = std::complex<double>(epsh, 0.) + act*nG*Dome/(2.*(ome - ome_0) + img*Dome) - (1 - act)*nG*img;
       return eps;
     }
+	  
 
-    // -------------------------
-    // Frohlich threshold solvers
-    // -------------------------
-    // Modes:
-    //  - CUP_FROHLICH_OPTIMAL:        omega21 = omega (optimal coherence)
-    //  - CUP_FROHLICH_CURRENT:        omega21 = omega_0 (current/linearized)
-    //  - CUP_FROHLICH_SELF_CONSISTENT:omega21 = omega_sp (self-consistent)
-    //
-    // Default mode can be controlled at compile time via CUP_DEFAULT_FROHLICH_MODE.
+    double *frohlich(double a0, double b0, double eps_b, double eps_s=0, double rap=0){
+	static double reso[2]={};
+	double ome_sp, Gth;
+	double eqn9_A, eqn9_D, a, b, d, e;    //declare some needed variables
+	double rap3=rap*rap*rap;
+	std::complex<double> eps1_A, eps1_B, eps1_D, F_A, F_B, F_D;
+	e = 1.e-10;
 
-#ifndef CUP_FROHLICH_OPTIMAL
-#define CUP_FROHLICH_OPTIMAL 0
-#endif
-#ifndef CUP_FROHLICH_CURRENT
-#define CUP_FROHLICH_CURRENT 1
-#endif
-#ifndef CUP_FROHLICH_SELF_CONSISTENT
-#define CUP_FROHLICH_SELF_CONSISTENT 2
-#endif
-#define CUP_DEFAULT_FROHLICH_MODE CUP_FROHLICH_OPTIMAL
+	double ome_sm=666.;
+	double ome21;//, eps_im
+	a=a0;
+	b=b0;
+	ome_sp =.5*(b0+a0);
+	ome_sm=666.;
+	while (abs(ome_sp-ome_sm)>1.e-20){ /* ome_sp dipende da rho e da ome21, riposiziono ome21 su ome_sp in modo che sia solo funzione di rho*/
+	    ome21=ome_sp;
+	    a=a0;
+	    b=b0;
+	    while (fabs(a-b)>=e){   /*if the mod of a-b is greater than the accuracy desired keep bisecting the interval*/
+		
+		d=0.5*(a+b);        //bisect the interval and find the value of c
 
-    double *frohlich(double a0, double b0, double eps_b, double eps_s=0, double rap=0, int mode=CUP_DEFAULT_FROHLICH_MODE){
-        static double reso[2] = {};
-        double ome_sp = 0.0, Gth = 0.0;
-        double eqn9_A, eqn9_D, a, b, d;
-        const double e = 1.e-10;
-        const double rap3 = rap*rap*rap;
+		eps1_A = metal(a);
+		F_A = F(eps1_A, eps_s, rap3);
+		eqn9_A = eqn9(a, ome21, F_A, eps_b, Dome);
 
-        std::complex<double> eps1_A, eps1_D, F_A, F_D;
+		eps1_D = metal(d);
+		F_D = F(eps1_D, eps_s, rap3);
+		eqn9_D = eqn9(d, ome21, F_D, eps_b, Dome);        
 
-        auto bisect = [&](double ome21)->void {
-            a = a0; b = b0;
-            while (fabs(a-b) >= e){
-                d = 0.5*(a+b);
-
-                eps1_A = metal(a);
-                F_A    = F(eps1_A, eps_s, rap3);
-                eqn9_A = eqn9(a, ome21, F_A, eps_b, Dome);
-
-                eps1_D = metal(d);
-                F_D    = F(eps1_D, eps_s, rap3);
-                eqn9_D = eqn9(d, ome21, F_D, eps_b, Dome);
-
-                if (eqn9_D * eqn9_A <= 0.) b = d;
-                else                       a = d;
-            }
-            ome_sp = d;
-        };
-
-        if (mode == CUP_FROHLICH_OPTIMAL){
-            // omega21 = omega, so at each bisection point use ome21 = current omega (d)
-            // This can be implemented by passing ome21=d to eqn9, which is already done in eqn9(...) call
-            // via bisect(d). We mimic the original behavior by reusing the same structure:
-            a = a0; b = b0;
-            while (fabs(a-b) >= e){
-                d = 0.5*(a+b);
-
-                eps1_A = metal(a);
-                F_A    = F(eps1_A, eps_s, rap3);
-                eqn9_A = eqn9(a, a, F_A, eps_b, Dome);
-
-                eps1_D = metal(d);
-                F_D    = F(eps1_D, eps_s, rap3);
-                eqn9_D = eqn9(d, d, F_D, eps_b, Dome);
-
-                if (eqn9_D * eqn9_A <= 0.) b = d;
-                else                       a = d;
-            }
-            ome_sp = d;
-            Gth = -Dome*imag(F_D)/Dome;
-        }
-        else if (mode == CUP_FROHLICH_CURRENT){
-            // omega21 = omega_0
-            const double ome21 = ome_0;
-            bisect(ome21);
-            // Keep the historical formula you used in single_particle:
-            Gth = 2.*(ome_sp-ome_0)*(real(F_D)-eps_b) - Dome*imag(F_D)/Dome;
-        }
-        else if (mode == CUP_FROHLICH_SELF_CONSISTENT){
-            // omega21 is repositioned to omega_sp until convergence
-            double ome_sm = 666.;
-            ome_sp = 0.5*(b0+a0);
-            while (fabs(ome_sp - ome_sm) > 1.e-20){
-                const double ome21 = ome_sp;
-                bisect(ome21);
-                ome_sm = ome_sp;
-                // ome_sp updated by bisect
-            }
-            Gth = -Dome*imag(F_D)/Dome;
-        }
-        else{
-            std::cerr << "Error: unknown Frohlich mode = " << mode << std::endl;
-            std::exit(EXIT_FAILURE);
-        }
-
-        reso[0] = ome_sp;
-        reso[1] = Gth;
-        return reso;
-    }
-
-    // Backward-compatible wrappers (keep older call sites working)
-    double *frohlich_optimal(double a0, double b0, double eps_b, double eps_s=0, double rap=0){
-        return frohlich(a0, b0, eps_b, eps_s, rap, CUP_FROHLICH_OPTIMAL);
-    }
-
-    double *frohlich_current(double a0, double b0, double eps_b, double eps_s=0, double rap=0){
-        return frohlich(a0, b0, eps_b, eps_s, rap, CUP_FROHLICH_CURRENT);
-    }
+		if (eqn9_D*eqn9_A<=0.){    
+		    b=d;    
+		    }
+		else{
+		    a=d;    
+		    }
+		}
+	ome_sm=ome_sp;
+	ome_sp = d;   // spasing freq
+	}
+	ome_sp   = ome_sp;
+	Gth = -Dome*imag(F_D)/Dome;
+	
+	reso[0]=ome_sp;
+	reso[1]=Gth;
+	
+	return reso;
+	}
 
     std::complex<double> set_GamG(double G, double tau2){
 		std::complex<double> GamG;
@@ -428,72 +352,11 @@ std::complex<double> metal(double ome) {
 		return odv;
 		}
 
-// std::vector<std::pair<double,std::complex<double>>> eigen_values(char* mdl, char* mtl, char* hst, double omemi, double omema, int omeN=1000, char* sol=0, double rho=0){
-//         std::vector<std::pair<double,std::complex<double>>> vkamp;
-//         int omi;
-//         std::complex<double> GamG, OmeG, GamM, OmeM, **A, *p0, *p1, *p2, gam1, gam2, xi, *kap, *odv;
-//         
-//         double *nv, omeeV, dome  = (omema-omemi)/omeN, ome;
-//         double  eps_b, eps_s, tau2, gamd, ome0;
-// 
-//         if ((sol != NULL)) {
-//             eps_s=set_host(sol);
-//             } else eps_s=0;
-//         eps_b=set_host(hst);
-// 
-//         A = new std::complex<double>*[3];
-//         for(int i = 0; i <= 2; i++)
-//             A[i] = new std::complex<double>[3];
-//         
-//         kap  = new std::complex<double>[3];
-//         nv   = new double[4];
-//         odv  = new std::complex<double> [3];
-// 
-//         // normalized variables
-//         nv = normalized_variables ();
-//         tau2 = nv[1];
-//         gamd = nv[2];
-//         ome0 = nv[3];
-//         GamG   = set_GamG(G, tau2);
-// 
-//         
-//         for (omi=0; omi<=omeN; omi++){
-//             omeeV = omemi + omi*dome;
-// 			metal(omeeV);
-// 
-// 			p0 = pcfc0(ceps_inf, eps_b, eps_s, rho);
-// 			p1 = pcfc1(ceps_inf, eps_b, eps_s, rho);
-// 			p2 = pcfc2(ceps_inf, eps_b, eps_s, rho);
-//             
-// 			ome  = omeeV/Ome_p;
-// 
-//             odv  = set_ome_dep_vrbls(ome, ome0, tau2, gamd);
-//             OmeG = odv[0];
-//             OmeM = odv[1];
-//             GamM = odv[2];
-//     
-//             A   = coefficients(OmeG, OmeM, GamG, GamM, p0, p1, p2);
-//             kap  = eigenvalues(A);
-//             
-//             double maxVal = kap[0].real();
-//             int    imax = 0;
-// 
-//             for (int i = 1; i < 3; i++) {
-//                 if (kap[i].real() > maxVal) {
-//                     maxVal = kap[i].real();
-//                     imax = i;
-//                     }
-//                 }
-//             vkamp.push_back(std::make_pair(omeeV, kap[imax]));
-//             }
-//         return vkamp;
-//         }
-
 	std::vector<std::pair<double,double>>  cross_sections(char* mdl , char* mtl ,char* hst ,double omemi, double omema, int omeN=10000, char* sol=0, double rho=0){
 			int omi, ns=0;
-			double pG = fabs(G), omeeV, dome  = (omema-omemi)/omeN, lam_nm, lam;
+			double pG = fabs(G), omeeV, dome  = (omema-omemi)/omeN, lam_nm, lam, eps3;
 			double Csca, Cext, Cabs, eps_s, eps_b;
-			std::complex<double> alph, eps1, eps2, k, n2;
+			std::complex<double> alph, eps1, eps2, k, enne;
 			std::ofstream crsc;
 
 			crsc.open("../data/output/sts/cross_sections.dat");
@@ -512,31 +375,32 @@ std::complex<double> metal(double ome) {
 			if (sol != NULL) {
 			eps_s = set_host(sol);
 			ns = 1;
-			} else  eps_s=0;
+			} else {
+ 			eps_s=0;
+			ns = 0;
+			} 
 			eps_b = set_host(hst);
-			double rE;
-			lam_nm  = h * cc * 1.e9 / (omeeV * eV2j); // lam in nm
-			if (ns == 0){
-				eps1 = metal(omeeV);
-				eps2 = active(omeeV, eps_b);
-				rE   = r1;
-			}
-			if (ns == 1){
-				eps1 = active(omeeV, eps_b);
-				eps2 = metal(omeeV);
-				eps3 = eps_s;
-				rE   = r2;
-			}
-			lam = lam_nm / rE; // lam normalized
-			n2 = sqrt(eps2);
-			k = 2. * M_PI * n2 / lam;
+
 
 	// 	    std::complex<double> eps1, eps2, m, x, k, n1, n2;
 			for (omi = 0; omi <= omeN; omi++){
-				omeeV = omemi + omi * dome;
-				lam_nm  = h * cc * 1.e9 / (omeeV * eV2j); // lam in nm
-				
-				alph = polarizability(eps1, eps2);
+					omeeV = omemi + omi * dome;
+					lam_nm  = h * cc * 1.e9 / (omeeV * eV2j); // lam in nm
+				if (ns == 0){
+					eps1 = metal(omeeV);
+					eps2 = active(omeeV, eps_b);
+					enne = sqrt(eps2);
+				}
+				if (ns == 1){
+					eps1 = active(omeeV, eps_b);
+					eps2 = metal(omeeV);
+					eps3 = eps_s;
+					enne = sqrt(eps1);
+				}
+				lam = lam_nm / r1; // lam normalized
+
+				k = 2. * M_PI * enne / lam;
+				alph = polarizability(eps1, eps2, eps3, rho);
 
 				double kreal = k.real();
 				double kimag = k.imag();
@@ -557,6 +421,7 @@ std::complex<double> metal(double ome) {
 			}
 			return vext;
 	    }
+
 		
 	std::vector<std::pair<double,std::complex<double>>>  steady_state(char* mdl , char* mtl ,char* hst ,double omemi, double omema, int omeN=10000, char* sol=0, double rho=0){
 	    int omi, ns=0;
@@ -573,7 +438,7 @@ std::complex<double> metal(double ome) {
 	    std::vector<std::pair<double,std::complex<double>>> valph;
 	    
 	    double tau2, gamd, ome0, eps3, pG = fabs(G), *nv;
-	    std::complex<double> GamG, OmeG, GamM, OmeM, *p0, *p1, *p2, **A, detA, *kap, *odv;
+	    std::complex<double> GamG, OmeG, GamM, OmeM, **A, detA, *p0, *p1, *p2, *kap, *odv;
 	    
 	    A = new std::complex<double>*[3];
 	    for(int i = 0; i <= 2; i++)
@@ -585,21 +450,10 @@ std::complex<double> metal(double ome) {
 
 		odv = new std::complex<double> [3];
 
-            std::ofstream stat("../data/output/stationary.dat");
-            if (!stat) {
-                std::cerr << "Error: Cannot open output file" << std::endl;
-                exit(1);
-            }
-            std::ofstream comp("../data/output/compounds.dat");
-            if (!comp) {
-                std::cerr << "Error: Cannot open output file" << std::endl;
-                exit(1);
-            }
-            std::ofstream egva("../data/output/eigenvalues.dat");
-            if (!egva) {
-                std::cerr << "Error: Cannot open output file" << std::endl;
-                exit(1);
-            }
+	    std::fstream comp, stat, egva;
+	    stat.open("../data/output/stationary.dat", std::ios::out);
+	    comp.open("../data/output/compounds.dat", std::ios::out);
+	    egva.open("../data/output/eigenvalues.dat", std::ios::out);
 	    
 	    stat<<"# * STATIC * "<<std::endl;
 	    stat<<"#"<<std::endl;
@@ -630,13 +484,11 @@ std::complex<double> metal(double ome) {
 	    egva<<"# G = "<<pG<<std::endl;
 	    egva<<"# a "<<mdl<<" model was used for "<<mtl<<std::endl;
 	    egva<<"# ------------- "<<std::endl;
-	    egva<<"# ome (eV)\treal(k1)\timag(k1)\treal(k2)\timag(k2)\treal(k3)\timag(k3)\treal(kap_em)\timag(kap_em)"<<std::endl;
+	    egva<<"# ome (eV)\treal(k1)\timag(k1)\treal(k2)\timag(k2)\treal(k3)\timag(k3)\treal(k_em)\timag(k_em)"<<std::endl;
 	    egva<<"#"<<std::endl;
 
 	    /** STEADY STATE **/
 	
-		vkap.clear();
-
 	    // normalized variables
 	    nv = normalized_variables ();
 		tau2 = nv[1];
@@ -688,21 +540,10 @@ std::complex<double> metal(double ome) {
 		kap  = eigenvalues(A);
 		std::complex<double> kap_em(0.0, 0.0);
 		for (int i=0; i<3; i++){
-			if (real(kap[i]) >= 0){
-				kap_em = kap[i];
-			}
+		    if (real(kap[i]) >= 0){
+			kap_em = kap[i];
+		    }
 		}
-		
-		double maxVal = kap[0].real();
-		int    imax = 0;
-
-		for (int i = 1; i < 3; i++) {
-			if (kap[i].real() > maxVal) {
-				maxVal = kap[i].real();
-				imax = i;
-				}
-			}
-		vkap.push_back(std::make_pair(omeeV, kap[imax]));
 		egva<<"  "<<std::setw(8)<<std::setiosflags (std::ios::left)<<omeeV<<              // 1 ome
 		    "\t"<<std::setw(11)<<std::setiosflags (std::ios::left)<<Ome_p*real(kap[0])<<  // 2 Re(kap1)
 		    "\t"<<std::setw(11)<<std::setiosflags (std::ios::left)<<Ome_p*imag(kap[0])<<  // 3 Im(kap1)
@@ -728,21 +569,9 @@ std::complex<double> metal(double ome) {
 
 		wavetable = gsl_fft_complex_wavetable_alloc (nfft);
 		workspace = gsl_fft_complex_workspace_alloc (nfft);
-            std::ofstream  wve("../data/output/wave.dat");
-            if (!wve) {
-                std::cerr << "Error: Cannot open output file" << std::endl;
-                exit(1);
-            }
-            std::ofstream  frr("../data/output/fourier.dat");
-            if (!frr) {
-                std::cerr << "Error: Cannot open output file" << std::endl;
-                exit(1);
-            }
-            std::ofstream  flg("../data/output/fourier.log");
-            if (!flg) {
-                std::cerr << "Error: Cannot open output file" << std::endl;
-                exit(1);
-            }
+	    std::ofstream  wve("../data/output/wave.dat");
+	    std::ofstream  frr("../data/output/fourier.dat");
+    	    std::ofstream  flg("../data/output/fourier.log");
 	    flg<<nfft<<" "<<dt<<" "<<Ome_p<<std::endl;
 		for (int i=0; i<nfft; i++) {
 			REAL(data,i) = wave[i].real();
@@ -811,26 +640,14 @@ std::complex<double> metal(double ome) {
 
 		odv = new std::complex<double> [3];
 		
-		p0 = new std::complex<double>[3];
-		p1 = new std::complex<double>[3];
-		p2 = new std::complex<double>[3];
-		p3 = new std::complex<double>[3];
-		
 		if (T==0){ 
 		    T=100000;
 		    steste=1;
 		    }
 
-                std::ofstream dyna("../data/output/numtime.dat");
-                if (!dyna) {
-                    std::cerr << "Error: Cannot open output file" << std::endl;
-                    exit(1);
-                }
-                std::ofstream fnct("../data/output/numfunc.dat");
-                if (!fnct) {
-                    std::cerr << "Error: Cannot open output file" << std::endl;
-                    exit(1);
-                }
+		std::fstream dyna, fnct;
+		dyna.open("../data/output/numtime.dat", std::ios::out);
+		fnct.open("../data/output/numfunc.dat", std::ios::out);
 		
 		dyna<<"# * NUMERICAL * "<<std::endl;
 		dyna<<"#"<<std::endl;
@@ -856,14 +673,16 @@ std::complex<double> metal(double ome) {
 		fnct<<"# t (ps)\treal(q0)\timag(q0)\treal(q1)\timag(q1)\treal(q2)\timag(q2)"<<std::endl;
 		fnct<<"#"<<std::endl;
 
-		omep = eV2j*Ome_p*2.*M_PI/h; // normalized variables
+		omep = eV2j*Ome_p*2.*M_PI/h;
+		// normalized variables
 		nv = normalized_variables ();
 		tau1 = nv[0];
 		tau2 = nv[1];
 		gamd = nv[2];
 		ome0 = nv[3];
 		GamG = set_GamG(G, tau2);
-		metal(omeeV); //needed to calculate ceps_inf
+
+		
 		p0 = pcfc0(ceps_inf, eps_b, eps_s, rho);
 		p1 = pcfc1(ceps_inf, eps_b, eps_s, rho);
 		p2 = pcfc2(ceps_inf, eps_b, eps_s, rho);
@@ -882,7 +701,7 @@ std::complex<double> metal(double ome) {
 		chiH = -GamG/OmeG;
 		chiP = -GamM/OmeM;
 
-		eps1e = ceps_inf + chiP;
+		eps1e = eps_inf + chiP;
 		eps2e = eps_b   + chiH;
 
 
@@ -893,7 +712,7 @@ std::complex<double> metal(double ome) {
 		
 		double N=0;
 		std::complex<double> *q ;
-		q = new std::complex<double>[3]{0.0, 0.0, 0.0};  // PDF order, fully initialized
+		q = new std::complex<double>[3] {0,0};
 
 		int Nt=T/dt;
 		int Nprint=Nt;
@@ -910,16 +729,15 @@ std::complex<double> metal(double ome) {
 		while (i<=Nt){// && (fabs(norm(dip)-dnormem)> 1.e-20 || t*1.e+12/omep<12*tpump)){
 		    t=i*dt;
 		    i++;
-		    if(t*1.e+12/omep >= tpump && pip == 0) {
-				tildeN = 1.;
+		    if(t*1.e+12/omep >= tpump && pip ==0) {
+				tildeN =1.;
+// 				GamG = set_GamG(G, tau2);
 				pip = 1.;
-		    }
+				}
 		    if (ns == 1) {
 				po  = numerical_output(E0, q, p0);
-				N   = Runge_Kutta_mono_4(N, -1./tau1, tildeN/tau1 + imag(q[0]*conj(po)), dt);
-		    } else {
-				N = 1;
-		    }
+				N   = Runge_Kutta_mono_4 (N, -1./tau1, tildeN/tau1+imag(q[0]*conj(po)), dt);
+				} else N = 1;
 		    A   = coefficients(OmeG, OmeM, GamG*N, GamM, p0, p1, p2); 
 		    B   = inhomogeneous(GamG*N, GamM, E0, p0, p1, p2);
 		    q   = Runge_Kutta_4 (q, A, B, dt);
@@ -935,20 +753,19 @@ std::complex<double> metal(double ome) {
 				dyna<<"  "<<std::setw(8)<<std::setiosflags (std::ios::left)<<t/omep*1.e+12<< // 1 time (ps)
 					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<real(alph)<<     // 2 Re(alpha)
 					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<imag(alph)<<     // 3 Im(alpha)
-					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<real(dip)<<      // 4 Re(dip)
-					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<imag(dip)<<      // 5 Im(dip)
-					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<N<<              // 6 N
-					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<real(dip-E0)<<    // 7 Re(p0)
-					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<imag(dip-E0)<<    // 8 Im(p0)
-					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<joule_heating(ns, ome, (dip-E0), q[2])<<    // 9 Q
+					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<real(dip)<<     // 4 Re(dip)
+					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<imag(dip)<<     // 5 Im(dip)
+					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<N<<             // 6 N
+					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<real(po)<<      // 7 Re(p0)
+					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<imag(po)<<      // 8 Im(p0) 
 					std::endl;
 				fnct<<"  "<<std::setw(8)<<std::setiosflags (std::ios::left)<<t/omep*1.e+12<< // 1 time (ps)
 					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<real(q[0])<<   // 2 Re(q0)
 					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<imag(q[0])<<   // 3 Im(q0)
 					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<real(q[1])<<   // 4 Re(q1)
 					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<imag(q[1])<<   // 5 Im(q1)
-					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<real(q[2])<<   // 6 Re(q2) new Re(q0)
-					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<imag(q[2])<<   // 7 Im(q2) new Im(q0)
+					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<real(q[2])<<   // 6 Re(q2)
+					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<imag(q[2])<<   // 7 Im(q2)
 					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<N<<    // 8 N
 					std::endl;
 				}
@@ -1013,16 +830,9 @@ std::complex<double> metal(double ome) {
 		    steste=1;
 		    }
 		
-                std::ofstream dyna("../data/output/anltime.dat");
-                if (!dyna) {
-                    std::cerr << "Error: Cannot open output file" << std::endl;
-                    exit(1);
-                }
-                std::ofstream fnct("../data/output/anlfunc.dat");
-                if (!fnct) {
-                    std::cerr << "Error: Cannot open output file" << std::endl;
-                    exit(1);
-                }
+		std::fstream dyna, fnct;
+		dyna.open("../data/output/anltime.dat", std::ios::out);
+		fnct.open("../data/output/anlfunc.dat", std::ios::out);
 		
 		dyna<<"# * ANALYTICAL * "<<std::endl;
 		dyna<<"#"<<std::endl;
@@ -1056,7 +866,7 @@ std::complex<double> metal(double ome) {
 		gamd = nv[2];
 		ome0 = nv[3];
 		GamG = set_GamG(G, tau2);
-		metal(omeeV); //needed to calculate ceps_inf
+
 		p0 = pcfc0(ceps_inf, eps_b, eps_s, rho);
 		p1 = pcfc1(ceps_inf, eps_b, eps_s, rho);
 		p2 = pcfc2(ceps_inf, eps_b, eps_s, rho);
@@ -1075,7 +885,7 @@ std::complex<double> metal(double ome) {
 		chiH = -GamG/OmeG;
 		chiP = -GamM/OmeM;
 
-		eps1e = ceps_inf + chiP;
+		eps1e = eps_inf + chiP;
 		eps2e = eps_b   + chiH;
 
 		// coefficients of the differential system of equations
@@ -1088,7 +898,8 @@ std::complex<double> metal(double ome) {
 		dt  = 1.;
 		std::complex<double> *q, *qss, *kap, **EVE, *C;
 		
-		q = new std::complex<double>[3]{0.0, 0.0, 0.0};  // PDF order, fully initialized
+		q   = new std::complex<double>[3];
+		for(int i = 0; i <= 1; i++) q[i] = std::complex<double> (0., 0.);
 		
 		qss = new std::complex<double>[3];
 		kap = new std::complex<double>[3];		
@@ -1175,5 +986,3 @@ std::complex<double> metal(double ome) {
 		return dip;
 		}
 	};
-
-#endif // CUP_H
