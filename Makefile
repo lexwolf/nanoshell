@@ -4,8 +4,7 @@ LIBS = -lgsl -lgslcblas -lm -larmadillo
 
 BINS = bin/crs bin/delta2tau bin/distribute bin/eV2ex bin/eV2nm bin/eV2rads \
 	 bin/Esat bin/fro bin/Gap bin/lyns bin/nom bin/nsISS bin/nsh bin/nsn \
-	 bin/nsx bin/nss bin/oap bin/oGp bin/rho2ome_sp bin/sap bin/sfr bin/sgl \
-	 bin/sGp bin/two_zero bin/vrb
+	 bin/nsx bin/nss bin/oap bin/oGp bin/rho2ome_sp bin/two_zero bin/vrb
 
 all: $(BINS)
 
@@ -68,18 +67,6 @@ bin/oGp: src/nanoshell_omeG_p3.cxx | bin
 
 bin/rho2ome_sp: src/rho2ome_sp.cxx | bin
 	$(CC) $(CFLAGS) src/rho2ome_sp.cxx -o bin/rho2ome_sp $(LIBS)
-
-bin/sap: src/single_ome_al_p3.cxx | bin
-	$(CC) $(CFLAGS) src/single_ome_al_p3.cxx -o bin/sap $(LIBS)
-
-bin/sfr: src/sfrohlich.cxx | bin
-	$(CC) $(CFLAGS) src/sfrohlich.cxx -o bin/sfr $(LIBS)
-
-bin/sgl: src/single.cxx | bin
-	$(CC) $(CFLAGS) src/single.cxx -o bin/sgl $(LIBS)
-
-bin/sGp: src/single_omeG_p3.cxx | bin
-	$(CC) $(CFLAGS) src/single_omeG_p3.cxx -o bin/sGp $(LIBS)
 
 bin/two_zero: src/two_zero.cxx | bin
 	$(CC) src/two_zero.cxx -o bin/two_zero
