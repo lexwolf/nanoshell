@@ -3,8 +3,8 @@ CFLAGS = -Wall -I/usr/include/ -I/usr/include/eigen3 -I/usr/include/eigen3 -L/us
 LIBS = -lgsl -lgslcblas -lm -larmadillo
 
 BINS = bin/crs bin/delta2tau bin/distribute bin/eV2ex bin/eV2nm bin/eV2rads \
-	 bin/Esat bin/fro bin/Gap bin/lyns bin/nom bin/nsISS bin/nsh bin/nsn \
-	 bin/nsx bin/nss bin/oap bin/oGp bin/rho2ome_sp bin/two_zero bin/vrb
+       bin/Esat bin/fro bin/Gap bin/lyns bin/nom bin/nsISS bin/nsh bin/nsn \
+       bin/nsx bin/nss bin/oap bin/oGp bin/rho2ome_sp bin/two_zero bin/vrb
 
 all: $(BINS)
 

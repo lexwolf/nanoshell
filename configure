@@ -6,6 +6,13 @@ if ! command -v g++ &> /dev/null; then
   exit 1
 fi
 
+if dpkg -s libeigen3-dev >/dev/null 2>&1; then
+  echo "libeigen3-dev installed"
+else
+  echo "Error: libeigen3-dev not installed. Please run: sudo apt-get install libeigen3-dev"
+  exit 1
+fi
+
 echo "Checking for armadillo..."
 if ! ldconfig -p | grep "libarmadillo.so" &> /dev/null; then
   echo "Error: Library armadillo not found. Please install it."
