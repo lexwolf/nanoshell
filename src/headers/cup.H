@@ -9,6 +9,7 @@
 #define CUP_H
 
 #include "cup/config.H"
+#include "cup/quasi_static/heating.H"
 
 class nanosphere{
 	gsl_interp_accel *acc;

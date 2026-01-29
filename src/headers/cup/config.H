@@ -23,14 +23,12 @@
 #include <iomanip>
 #include <cstdlib>
 #include <cmath>
-#include <limits>
 
 using std::complex;
 using std::conj;
 using std::imag;
 using std::real;
 using std::norm;
-
 
 #define cc  299792458.
 /** c [m/s] Speed of light **/
@@ -50,21 +48,5 @@ double eV2nm(double ome){
   lam=cc/(ome*eV2j/h)*1.e9;
   return lam;
   }
-
-// Joule heating proxy (single metal sphere only for now).
-// Returns quantity proportional to ∫_metal ω Im{ Π~_m · E*_m } dV.
-// For ns==1 (nanoshell), returns NaN until full shell-volume integral is implemented.
-inline double joule_heating(int ns,
-                            double ome,
-                            const std::complex<double>& p0,
-                            const std::complex<double>& q0)
-{
-  if (ns != 0) {
-    // TODO(nanoshell): implement metal-shell integral from r=rho*a to r=a,
-    // including angular P2(cosθ) terms and radial weights ~ (a^3/r^3), (a^6/r^6).
-    return std::numeric_limits<double>::quiet_NaN();
-  }
-  return 0.5 * ome * std::imag(std::conj(p0) * q0);
-}
 
 #endif // CUP_CONFIG_H
