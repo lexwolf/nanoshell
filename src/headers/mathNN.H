@@ -1,8 +1,8 @@
 /*
  * mathNN.H (clean)
  *
- * Linear-algebra / ODE utilities based on Eigen, meant to replace math33.H
- * for the NN/3x3 routines used across projects.
+ * Linear-algebra / ODE utilities based on Eigen.
+ * Intended to replace math33.H for NN/3x3 routines used across projects.
  */
 
 #ifndef MATHNN_H
@@ -10,202 +10,269 @@
 
 #include <Eigen/Dense>
 #include <complex>
-#include <iostream>
 #include <cstdlib>
+#include <iostream>
+#include <algorithm>  // std::max
+#include <array>      // std::array
+#include <vector>     // (only used by the generic RK4 fallback)
 
-inline std::complex<double> determinant(std::complex<double> **a, int N = 3) {
-    Eigen::MatrixXcd Am(N, N);
+/* ------------------------------ Helpers ---------------------------------- */
 
-    // Copy data from input array a into Eigen matrix Am
-    for (int i = 0; i < N; i++)
-        for (int j = 0; j < N; j++)
-            Am(i, j) = a[i][j];
-
-    std::complex<double> dtr = Am.determinant();
-    return dtr;
+inline void free_evec(std::complex<double>** eve, int N) {
+    if (!eve) return;
+    for (int i = 0; i < N; ++i) delete[] eve[i];
+    delete[] eve;
 }
 
-inline std::complex<double>* eigenvalues(std::complex<double> **a, int N = 3) {
-    std::complex<double>* eva = new std::complex<double>[N];
-    Eigen::MatrixXcd Am(N, N);
+/* ----------------------------- Determinant -------------------------------- */
 
-    // Copy input matrix a into Eigen matrix Am
-    for (int i = 0; i < N; i++)
-        for (int j = 0; j < N; j++)
+inline std::complex<double> determinant(std::complex<double> const* const* a, int N = 3) {
+    Eigen::MatrixXcd Am(N, N);
+    for (int i = 0; i < N; ++i)
+        for (int j = 0; j < N; ++j)
+            Am(i, j) = a[i][j];
+    return Am.determinant();
+}
+
+/* ------------------ Paired eigen-decomposition (paired!) ------------------ */
+
+inline void eigen_decomposition(std::complex<double> const* const* a,
+                                std::complex<double>*& eva,
+                                std::complex<double>**& eve,
+                                int N = 3)
+{
+    Eigen::MatrixXcd Am(N, N);
+    for (int i = 0; i < N; ++i)
+        for (int j = 0; j < N; ++j)
             Am(i, j) = a[i][j];
 
-    // Compute eigenvalues
     Eigen::ComplexEigenSolver<Eigen::MatrixXcd> ces;
     ces.compute(Am);
+
     if (ces.info() != Eigen::Success) {
-        std::cerr << "Error: Failed to calculate eigenvalues." << std::endl;
+        std::cerr << "Error: Failed to calculate eigen-decomposition.\n";
         std::exit(EXIT_FAILURE);
     }
 
-    // Copy eigenvalues to output array eva
-    for (int i = 0; i < N; i++) {
-        eva[i] = ces.eigenvalues()[i];
-    }
+    eva = new std::complex<double>[N];
+    eve = new std::complex<double>*[N];
+    for (int i = 0; i < N; ++i) eve[i] = new std::complex<double>[N];
 
-    return eva;
+    // IMPORTANT: same ordering for eigenvalues and eigenvectors (paired)
+    for (int k = 0; k < N; ++k) {
+        eva[k] = ces.eigenvalues()(k);
+        for (int i = 0; i < N; ++i)
+            eve[i][k] = ces.eigenvectors()(i, k); // column k is eigenvector k
+    }
 }
 
-inline std::complex<double>** eigenvectors(std::complex<double> **a, int N = 3) {
-    Eigen::MatrixXcd Am(N, N);
+inline std::complex<double>* eigenvalues(std::complex<double> const* const* a, int N = 3) {
+    std::complex<double>* eva = nullptr;
+    std::complex<double>** eve = nullptr;
+    eigen_decomposition(a, eva, eve, N);
+    free_evec(eve, N);
+    return eva; // caller deletes[]
+}
 
-    // Copy data from input array a into Eigen matrix Am
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
+inline std::complex<double>** eigenvectors(std::complex<double> const* const* a, int N = 3) {
+    std::complex<double>* eva = nullptr;
+    std::complex<double>** eve = nullptr;
+    eigen_decomposition(a, eva, eve, N);
+    delete[] eva;
+    return eve; // caller frees via free_evec(eve,N)
+}
+
+/* ------------------------- Steady state + constants ------------------------ */
+
+inline std::complex<double>* steady_state_solution(std::complex<double> const* const* a,
+                                                   std::complex<double> const* b,
+                                                   int N = 3)
+{
+    auto* qss = new std::complex<double>[N];
+
+    Eigen::MatrixXcd Am(N, N);
+    Eigen::VectorXcd rhs(N);
+
+    for (int i = 0; i < N; ++i) rhs(i) = -b[i];
+    for (int i = 0; i < N; ++i)
+        for (int j = 0; j < N; ++j)
             Am(i, j) = a[i][j];
-        }
-    }
 
-    // Calculate the eigenvalues and eigenvectors of Am
-    Eigen::ComplexEigenSolver<Eigen::MatrixXcd> ces;
-    ces.compute(Am);
-    if (ces.info() != Eigen::Success) {
-        std::cerr << "Error: Failed to calculate eigenvectors." << std::endl;
-        std::exit(EXIT_FAILURE);  // here returning a null pointer
-    }
+    Eigen::VectorXcd sol = Am.partialPivLu().solve(rhs);
+    for (int i = 0; i < N; ++i) qss[i] = sol(i);
 
-    // Allocate memory for the output eigenvectors (std::complex<double>**)
-    std::complex<double>** eve = new std::complex<double>*[N];
-    for (int i = 0; i < N; i++) {
-        eve[i] = new std::complex<double>[N];
-    }
-
-    // Copy data from the Eigen matrix to the dynamically allocated array eve
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            eve[i][j] = ces.eigenvectors()(i, j);
-        }
-    }
-
-    return eve;
+    return qss; // caller deletes[]
 }
 
-inline std::complex<double>* find_constants(std::complex<double> **EVE, std::complex<double> *qss, std::complex<double> *q0, int N = 3) {
-    std::complex<double>* c = new std::complex<double>[N];
+inline std::complex<double>* find_constants(std::complex<double> const* const* EVE,
+                                            std::complex<double> const* qss,
+                                            std::complex<double> const* q0,
+                                            int N = 3)
+{
+    auto* c = new std::complex<double>[N];
 
-    Eigen::VectorXcd q_stst(N);
-    Eigen::VectorXcd q_init(N);
-    Eigen::VectorXcd noto(N);
-    Eigen::VectorXcd cnstnt(N);
-    Eigen::MatrixXcd eigvec(N, N);
+    Eigen::MatrixXcd V(N, N);
+    Eigen::VectorXcd rhs(N);
 
-    // Fill the vectors and matrix from input
-    for (int i = 0; i < N; i++) q_init(i) = q0[i];
-    for (int i = 0; i < N; i++) q_stst(i) = qss[i];
-    for (int i = 0; i < N; i++)
-        for (int j = 0; j < N; j++) eigvec(i, j) = EVE[i][j];
+    for (int i = 0; i < N; ++i) {
+        rhs(i) = q0[i] - qss[i];
+        for (int j = 0; j < N; ++j)
+            V(i, j) = EVE[i][j];
+    }
 
-    if (norm(eigvec.determinant()) == 0) { std::cout << "EVE is singular!\n"; std::exit(EXIT_FAILURE); }
-    // Calculate the deviation from steady state
-    noto = q_init - q_stst;
+    const double det2 = std::norm(V.determinant());
+    if (det2 < 1e-28) {
+        std::cerr << "Error: EVE is (near) singular (det^2=" << det2 << ").\n";
+        std::exit(EXIT_FAILURE);
+    }
 
-    // Solve the linear system to find the constants
-    cnstnt = eigvec.partialPivLu().solve(noto);
+    Eigen::VectorXcd cnst = V.partialPivLu().solve(rhs);
+    for (int i = 0; i < N; ++i) c[i] = cnst(i);
 
-    // Convert to std::complex array for return
-    for (int i = 0; i < N; i++) c[i] = cnstnt(i);
-
-    return c;
-}
-
-inline std::complex<double>* steady_state_solution(std::complex<double> **a, std::complex<double> *b, int N = 3) {
-    std::complex<double>* qss = new std::complex<double>[N];
-    Eigen::VectorXcd q_stst(N);
-    Eigen::VectorXcd b_dsh(N);
-    Eigen::MatrixXcd Am(N, N);
-
-    for (int i = 0; i < N; i++) b_dsh(i) = -b[i];
-
-    for (int i = 0; i < N; i++)
-        for (int j = 0; j < N; j++) Am(i, j) = a[i][j];
-
-    // Solve the linear system for steady state solution
-    q_stst = Am.partialPivLu().solve(b_dsh);
-
-    for (int i = 0; i < N; i++) qss[i] = q_stst(i);
-    return qss;
+    return c; // caller deletes[]
 }
 
 // Compatibility wrapper (math33.H-style):
 // c = V^{-1} (q0 - qss), where qss solves A qss + b = 0 and V are eigenvectors of A.
-inline std::complex<double>* constants(std::complex<double> **a, std::complex<double> *b, std::complex<double> *q0, int N = 3) {
+inline std::complex<double>* constants(std::complex<double> const* const* a,
+                                       std::complex<double> const* b,
+                                       std::complex<double> const* q0,
+                                       int N = 3)
+{
     std::complex<double>* qss = steady_state_solution(a, b, N);
     std::complex<double>** eve = eigenvectors(a, N);
-    std::complex<double>* c   = find_constants(eve, qss, q0, N);
+    std::complex<double>* c = find_constants(eve, qss, q0, N);
+
     delete[] qss;
-    for (int i = 0; i < N; ++i) delete[] eve[i];
-    delete[] eve;
-    return c;
+    free_evec(eve, N);
+    return c; // caller deletes[]
 }
 
+/* ---------------------------------- RK4 ---------------------------------- */
 /*
- Coupled RK4: To solve coupled equations of the form:
-          
-          df/dt=A*f+C,
-          
-          where f=(f0, f1, f2),
-          
-              |a00  a01 a02|
-          A = |a10  a11 a12|  and C=(c0, c1, c2)
-              |a20  a21 a22|
-*/    
+ * Solve df/dt = A f + b
+ *
+ * Performance note:
+ * - Use the fixed-size RK4_3() inside tight loops (no heap, no vectors).
+ * - The generic RK4 below is allocation-free *inside* the call if you pass N=3
+ *   and the compiler can optimize, but it still uses std::vector.
+ */
 
-inline std::complex<double> * Runge_Kutta_4 (std::complex<double>* f, std::complex<double> **a, std::complex<double>* b, double dt, int N = 3){
-    std::complex<double> k[4][N];
-    std::complex<double> sum[N] = {0};
-    double d;
-    
-    for (int i=0; i<=3; i++){
-        if (i==0) d=0.;
-            else if (i==3) d=1.;
-            else d=0.5;
-        for (int j = 0 ; j < N; j++) sum[j] = std::complex<double> (0.,0.);
-        for (int j = 0 ; j < N; j++){
-            for (int jj = 0 ; jj < N; jj++) sum[j]=sum[j]+a[j][jj]*(f[jj]+d*k[i-1][jj]);
-            k[i][j]=dt*(sum[j]+b[j]);
-            }
-                }
-    for (int j = 0; j < N; j++)
-        f[j]=f[j]+(1/6.)*(k[0][j]+2.*k[1][j]+2.*k[2][j]+k[3][j]);
+/* Fast fixed-size N=3 RK4 (recommended for per-timestep calls) */
+inline void Runge_Kutta_4_3(std::complex<double>* f,
+                            std::complex<double> const* const* a,
+                            std::complex<double> const* b,
+                            double dt)
+{
+    using cd = std::complex<double>;
+    std::array<cd, 3> k1{}, k2{}, k3{}, k4{};
+    std::array<cd, 3> tmp{}, Af{};
 
-    return f;
+    auto matvec3 = [&](std::array<cd,3> const& x, std::array<cd,3>& out){
+        for (int i = 0; i < 3; ++i) {
+            cd s(0.0, 0.0);
+            for (int j = 0; j < 3; ++j) s += a[i][j] * x[j];
+            out[i] = s;
+        }
+    };
+
+    // k1
+    for (int i = 0; i < 3; ++i) tmp[i] = f[i];
+    matvec3(tmp, Af);
+    for (int i = 0; i < 3; ++i) k1[i] = dt * (Af[i] + b[i]);
+
+    // k2
+    for (int i = 0; i < 3; ++i) tmp[i] = f[i] + 0.5 * k1[i];
+    matvec3(tmp, Af);
+    for (int i = 0; i < 3; ++i) k2[i] = dt * (Af[i] + b[i]);
+
+    // k3
+    for (int i = 0; i < 3; ++i) tmp[i] = f[i] + 0.5 * k2[i];
+    matvec3(tmp, Af);
+    for (int i = 0; i < 3; ++i) k3[i] = dt * (Af[i] + b[i]);
+
+    // k4
+    for (int i = 0; i < 3; ++i) tmp[i] = f[i] + k3[i];
+    matvec3(tmp, Af);
+    for (int i = 0; i < 3; ++i) k4[i] = dt * (Af[i] + b[i]);
+
+    for (int i = 0; i < 3; ++i)
+        f[i] += (k1[i] + 2.0*k2[i] + 2.0*k3[i] + k4[i]) / 6.0;
 }
 
-/*
-  Single complex RK4: To solve equations of the form:
-        df/dt=a*f+b.
-*/
-std::complex<double> Runge_Kutta_moco_4 (std::complex<double> f, 
-                     std::complex<double> a, std::complex<double> b, double dt){
-    
-    std::complex<double> k0=dt*(a*f+b);
-    std::complex<double> k1=dt*(a*(f+0.5*k0)+b);
-    std::complex<double> k2=dt*(a*(f+0.5*k1)+b);
-    std::complex<double> k3=dt*(a*(f+k2)+b);
-    
-    f=f+(1/6.)*(k0+2.*k1+2.*k2+k3);
-    
-    return f;
-}
-
-/*
-  Single real RK4: To solve equations of the form:
-        df/dt=a*f+b.
-*/
-double Runge_Kutta_mono_4 (double f, double a, double b, double dt){
-    
-    double k0=dt*(a*f+b);
-    double k1=dt*(a*(f+0.5*k0)+b);
-    double k2=dt*(a*(f+0.5*k1)+b);
-    double k3=dt*(a*(f+k2)+b);
-    
-    f=f+(1/6.)*(k0+2.*k1+2.*k2+k3);
-    
-    return f;
+/* Generic RK4 (kept for compatibility / future N "just in case") */
+inline void Runge_Kutta_4(std::complex<double>* f,
+                          std::complex<double> const* const* a,
+                          std::complex<double> const* b,
+                          double dt,
+                          int N = 3)
+{
+    if (N == 3) { // fast-path for your current use
+        Runge_Kutta_4_3(f, a, b, dt);
+        return;
     }
+
+    using cd = std::complex<double>;
+    std::vector<cd> k1(N), k2(N), k3(N), k4(N);
+    std::vector<cd> tmp(N), Af(N);
+
+    auto matvec = [&](std::vector<cd> const& x, std::vector<cd>& out){
+        for (int i = 0; i < N; ++i) {
+            cd s(0.0, 0.0);
+            for (int j = 0; j < N; ++j) s += a[i][j] * x[j];
+            out[i] = s;
+        }
+    };
+
+    // k1
+    for (int i = 0; i < N; ++i) tmp[i] = f[i];
+    matvec(tmp, Af);
+    for (int i = 0; i < N; ++i) k1[i] = dt * (Af[i] + b[i]);
+
+    // k2
+    for (int i = 0; i < N; ++i) tmp[i] = f[i] + 0.5 * k1[i];
+    matvec(tmp, Af);
+    for (int i = 0; i < N; ++i) k2[i] = dt * (Af[i] + b[i]);
+
+    // k3
+    for (int i = 0; i < N; ++i) tmp[i] = f[i] + 0.5 * k2[i];
+    matvec(tmp, Af);
+    for (int i = 0; i < N; ++i) k3[i] = dt * (Af[i] + b[i]);
+
+    // k4
+    for (int i = 0; i < N; ++i) tmp[i] = f[i] + k3[i];
+    matvec(tmp, Af);
+    for (int i = 0; i < N; ++i) k4[i] = dt * (Af[i] + b[i]);
+
+    for (int i = 0; i < N; ++i)
+        f[i] += (k1[i] + 2.0*k2[i] + 2.0*k3[i] + k4[i]) / 6.0;
+}
+
+/*
+ * Single complex RK4: df/dt = a f + b.
+ */
+inline std::complex<double> Runge_Kutta_moco_4(std::complex<double> f,
+                                               std::complex<double> a,
+                                               std::complex<double> b,
+                                               double dt)
+{
+    const auto k0 = dt * (a*f + b);
+    const auto k1 = dt * (a*(f + 0.5*k0) + b);
+    const auto k2 = dt * (a*(f + 0.5*k1) + b);
+    const auto k3 = dt * (a*(f + k2) + b);
+    return f + (k0 + 2.0*k1 + 2.0*k2 + k3) / 6.0;
+}
+
+/*
+ * Single real RK4: df/dt = a f + b.
+ */
+inline double Runge_Kutta_mono_4(double f, double a, double b, double dt)
+{
+    const double k0 = dt * (a*f + b);
+    const double k1 = dt * (a*(f + 0.5*k0) + b);
+    const double k2 = dt * (a*(f + 0.5*k1) + b);
+    const double k3 = dt * (a*(f + k2) + b);
+    return f + (k0 + 2.0*k1 + 2.0*k2 + k3) / 6.0;
+}
 
 #endif // MATHNN_H
