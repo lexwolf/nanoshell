@@ -19,7 +19,8 @@ class nanosphere{
 	gsl_spline *reeph;
 	gsl_spline *imeph;
 	double *omem;
-	int rows, spln;
+	size_t rows = 0;
+	int spln;
 	char *wrk;
     public:
 	std::complex<double> img;
@@ -39,123 +40,138 @@ class nanosphere{
 	  pi = acos(-1.);
 	  }
 
-	void set_metal(const char* mtl, const char* mdl, int sel=0){
-	  /** Ome_p [THz]	Plasma frequency (gold)		**/
-	  /** Gam_d [THz]	Drude damping coefficient (gold)**/
-	  double *reps, *ieps, la, Dr, Di;
-	  char *jc;
-	  rows=0;
-	  jc = new char [35];
-	  if(strcmp(mtl,"gold")==0){
-	      Ome_p=8.91;
-	      Gam_d=0.0759;
-	      eps_inf=9.0685;
-	      if(strcmp(mdl,"drude")==0){
-		} else if(strcmp(mdl,"spline")==0){
+	void set_metal(const char* mtl, const char* mdl, int sel = 0)
+	{
+	// store selection
+	// -1: LOW (Re-Dr, Im-Di), 0: BASE, +1: HIGH (Re+Dr, Im+Di)
+	const int s = (sel > 0) ? +1 : (sel < 0 ? -1 : 0);
+
+	rows = 0;
+	spln  = 0;
+
+	if (strcmp(mtl,"gold")==0) {
+		Ome_p = 8.91;     // eV
+		Gam_d = 0.0759;   // eV
+		eps_inf = 9.0685;
+
+		if (strcmp(mdl, "drude") == 0) {
+			if (sel != 0) {
+				std::cerr
+					<< "Warning: 'drude' model does not support JC uncertainty "
+					<< "(sel=" << sel << "). Forcing sel=0 and continuing.\n";
+				sel = 0;
+			}
+			// pure Drude, nothing else to do
+		}
+		else if (strcmp(mdl,"spline")==0) {
 		spln = 1;
-		strcpy(jc,"../data/input/goldJCeV.dat");
-			std::ifstream inp(jc);
-			if (!inp) {
-				std::cerr << "Error: could not open " << jc << "\n";
-				exit(1);
+		const char* jcfile = "../data/input/goldJCeV.dat";
+		std::ifstream inp(jcfile);
+		if (!inp) { std::cerr << "Error: could not open " << jcfile << "\n"; std::exit(1); }
+
+		std::vector<double> omem_vec, reps_vec, ieps_vec;
+		double lam, om, re, im, Dr, Di;
+		std::string line;
+
+		while (std::getline(inp, line)) {
+			std::istringstream iss(line);
+			if (iss >> lam >> om >> re >> im >> Dr >> Di) {
+			// apply ± uncertainties at ingest
+			omem_vec.push_back(om);
+			reps_vec.push_back(re + s * Dr);
+			ieps_vec.push_back(im + s * Di);
 			}
-
-			std::vector<double> omem_vec, reps_vec, ieps_vec;
-			double om, re, im;
-
-			std::string line;
-			while (std::getline(inp, line)) {
-				std::istringstream iss(line);
-				if (iss >> la >> om >> re >> im >> Dr >> Di) {
-					omem_vec.push_back(om);
-					reps_vec.push_back(re);
-					ieps_vec.push_back(im);
-				}
-			}
-
-			inp.close();
-
-			rows = omem_vec.size();
-			omem = new double[rows];
-			reps = new double[rows];
-			ieps = new double[rows];
-
-			for (int i = 0; i < rows; ++i) {
-				omem[i] = omem_vec[i];
-				reps[i] = reps_vec[i];
-				ieps[i] = ieps_vec[i];
-			}
-
-			acc   = gsl_interp_accel_alloc();
-			reeps = gsl_spline_alloc(gsl_interp_cspline, rows);
-			imeps = gsl_spline_alloc(gsl_interp_cspline, rows);
-
-			gsl_spline_init(reeps, omem, reps, rows);
-			gsl_spline_init(imeps, omem, ieps, rows);
 		}
-	      else {
-		std::cout<<"you chosed "<<mdl<<" while option for gold are: drude, drude-lorentz, spline"<<std::endl;
-		exit(1);
+		inp.close();
+
+		rows = omem_vec.size();
+		if (rows == 0) { std::cerr << "Error: empty JC file: " << jcfile << "\n"; std::exit(1); }
+
+		omem = new double[rows];
+		double* reps = new double[rows];
+		double* ieps = new double[rows];
+		for (size_t i=0;i<rows;++i) {
+			omem[i] = omem_vec[i];
+			reps[i] = reps_vec[i];
+			ieps[i] = ieps_vec[i];
 		}
-	    } else  if(strcmp(mtl,"silver")==0){
-	      Ome_p=9.6;
-	      Gam_d=0.0228;
-	      eps_inf=5.3;
-		if(strcmp(mdl,"drude")==0){
-		} else if (strcmp(mdl, "spline") == 0) {
-		    spln = 1;
-			strcpy(jc, "../data/input/silverJCeV.dat");
-			std::ifstream inp(jc);
-			if (!inp) {
-				std::cerr << "Error: could not open " << jc << "\n";
-				exit(1);
+
+		acc   = gsl_interp_accel_alloc();
+		reeps = gsl_spline_alloc(gsl_interp_cspline, rows);
+		imeps = gsl_spline_alloc(gsl_interp_cspline, rows);
+		gsl_spline_init(reeps, omem, reps, rows);
+		gsl_spline_init(imeps, omem, ieps, rows);
+		}
+		else {
+		std::cout << "you chosed " << mdl << " while option for gold are: drude, drude-lorentz, spline\n";
+		std::exit(1);
+		}
+	}
+	else if (strcmp(mtl,"silver")==0) {
+		Ome_p = 9.6;     // eV
+		Gam_d = 0.0228;  // eV
+		eps_inf = 5.3;
+
+		if (strcmp(mdl, "drude") == 0) {
+			if (sel != 0) {
+				std::cerr
+					<< "Warning: 'drude' model does not support JC uncertainty "
+					<< "(sel=" << sel << "). Forcing sel=0 and continuing.\n";
+				sel = 0;
 			}
+			// pure Drude, nothing else to do
+		}
+		else if (strcmp(mdl,"spline")==0) {
+		spln = 1;
+		const char* jcfile = "../data/input/silverJCeV.dat";
+		std::ifstream inp(jcfile);
+		if (!inp) { std::cerr << "Error: could not open " << jcfile << "\n"; std::exit(1); }
 
-			std::vector<double> omem_vec, reps_vec, ieps_vec;
-			double la, Dr, Di, om, re, im;
+		std::vector<double> omem_vec, reps_vec, ieps_vec;
+		double lam, om, re, im, Dr, Di;
+		std::string line;
 
-			std::string line;
-			while (std::getline(inp, line)) {
-				std::istringstream iss(line);
-				if (iss >> la >> om >> re >> im >> Dr >> Di) {
-					omem_vec.push_back(om);
-					reps_vec.push_back(re);
-					ieps_vec.push_back(im);
-				}
+		while (std::getline(inp, line)) {
+			std::istringstream iss(line);
+			if (iss >> lam >> om >> re >> im >> Dr >> Di) {
+			omem_vec.push_back(om);
+			reps_vec.push_back(re + s * Dr);
+			ieps_vec.push_back(im + s * Di);
 			}
-
-			inp.close();
-
-			rows = omem_vec.size();
-			omem = new double[rows];
-			reps = new double[rows];
-			ieps = new double[rows];
-
-			for (int i = 0; i < rows; ++i) {
-				omem[i] = omem_vec[i];
-				reps[i] = reps_vec[i];
-				ieps[i] = ieps_vec[i];
-			}
-
-			acc   = gsl_interp_accel_alloc();
-			reeps = gsl_spline_alloc(gsl_interp_cspline, rows);
-			imeps = gsl_spline_alloc(gsl_interp_cspline, rows);
-
-			gsl_spline_init(reeps, omem, reps, rows);
-			gsl_spline_init(imeps, omem, ieps, rows);
 		}
-	      else {
-		std::cout<<"you chosed "<<mdl<<" while option for silver are: spline"<<std::endl;
-		exit(1);
+		inp.close();
+
+		rows = omem_vec.size();
+		if (rows == 0) { std::cerr << "Error: empty JC file: " << jcfile << "\n"; std::exit(1); }
+
+		omem = new double[rows];
+		double* reps = new double[rows];
+		double* ieps = new double[rows];
+		for (size_t i=0;i<rows;++i) {
+			omem[i] = omem_vec[i];
+			reps[i] = reps_vec[i];
+			ieps[i] = ieps_vec[i];
 		}
-	    }
-	    else{
-		std::cout<<mtl<<" not found, option are: gold, silver"<<std::endl;
-		exit(1);
+
+		acc   = gsl_interp_accel_alloc();
+		reeps = gsl_spline_alloc(gsl_interp_cspline, rows);
+		imeps = gsl_spline_alloc(gsl_interp_cspline, rows);
+		gsl_spline_init(reeps, omem, reps, rows);
+		gsl_spline_init(imeps, omem, ieps, rows);
 		}
-	  ome_p=Ome_p; //corretto
-	  ome_p2=ome_p*ome_p;
-	  }
+		else {
+		std::cout << "you chosed " << mdl << " while option for silver are: spline\n";
+		std::exit(1);
+		}
+	}
+	else {
+		std::cout << mtl << " not found, option are: gold, silver\n";
+		std::exit(1);
+	}
+
+	ome_p  = Ome_p;
+	ome_p2 = ome_p * ome_p;
+	}
 
 	double set_host(const char* hst){
 	  double eps_0;

@@ -23,6 +23,7 @@
 #include <iomanip>
 #include <cstdlib>
 #include <cmath>
+#include <sstream>
 
 using std::complex;
 using std::conj;
