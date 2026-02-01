@@ -74,93 +74,10 @@ class nanosphere{
 #endif
 #define CUP_DEFAULT_FROHLICH_MODE CUP_FROHLICH_OPTIMAL
 
-    double *frohlich(double a0, double b0, double eps_b, double eps_s=0, double rap=0, int mode=CUP_DEFAULT_FROHLICH_MODE){
-        static double reso[2] = {};
-        double ome_sp = 0.0, Gth = 0.0;
-        double eqn9_A, eqn9_D, a, b, d;
-        const double e = 1.e-10;
-        const double rap3 = rap*rap*rap;
+        double *frohlich(double a0, double b0, double eps_b, double eps_s=0, double rap=0, int mode=CUP_DEFAULT_FROHLICH_MODE);
+    double *frohlich_optimal(double a0, double b0, double eps_b, double eps_s=0, double rap=0);
+    double *frohlich_current(double a0, double b0, double eps_b, double eps_s=0, double rap=0);
 
-        std::complex<double> eps1_A, eps1_D, F_A, F_D;
-
-        auto bisect = [&](double ome21)->void {
-            a = a0; b = b0;
-            while (fabs(a-b) >= e){
-                d = 0.5*(a+b);
-
-                eps1_A = metal(a);
-                F_A    = F(eps1_A, eps_s, rap3);
-                eqn9_A = eqn9(a, ome21, F_A, eps_b, Dome);
-
-                eps1_D = metal(d);
-                F_D    = F(eps1_D, eps_s, rap3);
-                eqn9_D = eqn9(d, ome21, F_D, eps_b, Dome);
-
-                if (eqn9_D * eqn9_A <= 0.) b = d;
-                else                       a = d;
-            }
-            ome_sp = d;
-        };
-
-        if (mode == CUP_FROHLICH_OPTIMAL){
-            // omega21 = omega, so at each bisection point use ome21 = current omega (d)
-            // This can be implemented by passing ome21=d to eqn9, which is already done in eqn9(...) call
-            // via bisect(d). We mimic the original behavior by reusing the same structure:
-            a = a0; b = b0;
-            while (fabs(a-b) >= e){
-                d = 0.5*(a+b);
-
-                eps1_A = metal(a);
-                F_A    = F(eps1_A, eps_s, rap3);
-                eqn9_A = eqn9(a, a, F_A, eps_b, Dome);
-
-                eps1_D = metal(d);
-                F_D    = F(eps1_D, eps_s, rap3);
-                eqn9_D = eqn9(d, d, F_D, eps_b, Dome);
-
-                if (eqn9_D * eqn9_A <= 0.) b = d;
-                else                       a = d;
-            }
-            ome_sp = d;
-            Gth = -Dome*imag(F_D)/Dome;
-        }
-        else if (mode == CUP_FROHLICH_CURRENT){
-            // omega21 = omega_0
-            const double ome21 = ome_0;
-            bisect(ome21);
-            // Keep the historical formula you used in single_particle:
-            Gth = 2.*(ome_sp-ome_0)*(real(F_D)-eps_b) - Dome*imag(F_D)/Dome;
-        }
-        else if (mode == CUP_FROHLICH_SELF_CONSISTENT){
-            // omega21 is repositioned to omega_sp until convergence
-            double ome_sm = 666.;
-            ome_sp = 0.5*(b0+a0);
-            while (fabs(ome_sp - ome_sm) > 1.e-20){
-                const double ome21 = ome_sp;
-                bisect(ome21);
-                ome_sm = ome_sp;
-                // ome_sp updated by bisect
-            }
-            Gth = -Dome*imag(F_D)/Dome;
-        }
-        else{
-            std::cerr << "Error: unknown Frohlich mode = " << mode << std::endl;
-            std::exit(EXIT_FAILURE);
-        }
-
-        reso[0] = ome_sp;
-        reso[1] = Gth;
-        return reso;
-    }
-
-    // Backward-compatible wrappers (keep older call sites working)
-    double *frohlich_optimal(double a0, double b0, double eps_b, double eps_s=0, double rap=0){
-        return frohlich(a0, b0, eps_b, eps_s, rap, CUP_FROHLICH_OPTIMAL);
-    }
-
-    double *frohlich_current(double a0, double b0, double eps_b, double eps_s=0, double rap=0){
-        return frohlich(a0, b0, eps_b, eps_s, rap, CUP_FROHLICH_CURRENT);
-    }
 	double Rabi_frec(double G, double tau2, double E0){
 		double omeR = 2.*sqrt(fabs(G)/tau2)*E0*1.e7;
 		return omeR;
@@ -920,6 +837,9 @@ std::complex<double> numerical(char* mdl, char* mtl, char* hst,
 		return dip;
 		}
 	};
+
+
+#include "cup/quasi_static/frohlich.H"
 
 
 // Inline definitions of material-related member functions

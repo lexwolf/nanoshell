@@ -17,6 +17,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#ifndef NANOSHELL_H
+#define NANOSHELL_H
+
+#define CUP_HAS_FROHLICH_GEOMETRY 1
+#define CUP_GEOMETRY_NANOSHELL 1
+
 inline std::complex<double>* pcfc0(std::complex <double> eps_inf, double eps_b, double eps_s, double rho){
       auto* p = new std::complex<double>[4];
       double r3=rho*rho*rho;
@@ -119,3 +125,5 @@ std::complex<double> numerical_output(double E0, std::complex<double> *q, std::c
   nout = p[0]*q[0] + p[1]*q[1] + p[2]*q[2] + p[3]*E0;
   return nout;
   }
+
+#endif // NANOSHELL_H
