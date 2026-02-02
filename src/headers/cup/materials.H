@@ -202,7 +202,7 @@ inline std::complex<double> nanosphere::confinement(double ome){
 inline std::complex<double> nanosphere::active(double ome, double epsh){
   std::complex<double> eps;
       double nG = fabs(G);
-      eps = std::complex<double>(epsh, 0.) + act*nG*Dome/(2.*(ome - ome_0) + img*Dome) - (1 - act)*nG*img;
+      eps = std::complex<double>(epsh, 0.) + act*nG*Dome/(2.*(ome - ome_g) + img*Dome) - (1 - act)*nG*img;
       return eps;
     }
 
@@ -215,30 +215,30 @@ return GamG;
 
 
 inline double * nanosphere::normalized_variables (){
-double *nv, tau1, tau2, gamd, ome0;
+double *nv, tau1, tau2, gamd, ome_g_norm;
 nv = new double[4];
 		
 tau2 = 2.*Ome_p/Dome;
 tau1 = 5.*tau2;
 
 gamd = .5*Gam_d/Ome_p;
-ome0 = ome_0/Ome_p;
+ome_g_norm = ome_g/Ome_p;
 
 nv[0] = tau1;
 nv[1] = tau2;
 nv[2] = gamd;
-nv[3] = ome0;
+nv[3] = ome_g_norm;
 
 return nv;
 }
 
 
-inline std::complex<double> * nanosphere::set_ome_dep_vrbls(double ome, double ome0, double tau2, double gamd){
+inline std::complex<double> * nanosphere::set_ome_dep_vrbls(double ome, double ome_g, double tau2, double gamd){
 std::complex<double> OmeG, GamM, OmeM;
 std::complex<double> *odv;
 odv = new std::complex<double> [3];
 
-OmeG = img*(ome-ome0)-1./tau2;
+OmeG = img*(ome-ome_g)-1./tau2;
 GamM = 1./(2.*(gamd-img*ome));
 OmeM = (ome*(ome+2.*img*gamd))*GamM; 
 

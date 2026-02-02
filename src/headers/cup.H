@@ -31,7 +31,7 @@ class nanosphere{
 	double A, r1, r2, rap;
 	double G, nOme;
 	double ome_p, Dome, lam_0, eps_0;
-	double ome_p2, ome_0, gamd, kap;
+	double ome_p2, ome_g, gamd, kap;
 	double ome_o2, ome, f, n, enne, omeB;
 	double Ome_p, Gam_d, Gam, eps_inf, Ome_L, Gam_L, Deps, DELTAOme;
 	std::complex<double> eps3, ceps_inf;
@@ -51,7 +51,7 @@ class nanosphere{
 		std::complex<double> active(double ome, double epsh);
 		std::complex<double> set_GamG(double G, double tau2);
 		double *normalized_variables();
-		std::complex<double> *set_ome_dep_vrbls(double ome, double ome0, double tau2, double gamd);
+		std::complex<double> *set_ome_dep_vrbls(double ome, double ome_g, double tau2, double gamd);
 
     // -------------------------
     // Frohlich threshold solvers
@@ -88,7 +88,7 @@ class nanosphere{
 //         std::complex<double> GamG, OmeG, GamM, OmeM, **A, *p0, *p1, *p2, gam1, gam2, xi, *kap, *odv;
 //         
 //         double *nv, omeeV, dome  = (omema-omemi)/omeN, ome;
-//         double  eps_b, eps_s, tau2, gamd, ome0;
+//         double  eps_b, eps_s, tau2, gamd, ome_g;
 // 
 //         if ((sol != NULL)) {
 //             eps_s=set_host(sol);
@@ -107,7 +107,7 @@ class nanosphere{
 //         nv = normalized_variables ();
 //         tau2 = nv[1];
 //         gamd = nv[2];
-//         ome0 = nv[3];
+//         ome_g = nv[3];
 //         GamG   = set_GamG(G, tau2);
 // 
 //         
@@ -121,7 +121,7 @@ class nanosphere{
 //             
 // 			ome  = omeeV/Ome_p;
 // 
-//             odv  = set_ome_dep_vrbls(ome, ome0, tau2, gamd);
+//             odv  = set_ome_dep_vrbls(ome, ome_g, tau2, gamd);
 //             OmeG = odv[0];
 //             OmeM = odv[1];
 //             GamM = odv[2];
@@ -226,7 +226,7 @@ class nanosphere{
 
 	    std::vector<std::pair<double,std::complex<double>>> valph;
 	    
-	    double tau2, gamd, ome0, eps3, pG = fabs(G), *nv;
+	    double tau2, gamd, ome_g, eps3, pG = fabs(G), *nv;
 	    std::complex<double> GamG, OmeG, GamM, OmeM, *p0, *p1, *p2, **A, detA, *kap, *odv;
 	    
 	    A = new std::complex<double>*[3];
@@ -295,7 +295,7 @@ class nanosphere{
 	    nv = normalized_variables ();
 		tau2 = nv[1];
 		gamd = nv[2];
-		ome0 = nv[3];
+		ome_g = nv[3];
 		GamG = set_GamG(G, tau2);
 
 	    for (omi=0; omi<=omeN; omi++){
@@ -331,7 +331,7 @@ class nanosphere{
 		
 		ome = omeeV/Ome_p;
 		
-		odv  = set_ome_dep_vrbls(ome, ome0, tau2, gamd);
+		odv  = set_ome_dep_vrbls(ome, ome_g, tau2, gamd);
 
 		OmeG = odv[0];
 		OmeM = odv[1];
@@ -453,7 +453,7 @@ std::complex<double> numerical(char* mdl, char* mtl, char* hst,
 
     int steste = 0;
     std::complex<double> eps1e, eps2e, alph;
-    double omep, t, tau1, tau2, gamd, ome0, pG = fabs(G), tildeN;
+    double omep, t, tau1, tau2, gamd, ome_g, pG = fabs(G), tildeN;
 
     // NOTE: GamG is constant, the N dependence enters via GamG * N
     std::complex<double> GamG, OmeG, GamM, OmeM, chiH, chiP;
@@ -503,7 +503,7 @@ std::complex<double> numerical(char* mdl, char* mtl, char* hst,
     tau1 = nv[0];
     tau2 = nv[1];
     gamd = nv[2];
-    ome0 = nv[3];
+    ome_g = nv[3];
 
     GamG = set_GamG(G, tau2);
 
@@ -518,7 +518,7 @@ std::complex<double> numerical(char* mdl, char* mtl, char* hst,
 
     ome = omeeV / Ome_p;
 
-    odv = set_ome_dep_vrbls(ome, ome0, tau2, gamd); // returns new complex[3]
+    odv = set_ome_dep_vrbls(ome, ome_g, tau2, gamd); // returns new complex[3]
     OmeG = odv[0];
     OmeM = odv[1];
     GamM = odv[2];
@@ -658,7 +658,7 @@ std::complex<double> numerical(char* mdl, char* mtl, char* hst,
 		eps_b=set_host(hst);
 		int steste=0, amp=0;
 		std::complex<double> eps1e, eps2e, eps1, eps2, alph;
-		double omep, t, tau1, tau2, gamd, ome0, pG = fabs(G), *nv, N, tildeN;
+		double omep, t, tau1, tau2, gamd, ome_g, pG = fabs(G), *nv, N, tildeN;
 		std::complex<double> GamGxN, OmeG, chiH, GamM, OmeM, chiP, *p0, *p1, *p2, *p3, *p, *q, *odv;
 		
 		std::complex<double> dip = {0.0, 0.0};
@@ -733,7 +733,7 @@ std::complex<double> numerical(char* mdl, char* mtl, char* hst,
 		tau1 = nv[0];
 		tau2 = nv[1];
 		gamd = nv[2];
-		ome0 = nv[3];
+		ome_g = nv[3];
 	
 		metal(omeeV); //needed to calculate ceps_inf
 		p0 = pcfc0(ceps_inf, eps_b, eps_s, rho);
@@ -745,7 +745,7 @@ std::complex<double> numerical(char* mdl, char* mtl, char* hst,
 		ome = omeeV/Ome_p;
 		
 			
-		odv  = set_ome_dep_vrbls(ome, ome0, tau2, gamd);
+		odv  = set_ome_dep_vrbls(ome, ome_g, tau2, gamd);
 		
 		OmeG = odv[0];
 		OmeM = odv[1];

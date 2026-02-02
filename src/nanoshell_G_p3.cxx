@@ -75,7 +75,7 @@ int main(){
         return 1;
     }
     
-    nano>>ns.r1>>ns.Dome>>ns.ome_0>>ns.G>>omemi>>omema>>mtl>>mdl>>active>>sol>>E0>>rho>>hst;
+    nano>>ns.r1>>ns.Dome>>ns.ome_g>>ns.G>>omemi>>omema>>mtl>>mdl>>active>>sol>>E0>>rho>>hst;
     
     E0=1.e-8;
     ns.init();
@@ -89,7 +89,7 @@ int main(){
     dG=40.*fro[1]/GN;
    
     omeeV    = fro[0];
-    ns.ome_0 = omeeV;
+    ns.ome_g = omeeV;
 
     eps2=ns.metal(omeeV);
     

@@ -49,7 +49,7 @@ int main(int argc, char ** argv){
     return 1;
   }
 
-  nano>>ns.r1>>ns.Dome>>ns.ome_0>>ns.G>>omemi>>omema>>mtl>>mdl>>active>>sol>>E0>>rap>>hst;
+  nano>>ns.r1>>ns.Dome>>ns.ome_g>>ns.G>>omemi>>omema>>mtl>>mdl>>active>>sol>>E0>>rap>>hst;
 
   ns.init();
   eps3=ns.set_host(sol);

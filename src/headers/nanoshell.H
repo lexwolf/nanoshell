@@ -106,9 +106,9 @@ std::complex<double> F(std::complex<double> eps2, double eps3, double rap3){
     eff=eps2*(2.*eps2*(rap3-1.)-2.*eps3*(rap3+2.))/(eps2*(2.*rap3+1.)+2.*eps3*(1.-rap3));
     return eff;
     }
-double eqn9(double ome, double ome0, std::complex<double> F, double eps_b, double Dome){
+double eqn9(double ome, double ome_g, std::complex<double> F, double eps_b, double Dome){
     double eq9;
-    eq9=Dome*(eps_b-real(F))-2.*(ome - ome0)*imag(F);
+    eq9=Dome*(eps_b-real(F))-2.*(ome - ome_g)*imag(F);
     return eq9;
     }    
 

@@ -85,7 +85,7 @@ fi
 file_path="../data/input/nanosphere_eV.dat"
 echo "> WARNING: $file_path will be temporarily overwritten during the calculations."
 
-read r Dome ome0 G omemi omema mtl mdl atv hst E0 rho sol < <(grep -v '^#' "$file_path")
+read r Dome ome_g G omemi omema mtl mdl atv hst E0 rho sol < <(grep -v '^#' "$file_path")
 
 # Backup the original file
 cp "$file_path" "${file_path}.bak"
@@ -139,7 +139,7 @@ echo "> ...done!"
 # Reinstate the original content of the file
 echo "> Reinstating the original content of $file_path"
 {
-  echo "$r $Dome $ome0 $G $omemi $omema $mtl $mdl $atv $hst $E0 $rho $sol"
-  echo "# r Dome ome0 G omemi omema mtl mdl atv hst E0 rho sol"
+  echo "$r $Dome $ome_g $G $omemi $omema $mtl $mdl $atv $hst $E0 $rho $sol"
+  echo "# r Dome ome_g G omemi omema mtl mdl atv hst E0 rho sol"
 } > "$file_path"
 echo "> done!"

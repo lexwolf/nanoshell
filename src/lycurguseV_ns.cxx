@@ -59,7 +59,7 @@ int main(){
   nanosphere ns;
 
     
-  nano>>ns.r1>>ns.Dome>>ns.ome_0>>ns.G>>omemi>>omema>>mtl>>mdl>>active>>sol>>E0>>ns.rap>>hst;
+  nano>>ns.r1>>ns.Dome>>ns.ome_g>>ns.G>>omemi>>omema>>mtl>>mdl>>active>>sol>>E0>>ns.rap>>hst;
   
   ns.r1=ns.r1*1.e-9;
   ns.r2=ns.r1/ns.rap;

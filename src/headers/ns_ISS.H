@@ -149,16 +149,16 @@ double** Inum(std::complex<double>* p1, std::complex<double>* p2, std::complex<d
     return I;
 }
 
-double *cffcOme (double *D, double **R, double **I, std::complex<double>* p0, double tau2, double ome, double ome0){
+double *cffcOme (double *D, double **R, double **I, std::complex<double>* p0, double tau2, double ome, double ome_g){
     double *c;
     c = new double[5];
 
-    c[0] = real(-(p0[2]*I[2][0]+p0[1]*I[1][0])*(ome-ome0)*tau2+p0[2]*R[2][0]+p0[1]*R[1][0]+D[0]*p0[0]);
-    c[1] = real(-(p0[2]*I[2][1]+p0[1]*I[1][1])*(ome-ome0)*tau2+p0[2]*(I[2][0]*tau2+R[2][1])+
+    c[0] = real(-(p0[2]*I[2][0]+p0[1]*I[1][0])*(ome-ome_g)*tau2+p0[2]*R[2][0]+p0[1]*R[1][0]+D[0]*p0[0]);
+    c[1] = real(-(p0[2]*I[2][1]+p0[1]*I[1][1])*(ome-ome_g)*tau2+p0[2]*(I[2][0]*tau2+R[2][1])+
                                                           p0[1]*(I[1][0]*tau2+R[1][1])+p0[0]*D[1]);
-    c[2] = real(-(p0[2]*I[2][2]+p0[1]*I[1][2])*(ome-ome0)*tau2+p0[2]*(I[2][1]*tau2+R[2][2])+
+    c[2] = real(-(p0[2]*I[2][2]+p0[1]*I[1][2])*(ome-ome_g)*tau2+p0[2]*(I[2][1]*tau2+R[2][2])+
                                                           p0[1]*(I[1][1]*tau2+R[1][2])+p0[0]*D[2]);
-    c[3] = real(-(p0[2]*I[2][3]+p0[1]*I[1][3])*(ome-ome0)*tau2+p0[2]*(I[2][2]*tau2+R[2][3])+
+    c[3] = real(-(p0[2]*I[2][3]+p0[1]*I[1][3])*(ome-ome_g)*tau2+p0[2]*(I[2][2]*tau2+R[2][3])+
                                                           p0[1]*(I[1][2]*tau2+R[1][3])+p0[0]*D[3]);
     c[4] = real((p0[2]*I[2][3]+p0[1]*I[1][3])*tau2+p0[0]*D[4]);
 
@@ -171,7 +171,7 @@ std::vector<std::pair<double,std::complex<double>>> gimme_emi_kap(nanosphere ns,
         std::complex<double> GG, OmeH, GamP, OmeP, **A, *p0, *p1, *p2, gam1, gam2, xi, *kap, *odv;
         
         double *nv, omeeV, dome  = (omema-omemi)/omeN, ome;
-        double  eps_b, eps_s, tau2, gamd, ome0;
+        double  eps_b, eps_s, tau2, gamd, ome_g;
 
         if ((sol != NULL)) {
             eps_s=ns.set_host(sol);
@@ -190,7 +190,7 @@ std::vector<std::pair<double,std::complex<double>>> gimme_emi_kap(nanosphere ns,
         nv = ns.normalized_variables ();
         tau2 = nv[1];
         gamd = nv[2];
-        ome0 = nv[3];
+        ome_g = nv[3];
         GG   = ns.set_GamG(ns.G, tau2);
 
         p0 = pcfc0(ns.eps_inf, eps_b, eps_s, rho);
@@ -202,7 +202,7 @@ std::vector<std::pair<double,std::complex<double>>> gimme_emi_kap(nanosphere ns,
         
             ome  = omeeV/ns.Ome_p;
 
-            odv  = ns.set_ome_dep_vrbls(ome, ome0, tau2, gamd);
+            odv  = ns.set_ome_dep_vrbls(ome, ome_g, tau2, gamd);
             OmeH = odv[0];
             OmeP = odv[1];
             GamP = odv[2];
@@ -226,7 +226,7 @@ std::vector<std::pair<double,std::complex<double>>> gimme_emi_kap(nanosphere ns,
 
 double find_Omega(nanosphere ns, double omeeV, char* hst, char* sol=0, double rho=0){
     std::complex<double> GG, OmeH, GamP, OmeP, **A, *p0, *p1, *p2, gam1, gam2, xi, *vOme, *kap, *odv;
-    double tau1, tau2, gamd, ome, ome0, eps_b, eps_s, *D, **R, **I, *c;
+    double tau1, tau2, gamd, ome, ome_g, eps_b, eps_s, *D, **R, **I, *c;
     double Ome, equ1, equ2, kamp, dmem, *nv;
     
     eps_b=ns.set_host(hst);
@@ -258,12 +258,12 @@ double find_Omega(nanosphere ns, double omeeV, char* hst, char* sol=0, double rh
     tau1 = nv[0];
     tau2 = nv[1];
     gamd = nv[2];
-    ome0 = nv[3];
+    ome_g = nv[3];
     GG   = ns.set_GamG(ns.G, tau2);
 
     ome  = omeeV/ns.Ome_p;
 
-    odv  = ns.set_ome_dep_vrbls(ome, ome0, tau2, gamd);
+    odv  = ns.set_ome_dep_vrbls(ome, ome_g, tau2, gamd);
     OmeH = odv[0];
     OmeP = odv[1];
     GamP = odv[2];
@@ -277,7 +277,7 @@ double find_Omega(nanosphere ns, double omeeV, char* hst, char* sol=0, double rh
     D    = Dsqr(p1[1], p1[2], p2[1], p2[2], ome, gamd);
     R    = Rnum(p1, p2, ome, gamd);
     I    = Inum(p1, p2, ome, gamd);
-    c    = cffcOme (D, R, I, p0, tau2, ome, ome0);
+    c    = cffcOme (D, R, I, p0, tau2, ome, ome_g);
     
 
     
@@ -302,7 +302,7 @@ double find_Omega(nanosphere ns, double omeeV, char* hst, char* sol=0, double rh
     gam1 = gamma1(A, Ome);
     gam2 = gamma2(A, Ome);
     xi   = gimmeXi(p0, gam1, gam2, tau1);
-    equ1 = norm(gammaD(A, Ome))*(real(xi)+tau2*(Ome-ome+ome0)*imag(xi))/tau1;
+    equ1 = norm(gammaD(A, Ome))*(real(xi)+tau2*(Ome-ome+ome_g)*imag(xi))/tau1;
     equ2 = c[0]+c[1]*Ome+c[2]*pow(Ome,2)+c[3]*pow(Ome,3)+c[4]*pow(Ome,4);
     if (abs(equ1-equ2)>=1.e-18 && fabs(Ome)> 1.e-30){
         std::cout.precision(20);
@@ -316,14 +316,14 @@ double find_Omega(nanosphere ns, double omeeV, char* hst, char* sol=0, double rh
     return Ome;
     }
 
-double gOmega(double ome, double ome0, double tau2, std::complex<double> xi, double Ome){
-    double g = ome - ome0 - real(xi)/(tau2*imag(xi)) - Ome;
+double gOmega(double ome, double ome_g, double tau2, std::complex<double> xi, double Ome){
+    double g = ome - ome_g - real(xi)/(tau2*imag(xi)) - Ome;
     return g;
     }
     
 double find_Omega1(nanosphere ns, double omeeV, char* hst, char* sol, double rho){
     std::complex<double> GG, OmeH, GamP, OmeP, **A, *p0, *p1, *p2, cq0s, gam1, gam2, xi, *kap, *odv;
-    double tau1, tau2, gamd, ome, ome0, eps_b, eps_s;
+    double tau1, tau2, gamd, ome, ome_g, eps_b, eps_s;
     double Ome, Ome0, *nv, ddOme, gOme, gOmep, gOmem, DgOme, dOme;
     int ite=0;
 
@@ -344,13 +344,13 @@ double find_Omega1(nanosphere ns, double omeeV, char* hst, char* sol, double rho
     tau1 = nv[0];
     tau2 = nv[1];
     gamd = nv[2];
-    ome0 = nv[3];
+    ome_g = nv[3];
 
     GG   = ns.set_GamG(ns.G, tau2);
     
     ome  = omeeV/ns.Ome_p;
 
-    odv  = ns.set_ome_dep_vrbls(ome, ome0, tau2, gamd);
+    odv  = ns.set_ome_dep_vrbls(ome, ome_g, tau2, gamd);
     OmeH = odv[0];
     OmeP = odv[1];
     GamP = odv[2];
@@ -375,16 +375,16 @@ double find_Omega1(nanosphere ns, double omeeV, char* hst, char* sol, double rho
             gam1   = gamma1(A, Ome);
             gam2   = gamma2(A, Ome);
             xi     = gimmeXi(p0, gam1, gam2, tau1);
-            gOme   = gOmega(ome, ome0, tau2, xi, Ome);
+            gOme   = gOmega(ome, ome_g, tau2, xi, Ome);
             gam1   = gamma1(A, Ome + ddOme);
             gam2   = gamma2(A, Ome + ddOme);
             xi     = gimmeXi(p0, gam1, gam2, tau1);
-            gOmep  = gOmega(ome, ome0, tau2, xi, Ome + ddOme);
+            gOmep  = gOmega(ome, ome_g, tau2, xi, Ome + ddOme);
             
             gam1   = gamma1(A,Ome - ddOme);
             gam2   = gamma2(A,Ome - ddOme);
             xi     = gimmeXi(p0, gam1, gam2, tau1);
-            gOmem  =  gOmega(ome, ome0, tau2, xi, Ome - ddOme);
+            gOmem  =  gOmega(ome, ome_g, tau2, xi, Ome - ddOme);
             
             DgOme  = .5*(gOmep-gOmem)/ddOme;
             dOme   = -gOme/DgOme;
@@ -399,7 +399,7 @@ double find_Omega1(nanosphere ns, double omeeV, char* hst, char* sol, double rho
     
 double *ISS_results(nanosphere ns, double Ome, double ome1, double ome2, double omeeV, char* hst, char* sol=0, double rho=0){
     std::complex<double> GG, OmeH, GamP, OmeP, gam1, gam2, xi, **A, cq0s, *vec, *odv;
-    double *res, q0s, p1s, p2s, p3s, N, tau1, tau2, gamd, ome, ome0, *nv;
+    double *res, q0s, p1s, p2s, p3s, N, tau1, tau2, gamd, ome, ome_g, *nv;
     std::complex<double>* p0, *p1, *p2, *p3;
     double eps_b, eps_s, *fro;
     eps_b=ns.set_host(hst);
@@ -421,12 +421,12 @@ double *ISS_results(nanosphere ns, double Ome, double ome1, double ome2, double 
     tau1 = nv[0];
     tau2 = nv[1];
     gamd = nv[2];
-    ome0 = nv[3];
+    ome_g = nv[3];
     GG = ns.set_GamG(ns.G, tau2);
     
     ome  = omeeV/ns.Ome_p;
 
-    odv  = ns.set_ome_dep_vrbls(ome, ome0, tau2, gamd);
+    odv  = ns.set_ome_dep_vrbls(ome, ome_g, tau2, gamd);
     OmeH = odv[0];
     OmeP = odv[1];
     GamP = odv[2];

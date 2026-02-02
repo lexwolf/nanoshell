@@ -48,7 +48,7 @@ int main(int argc, char** argv){
       }
   alpha=atof(argv[1]);
   
-  nano>>ns.r1>>ns.Dome>>ns.ome_0>>ns.G>>omemi>>omema>>mtl>>mdl>>active>>sol>>E0>>rho>>hst;
+  nano>>ns.r1>>ns.Dome>>ns.ome_g>>ns.G>>omemi>>omema>>mtl>>mdl>>active>>sol>>E0>>rho>>hst;
 
   ns.init();
   ns.set_metal(mtl,mdl,1);

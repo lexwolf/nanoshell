@@ -70,7 +70,7 @@ int main(int argc, char** argv){
         return 1;
     }
     
-    nano>>ns.r1>>ns.Dome>>ns.ome_0>>ns.G>>omemi>>omema>>mtl>>mdl>>active>>sol>>E0>>rho>>hst;
+    nano>>ns.r1>>ns.Dome>>ns.ome_g>>ns.G>>omemi>>omema>>mtl>>mdl>>active>>sol>>E0>>rho>>hst;
     time>>T>>tpump;    
     
     if (E0==0.) E0=1.e-30; // zero is problematic as a value for E0 
@@ -87,7 +87,7 @@ int main(int argc, char** argv){
     frlc<<fro[0]<<" "<<fro[1]<<endl;
     
 
-    ns.ome_0=fro[0];
+    ns.ome_g=fro[0];
     
     ns.steady_state(mdl, mtl, hst, omemi, omema, 1000, sol, rho);
     alph_anl=ns.analytical(mdl, mtl, hst, E0, omeeV, T, tpump, sol, rho)/E0;

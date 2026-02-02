@@ -65,10 +65,10 @@ inline double *nanosphere::frohlich(double a0, double b0, double eps_b, double e
         }
         else if (mode == CUP_FROHLICH_CURRENT){
             // omega21 = omega_0
-            const double ome21 = ome_0;
+            const double ome21 = ome_g;
             bisect(ome21);
             // Keep the historical formula you used in single_particle:
-            Gth = 2.*(ome_sp-ome_0)*(real(F_D)-eps_b) - Dome*imag(F_D)/Dome;
+            Gth = 2.*(ome_sp-ome_g)*(real(F_D)-eps_b) - Dome*imag(F_D)/Dome;
         }
         else if (mode == CUP_FROHLICH_SELF_CONSISTENT){
             // omega21 is repositioned to omega_sp until convergence
