@@ -58,7 +58,7 @@ mkdir -p "$outbase"
 cp "$infile" "${infile}.bak" || exit 1
 
 # Read first line (same pattern as intime.bash)
-read r1 Dome ome_g G omemi omema mtl mdl active sol E0 rap hst < "$infile"
+read a Dome ome_g G omemi omema mtl mdl active sol E0 rho hst < "$infile"
 
 # Frohlich thresholds
 info=$(../bin/fro)
@@ -77,8 +77,8 @@ echo "$ometh $Gth" > ../data/output/frohlich.dat
 write_input() {
   local newG="$1"
   {
-    echo "$r1 $Dome $ometh $newG $omemi $omema $mtl $mdl $active $sol $E0 $rap $hst"
-    echo "# a Dome ome_g G omemi omema mtl mdl atv sol E0 rap host"
+    echo "$a $Dome $ometh $newG $omemi $omema $mtl $mdl $active $sol $E0 $rho $hst"
+    echo "# a Dome ome_g G omemi omema mtl mdl atv sol E0 rho host"
     echo "** WARNING: automatically modified by GxN.bash"
   } > "$infile"
 }

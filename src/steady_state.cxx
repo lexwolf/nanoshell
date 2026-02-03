@@ -43,12 +43,12 @@ int main(int argc, char** argv){
         return 1;
     }
 
-    nano>>ns.r1>>ns.Dome>>ns.ome_g>>ns.G>>omemi>>omema>>mtl>>mdl>>active>>sol>>E0>>ns.rap>>hst;
+    nano>>ns.a>>ns.Dome>>ns.ome_g>>ns.G>>omemi>>omema>>mtl>>mdl>>active>>sol>>E0>>ns.rho>>hst;
     ns.init();
     ns.set_metal(mtl,mdl,1);
     ns.set_host(sol);
     ns.set_active(active);
     
-    ns.steady_state(mdl, mtl, hst, omemi, omema, 100000, sol, ns.rap);
+    ns.steady_state(mdl, mtl, hst, omemi, omema, 100000, sol, ns.rho);
   return 0;
   }

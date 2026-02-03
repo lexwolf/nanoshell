@@ -62,7 +62,7 @@ int main(int argc, char** argv){
         return 1;
     }
     
-    nano>>ns.r1>>ns.Dome>>ns.ome_g>>ns.G>>omemi>>omema>>mtl>>mdl>>active>>sol>>E0>>rho>>hst;
+    nano>>ns.a>>ns.Dome>>ns.ome_g>>ns.G>>omemi>>omema>>mtl>>mdl>>active>>sol>>E0>>rho>>hst;
     time>>T>>tpump;    
     
     if (E0==0.) E0=1.e-30; // zero is problematic as a value for E0 

@@ -101,9 +101,9 @@ double Nss(double tau1, double* p0, std::complex<double> *q){
   return N;
   }
 
-std::complex<double> F(std::complex<double> eps2, double eps3, double rap3){
+std::complex<double> F(std::complex<double> eps2, double eps3, double rho3){
     std::complex<double> eff;
-    eff=eps2*(2.*eps2*(rap3-1.)-2.*eps3*(rap3+2.))/(eps2*(2.*rap3+1.)+2.*eps3*(1.-rap3));
+    eff=eps2*(2.*eps2*(rho3-1.)-2.*eps3*(rho3+2.))/(eps2*(2.*rho3+1.)+2.*eps3*(1.-rho3));
     return eff;
     }
 double eqn9(double ome, double ome_g, std::complex<double> F, double eps_b, double Dome){

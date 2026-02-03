@@ -36,9 +36,8 @@ int main(int argc, char ** argv){
         cout<<endl<<" Usage: "<<argv[0]<<" <rho>"<<endl<<endl;
         exit(1);
         }
-  double rho;
-  rho=atof(argv[1]);
-  double   omemi, omema, eps_b, E0, eps3, rap;
+  double rho = atof(argv[1]);
+  double   omemi, omema, eps_b, E0, eps3, rho_file;
   double *result;
   
   char mtl[16], mdl[16], sol[16], hst[16], active[16];
@@ -49,7 +48,8 @@ int main(int argc, char ** argv){
     return 1;
   }
 
-  nano>>ns.r1>>ns.Dome>>ns.ome_g>>ns.G>>omemi>>omema>>mtl>>mdl>>active>>sol>>E0>>rap>>hst;
+  nano>>ns.a>>ns.Dome>>ns.ome_g>>ns.G>>omemi>>omema>>mtl>>mdl>>active>>sol>>E0>>rho_file>>hst;
+  (void)rho_file;
 
   ns.init();
   eps3=ns.set_host(sol);
@@ -60,6 +60,5 @@ int main(int argc, char ** argv){
   cout.precision(7);        //set the precision
   cout.setf(ios::fixed);
   cout<<result[0]<<" "<<result[1];
-  return 0;
   return 0;
   }

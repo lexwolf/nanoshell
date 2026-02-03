@@ -12,13 +12,13 @@
 #include <cmath>
 #include <iostream>
 
-inline double *nanosphere::frohlich(double a0, double b0, double eps_b, double eps_s, double rap, int mode) {
+inline double *nanosphere::frohlich(double a0, double b0, double eps_b, double eps_s, double rho, int mode) {
 
         static double reso[2] = {};
         double ome_sp = 0.0, Gth = 0.0;
         double eqn9_A, eqn9_D, a, b, d;
         const double e = 1.e-10;
-        const double rap3 = rap*rap*rap;
+        const double rho3 = rho*rho*rho;
 
         std::complex<double> eps1_A, eps1_D, F_A, F_D;
 
@@ -28,11 +28,11 @@ inline double *nanosphere::frohlich(double a0, double b0, double eps_b, double e
                 d = 0.5*(a+b);
 
                 eps1_A = metal(a);
-                F_A    = F(eps1_A, eps_s, rap3);
+                F_A    = F(eps1_A, eps_s, rho3);
                 eqn9_A = eqn9(a, ome21, F_A, eps_b, Dome);
 
                 eps1_D = metal(d);
-                F_D    = F(eps1_D, eps_s, rap3);
+                F_D    = F(eps1_D, eps_s, rho3);
                 eqn9_D = eqn9(d, ome21, F_D, eps_b, Dome);
 
                 if (eqn9_D * eqn9_A <= 0.) b = d;
@@ -50,11 +50,11 @@ inline double *nanosphere::frohlich(double a0, double b0, double eps_b, double e
                 d = 0.5*(a+b);
 
                 eps1_A = metal(a);
-                F_A    = F(eps1_A, eps_s, rap3);
+                F_A    = F(eps1_A, eps_s, rho3);
                 eqn9_A = eqn9(a, a, F_A, eps_b, Dome);
 
                 eps1_D = metal(d);
-                F_D    = F(eps1_D, eps_s, rap3);
+                F_D    = F(eps1_D, eps_s, rho3);
                 eqn9_D = eqn9(d, d, F_D, eps_b, Dome);
 
                 if (eqn9_D * eqn9_A <= 0.) b = d;
@@ -93,13 +93,13 @@ inline double *nanosphere::frohlich(double a0, double b0, double eps_b, double e
     
 }
 
-inline double *nanosphere::frohlich_optimal(double a0, double b0, double eps_b, double eps_s, double rap) {
-        return frohlich(a0, b0, eps_b, eps_s, rap, CUP_FROHLICH_OPTIMAL);
+inline double *nanosphere::frohlich_optimal(double a0, double b0, double eps_b, double eps_s, double rho) {
+        return frohlich(a0, b0, eps_b, eps_s, rho, CUP_FROHLICH_OPTIMAL);
     
 }
 
-inline double *nanosphere::frohlich_current(double a0, double b0, double eps_b, double eps_s, double rap) {
-        return frohlich(a0, b0, eps_b, eps_s, rap, CUP_FROHLICH_CURRENT);
+inline double *nanosphere::frohlich_current(double a0, double b0, double eps_b, double eps_s, double rho) {
+        return frohlich(a0, b0, eps_b, eps_s, rho, CUP_FROHLICH_CURRENT);
     
 }
 

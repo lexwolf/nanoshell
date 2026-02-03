@@ -45,7 +45,7 @@ int main(int argc, char** argv){
         return 1;
     }
 
-    nano>>ns.r1>>ns.Dome>>ns.ome_g>>ns.G>>omemi>>omema>>mtl>>mdl>>active>>sol>>E0>>rho>>hst;
+    nano>>ns.a>>ns.Dome>>ns.ome_g>>ns.G>>omemi>>omema>>mtl>>mdl>>active>>sol>>E0>>rho>>hst;
     
     ns.init();
     ns.set_metal(mtl,mdl,1);

@@ -118,7 +118,7 @@ trap cleanup EXIT
 
 echo "> WARNING: $input_file will be temporarily overwritten during the calculations."
 
-read a Dome ome21 G omemi omema metal model gain_model solvent E0 rap host < "$input_file"
+read a Dome ome21 G omemi omema metal model gain_model solvent E0 rho host < "$input_file"
 
 # ---- range selection ----
 if [ -n "$range_override" ]; then

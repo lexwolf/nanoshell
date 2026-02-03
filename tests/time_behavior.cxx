@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
     nano.open("../data/input/nanosphere_eV.dat", ios::in);
     time.open("../data/input/time.dat", ios::in);
     
-    nano>>simulation.r1>>simulation.Dome>>simulation.ome_g>>simulation.G>>omemi>>omema>>mtl>>mdl>>active>>sol>>E0>>rho>>hst;
+    nano>>simulation.a>>simulation.Dome>>simulation.ome_g>>simulation.G>>omemi>>omema>>mtl>>mdl>>active>>sol>>E0>>rho>>hst;
     time>>T>>tpump;  
         
     simulation.set_metal(mtl,mdl,1);
