@@ -1,11 +1,11 @@
 reset
-omin=2.2
-omax=3.4
+omin=2.0
+omax=3.2
 at(file, row, col) = system( sprintf("awk -v row=%d -v col=%d 'NR == row {print $col}' %s", row, col, file) )
 r_list="0.8 0.7 0.6 0.5 0.4"
 n_r=words(r_list)
-xmax_list="2.22937 2.57436 2.8122 2.98039 3.09744"
-ymax_list="0.00179166 0.00126799 0.000817899 0.000482422 0.000252764"
+xmax_list="2.22937 2.57436 2.8122 2.98039 0.641"
+ymax_list="0.00179166 0.00126799 0.000817899 0.000482422 0"
 dx_list="0.048 0.048 0.048 0.048 .096"
 
 omegaB(i) = at(sprintf("../data/output/rho/omeB-%s.dat", word(r_list,i)),1,1)

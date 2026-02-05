@@ -35,7 +35,7 @@
 using namespace std;
 double pi=acos(-1.);
 
-double nfindOme(int nfft, vector<complex<double>> wave, double dt){
+double find_Ome_fourier(int nfft, vector<complex<double>> wave, double dt){
     double Ome, rOme, iOme, iMax=0, rMax=0;
     double data[2*nfft];
     gsl_fft_complex_wavetable * wavetable;
@@ -92,7 +92,7 @@ int main(){
             wave.push_back(value);
             }
         }
-    nOme=nfindOme(wave.size(), wave, dt);
+    nOme=find_Ome_fourier(wave.size(), wave, dt);
     cout<<nOme<<" "<<Ome<<" err: "<<fabs(nOme-Ome)<<endl;
     return 0;
     }

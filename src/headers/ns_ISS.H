@@ -512,13 +512,94 @@ double *ISS_results(nanosphere ns, double Ome, double ome1, double ome2, double 
         ns.G=Gmem;
         return omeB;
         }
-        
-    std::vector<std::pair<double,double>> intensity_steady_state(nanosphere ns, char* mdl, char* mtl, char* hst, double omemi, double omema, char* sol, double rho, int omeN=1000){
+
+    void find_ome1_ome2_unsafe(nanosphere &ns, double &ome1, double &ome2, double omemi, double omema, char* hst, char* sol, double rho){
         int omi, ch=1, o1=0, o2=0, oB=0;
-        double *res, *fro, omeeV, dome  = (omema-omemi)/omeN, Ome, myOme, Omem=0., ome, shome;
-        double ome1, ome2;
+        double *fro, omeeV, dome, Ome, Omem=0., ome;
         double eps3=ns.set_host(sol);
         double eps_b=ns.set_host(hst);
+
+        fro=ns.frohlich(omemi, omema, eps_b, eps3, rho);
+        dome  = (omema-omemi)/10000;
+        for (omi=0; omi<=10000; omi++){
+            omeeV = omemi + omi*dome;
+            Omem = Ome;
+            Ome = find_Omega(ns, omeeV, hst, sol, rho);
+            ome  = omeeV/ns.Ome_p;
+            if (o1==1 && Omem != 0) ch  = Omem*Ome/fabs(Omem*Ome);
+            if (fabs(Ome)>1.e-30 && o1==0){
+                ome1=ome;
+                o1=1;
+                }
+            if (fabs(Ome)<1.e-30 && o2==0 && o1==1 && oB==1){
+                ome2=ome-dome/ns.Ome_p;
+                o2=1;
+                }
+            if (ch < 0 && o1==1 && oB==0) {
+                ns.omeB     = ome;
+                oB=1;
+                }
+            }
+        if (fabs(ns.G)<fabs(fro[1])) {
+            ome1=ns.omeB/ns.Ome_p+dome;
+            ome2=ns.omeB/ns.Ome_p-dome;
+            }
+        if (ome1*ns.Ome_p==omemi || ome2 ==0){
+            std::cout<<"Fatal! the frequency range is too small!"<<std::endl;
+            exit(78);
+            }
+        }
+
+    bool find_ome1_ome2(nanosphere &ns, double &ome1, double &ome2, double omemi, double omema, char* hst, char* sol, double rho){
+        int omi, ch=1, o1=0, o2=0, oB=0;
+        double *fro, omeeV, dome, Ome=0., Omem=0., ome;
+        bool found1=false, found2=false, foundB=false;
+        double eps3=ns.set_host(sol);
+        double eps_b=ns.set_host(hst);
+
+        fro=ns.frohlich(omemi, omema, eps_b, eps3, rho);
+        dome  = (omema-omemi)/10000;
+        for (omi=0; omi<=10000; omi++){
+            omeeV = omemi + omi*dome;
+            Omem = Ome;
+            Ome = find_Omega(ns, omeeV, hst, sol, rho);
+            ome  = omeeV/ns.Ome_p;
+            if (o1==1 && Omem != 0) ch  = Omem*Ome/fabs(Omem*Ome);
+            if (fabs(Ome)>1.e-30 && o1==0){
+                ome1=ome;
+                o1=1;
+                found1=true;
+                }
+            if (fabs(Ome)<1.e-30 && o2==0 && o1==1 && oB==1){
+                ome2=ome-dome/ns.Ome_p;
+                o2=1;
+                found2=true;
+                }
+            if (ch < 0 && o1==1 && oB==0) {
+                ns.omeB     = ome;
+                oB=1;
+                foundB=true;
+                }
+            }
+        if (fabs(ns.G)<fabs(fro[1])) {
+            ome1=ns.omeB/ns.Ome_p+dome;
+            ome2=ns.omeB/ns.Ome_p-dome;
+            found1=true;
+            found2=true;
+            }
+        if (!foundB) {
+            ns.omeB = 0.5*(omemi+omema)/ns.Ome_p;
+            }
+        if (!(found1 && found2)) return false;
+        if (ome1*ns.Ome_p==omemi || ome2 ==0) return false;
+
+        return true;
+        }
+        
+    std::vector<std::pair<double,double>> intensity_steady_state(nanosphere ns, char* mdl, char* mtl, char* hst, double omemi, double omema, char* sol, double rho, int omeN=1000){
+        int omi;
+        double *res, omeeV, dome  = (omema-omemi)/omeN, Ome, myOme, ome, shome;
+        double ome1, ome2;
         std::vector<std::pair<double,double>> q0s_left;
         std::vector<std::pair<double,double>> q0s_rgth;
         std::vector<std::pair<double,double>> p1s_left;
@@ -551,35 +632,9 @@ double *ISS_results(nanosphere ns, double Ome, double ome1, double ome2, double 
         func<<"#"<<std::endl;
 
         /** STEADY STATE **/
-        fro=ns.frohlich(omemi, omema, eps_b, eps3, rho);
-        dome  = (omema-omemi)/10000;
-// TODO: what follows has to go in a subroutine find_ome1_ome2(ns, omemi, omema, hst, sol, rho)
-        for (omi=0; omi<=10000; omi++){
-            omeeV = omemi + omi*dome;
-            Omem = Ome;
-            Ome = find_Omega(ns, omeeV, hst, sol, rho);
-            ome  = omeeV/ns.Ome_p;
-            if (o1==1 && Omem != 0) ch  = Omem*Ome/fabs(Omem*Ome);
-            if (fabs(Ome)>1.e-30 && o1==0){
-                ome1=ome;
-                o1=1;
-                }
-            if (fabs(Ome)<1.e-30 && o2==0 && o1==1 && oB==1){
-                ome2=ome-dome/ns.Ome_p;
-                o2=1;
-                }
-            if (ch < 0 && o1==1 && oB==0) {
-                ns.omeB     = ome;
-                oB=1;
-                }
-            }
-        if (fabs(ns.G)<fabs(fro[1])) {
-            ome1=ns.omeB/ns.Ome_p+dome;
-            ome2=ns.omeB/ns.Ome_p-dome;
-            }
-        if (ome1*ns.Ome_p==omemi || ome2 ==0){
-            std::cout<<"Fatal! the frequency range is too small!"<<std::endl;
-            exit(78);
+        if (!find_ome1_ome2(ns, ome1, ome2, omemi, omema, hst, sol, rho)){
+            std::cout<<"Warning! Strict ome1/ome2 scan failed, falling back to unsafe scan."<<std::endl;
+            find_ome1_ome2_unsafe(ns, ome1, ome2, omemi, omema, hst, sol, rho);
             }
 // ----------------------------------
 

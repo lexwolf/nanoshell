@@ -74,72 +74,11 @@ class nanosphere{
 #endif
 #define CUP_DEFAULT_FROHLICH_MODE CUP_FROHLICH_OPTIMAL
 
-        double *frohlich(double a0, double b0, double eps_b, double eps_s=0, double rho=0, int mode=CUP_DEFAULT_FROHLICH_MODE);
+    double *frohlich(double a0, double b0, double eps_b, double eps_s=0, double rho=0, int mode=CUP_DEFAULT_FROHLICH_MODE);
     double *frohlich_optimal(double a0, double b0, double eps_b, double eps_s=0, double rho=0);
     double *frohlich_current(double a0, double b0, double eps_b, double eps_s=0, double rho=0);
 
 	double Rabi_frec(double G, double tau2, double E0);
-
-// std::vector<std::pair<double,std::complex<double>>> eigen_values(char* mdl, char* mtl, char* hst, double omemi, double omema, int omeN=1000, char* sol=0, double rho=0){
-//         std::vector<std::pair<double,std::complex<double>>> vkamp;
-//         int omi;
-//         std::complex<double> GamG, OmeG, GamM, OmeM, **A, *p0, *p1, *p2, gam1, gam2, xi, *kap, *odv;
-//         
-//         double *nv, omeeV, dome  = (omema-omemi)/omeN, ome;
-//         double  eps_b, eps_s, tau2, gamd, ome_g;
-// 
-//         if ((sol != NULL)) {
-//             eps_s=set_host(sol);
-//             } else eps_s=0;
-//         eps_b=set_host(hst);
-// 
-//         A = new std::complex<double>*[3];
-//         for(int i = 0; i <= 2; i++)
-//             A[i] = new std::complex<double>[3];
-//         
-//         kap  = new std::complex<double>[3];
-//         nv   = new double[4];
-//         odv  = new std::complex<double> [3];
-// 
-//         // normalized variables
-//         nv = normalized_variables ();
-//         tau2 = nv[1];
-//         gamd = nv[2];
-//         ome_g = nv[3];
-//         GamG   = set_GamG(G, tau2);
-// 
-//         
-//         for (omi=0; omi<=omeN; omi++){
-//             omeeV = omemi + omi*dome;
-// 			metal(omeeV);
-// 
-// 			p0 = pcfc0(ceps_inf, eps_b, eps_s, rho);
-// 			p1 = pcfc1(ceps_inf, eps_b, eps_s, rho);
-// 			p2 = pcfc2(ceps_inf, eps_b, eps_s, rho);
-//             
-// 			ome  = omeeV/Ome_p;
-// 
-//             odv  = set_ome_dep_vrbls(ome, ome_g, tau2, gamd);
-//             OmeG = odv[0];
-//             OmeM = odv[1];
-//             GamM = odv[2];
-//     
-//             A   = coefficients(OmeG, OmeM, GamG, GamM, p0, p1, p2);
-//             kap  = eigenvalues(A);
-//             
-//             double maxVal = kap[0].real();
-//             int    imax = 0;
-// 
-//             for (int i = 1; i < 3; i++) {
-//                 if (kap[i].real() > maxVal) {
-//                     maxVal = kap[i].real();
-//                     imax = i;
-//                     }
-//                 }
-//             vkamp.push_back(std::make_pair(omeeV, kap[imax]));
-//             }
-//         return vkamp;
-//         }
 
 	std::vector<std::pair<double,double>>  cross_sections(char* mdl , char* mtl ,char* hst ,double omemi, double omema, int omeN=10000, char* sol=0, double rho=0);
 
@@ -147,7 +86,7 @@ class nanosphere{
 	std::vector<std::pair<double,std::complex<double>>>  steady_state(char* mdl , char* mtl ,char* hst ,double omemi, double omema, int omeN=10000, char* sol=0, double rho=0);
 
 
-	double nfindOme(int nfft, std::vector<std::complex<double>> wave, double dt){
+	double find_Ome_fourier(int nfft, std::vector<std::complex<double>> wave, double dt){
 	    double Ome, rOme, iOme, iMax=0, rMax=0, nom;
 	    double data[2*nfft];
 		std::vector<std::pair<double,std::complex<double>>> vfour;

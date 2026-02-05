@@ -439,7 +439,7 @@ inline std::complex<double> nanosphere::numerical(char* mdl, char* mtl, char* hs
     }
 
     if (ns == 1) {
-        if (!wave.empty()) nOme = nfindOme(wave.size(), wave, dt);
+        if (!wave.empty()) nOme = find_Ome_fourier(wave.size(), wave, dt);
         else nOme = 0.;
     }
 
