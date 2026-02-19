@@ -1,6 +1,8 @@
 #ifndef CUP_QUASI_STATIC_SOLVERS_H
 #define CUP_QUASI_STATIC_SOLVERS_H
 
+#include "../pump.H"
+
 // Quasi-static solver routines extracted from cup.H.
 // Note: default arguments must appear only in declarations (inside class nanosphere).
 
@@ -247,10 +249,10 @@ inline std::vector<std::pair<double,std::complex<double>>>  nanosphere::steady_s
 
 inline std::complex<double> nanosphere::numerical(char* mdl, char* mtl, char* hst,
                                double E0, double omeeV, double T, double tpump,
-                               char* sol, double rho){
+                               char* sol, double rho, const char* pump_md, bool evolve_N) {
 
     constexpr int Nsys = 3;
-
+	PumpMode pm = pump_mode(pump_md);
     double eps_b, eps_s, ome, dt;
     double dnormem = 1.e20, dnavr = 0, dnavrm = 1.e20;
 
@@ -263,7 +265,7 @@ inline std::complex<double> nanosphere::numerical(char* mdl, char* mtl, char* hs
 
     int steste = 0;
     std::complex<double> eps1e, eps2e, alph;
-    double omep, t, tau1, tau2, gamd, ome_g, pG = fabs(G), tildeN;
+    double omep, t, t_ps, tau1, tau2, gamd, ome_g, pG = fabs(G), tildeN;
 
     // NOTE: GamG is constant, the N dependence enters via GamG * N
     std::complex<double> GamG, OmeG, GamM, OmeM, chiH, chiP;
@@ -360,28 +362,31 @@ inline std::complex<double> nanosphere::numerical(char* mdl, char* mtl, char* hs
     };
 
     // --- Integration loop ---
-    tildeN = 0.0;
-    double N = tildeN;
+    double tNmin = 0.0;
+	double tNmax = 1.0;
+
+    double N;
     omeR = Rabi_frec(G, tau2, E0);
 
     int i = 0;
-    int pip = 0;
 
     while (i <= Nt) {
         t = i * dt;
+        t_ps = t * 1.e+12 / omep; // time in picoseconds
         i++;
 
-        if (t * 1.e+12 / omep >= tpump && pip == 0) {
-            tildeN = 1.0;
-            pip = 1;
-        }
+		tildeN = gimme_tildeN(t_ps, tpump, pm, tNmin, tNmax);
 
-        if (ns == 1) {
-            po = numerical_output(E0, q, p0);
-            N  = Runge_Kutta_mono_4(N, -1./tau1, tildeN/tau1 + imag(q[0]*conj(po)), dt);
-        } else {
-            N = tildeN;
-        }
+		if (evolve_N) {
+			if (ns==1) {
+				po = numerical_output(E0, q, p0);
+				N  = Runge_Kutta_mono_4(N, -1./tau1, tildeN/tau1 + imag(q[0]*conj(po)), dt);
+			} else {
+				N  = Runge_Kutta_mono_4(N, -1./tau1, tildeN/tau1, dt);
+			}
+		} else {
+			N = tildeN;
+		}
 
         rebuild_AB(N);
         Runge_Kutta_4(q, A, B, dt, Nsys);
@@ -391,7 +396,7 @@ inline std::complex<double> nanosphere::numerical(char* mdl, char* mtl, char* hs
         alph = dip / E0;
 
         if (i % iprint == 0) {
-            dyna << "  " << std::setw(8) << std::setiosflags(std::ios::left) << t/omep*1.e+12
+            dyna << "  " << std::setw(8) << std::setiosflags(std::ios::left) << t_ps
                  << "\t" << std::setw(13) << std::setiosflags(std::ios::left) << real(alph)
                  << "\t" << std::setw(13) << std::setiosflags(std::ios::left) << imag(alph)
                  << "\t" << std::setw(13) << std::setiosflags(std::ios::left) << real(dip)
@@ -403,7 +408,7 @@ inline std::complex<double> nanosphere::numerical(char* mdl, char* mtl, char* hs
                  << joule_heating(ns, ome, (dip - E0), q[2])
                  << "\n";
 
-            fnct << "  " << std::setw(8) << std::setiosflags(std::ios::left) << t/omep*1.e+12
+            fnct << "  " << std::setw(8) << std::setiosflags(std::ios::left) << t_ps
                  << "\t" << std::setw(13) << std::setiosflags(std::ios::left) << real(q[0])
                  << "\t" << std::setw(13) << std::setiosflags(std::ios::left) << imag(q[0])
                  << "\t" << std::setw(13) << std::setiosflags(std::ios::left) << real(q[1])
@@ -414,7 +419,7 @@ inline std::complex<double> nanosphere::numerical(char* mdl, char* mtl, char* hs
                  << "\n";
         }
 
-        if (t * 1.e+12 / omep > 2.*tpump) {
+        if (t_ps > 2.*tpump) {
             if (steste == 1 && fabs((norm(dip)-dnormem)/norm(dip)) < 1.e-30) break;
             if (fabs((norm(dip)-dnormem)/norm(dip)) < 1.e-10) wb = 1;
 
@@ -462,7 +467,9 @@ inline std::complex<double> nanosphere::numerical(char* mdl, char* mtl, char* hs
 
 }
 
-inline std::complex<double> nanosphere::analytical(char* mdl , char* mtl ,char* hst, double E0, double omeeV, double T, double tpump, char* sol, double rho){
+inline std::complex<double> nanosphere::analytical(char* mdl , char* mtl ,char* hst,
+								double E0, double omeeV, double T, double tpump,
+								char* sol, double rho){
 
 		double eps_b, eps_s, ome, dt, dnormem=1.e20;
     		if ((sol != NULL)) eps_s=set_host(sol);
@@ -470,7 +477,7 @@ inline std::complex<double> nanosphere::analytical(char* mdl , char* mtl ,char* 
 		eps_b=set_host(hst);
 		int steste=0, amp=0;
 		std::complex<double> eps1e, eps2e, eps1, eps2, alph;
-		double omep, t, tau1, tau2, gamd, ome_g, pG = fabs(G), *nv, N, tildeN;
+		double omep, t, t_ps, tau1, tau2, gamd, ome_g, pG = fabs(G), *nv, N, tildeN;
 		std::complex<double> GamGxN, OmeG, chiH, GamM, OmeM, chiP, *p0, *p1, *p2, *p3, *p, *q, *odv;
 		
 		std::complex<double> dip = {0.0, 0.0};
@@ -584,8 +591,9 @@ inline std::complex<double> nanosphere::analytical(char* mdl , char* mtl ,char* 
 		int i=0, pip=0;
 		while (i<=Nt){
 		    t=i*dt;
+		    t_ps = t * 1.e+12 / omep; // time in picoseconds
 		    i++;
-		    if(t*1.e+12/omep >= tpump && pip ==0) {
+		    if(t_ps >= tpump && pip ==0) {
 				// the pump is switched on at t = tpump
 				tildeN = 1.;
 				t0  = t;
@@ -609,13 +617,13 @@ inline std::complex<double> nanosphere::analytical(char* mdl , char* mtl ,char* 
 		    alph = dip/E0;
 		    
 		    if(i%iprint==0){
-				dyna<<"  "<<std::setw(8)<<std::setiosflags (std::ios::left)<<t/omep*1.e+12<<   // 1 time (ps)
+				dyna<<"  "<<std::setw(8)<<std::setiosflags (std::ios::left)<<t_ps<<   // 1 time (ps)
 					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<real(alph)<<   // 2 Re(alpha)
 					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<imag(alph)<<   // 3 Im(alpha)
 					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<real(dip)<<    // 4 Re(dip)
 					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<imag(dip)<<    // 5 Im(dip)
 					std::endl;
-				fnct<<"  "<<std::setw(8)<<std::setiosflags (std::ios::left)<<t/omep*1.e+12<<   // 1 time (ps)
+				fnct<<"  "<<std::setw(8)<<std::setiosflags (std::ios::left)<<t_ps<<   // 1 time (ps)
 					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<real(q[0])<<   // 2 Re(q0)
 					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<imag(q[0])<<   // 3 Im(q0)
 					"\t"<<std::setw(13)<<std::setiosflags (std::ios::left)<<real(q[1])<<   // 4 Re(q1)
@@ -626,7 +634,7 @@ inline std::complex<double> nanosphere::analytical(char* mdl , char* mtl ,char* 
 					std::endl;
 				}
 			if (amp == 1 && norm(dip)/E0 > 5.e26) break;
-			if (amp == 0 && t*1.e+12/omep>2.*tpump) 
+			if (amp == 0 && t_ps>2.*tpump) 
 				if (fabs((norm(dip)-dnormem)/norm(dip)) < 1.e-20) break;
 		    }
 

@@ -279,8 +279,6 @@ double find_Omega(nanosphere ns, double omeeV, char* hst, char* sol=0, double rh
     I    = Inum(p1, p2, ome, gamd);
     c    = cffcOme (D, R, I, p0, tau2, ome, ome_g);
     
-
-    
     vOme = solve4(c);
     kap  = eigenvalues(A);
 
@@ -310,9 +308,6 @@ double find_Omega(nanosphere ns, double omeeV, char* hst, char* sol=0, double rh
         std::cout<<"> ome ="<<omeeV<<std::endl;
         exit(-66);
         }
-    
-    
-    
     return Ome;
     }
 

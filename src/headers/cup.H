@@ -148,17 +148,20 @@ class nanosphere{
 	    return Ome;
 	    }
 	    
-std::complex<double> numerical(char* mdl, char* mtl, char* hst,
+	std::complex<double> numerical(char* mdl, char* mtl, char* hst,
                                double E0, double omeeV, double T, double tpump,
-                               char* sol=0, double rho=0);
+                               char* sol=0, double rho=0, const char* pump_md="step", bool evolve_N = true);
 
     
-	    std::complex<double> analytical(char* mdl , char* mtl ,char* hst, double E0, double omeeV, double T, double tpump, char* sol=0, double rho=0);
+	std::complex<double> analytical(char* mdl , char* mtl ,char* hst,
+								double E0, double omeeV, double T, double tpump,
+								char* sol=0, double rho=0);
 
 	};
 
 
 #include "cup/quasi_static/frohlich.H"
+#include "cup/pump.H"
 #include "cup/quasi_static/solvers.H"
 
 
