@@ -13,6 +13,9 @@
 
 constexpr int Nsys = 3; // change to 5 in mie_single_particle
 
+struct FourierDump;
+const FourierDump& no_fourier_dump();
+
 class nanosphere{
 	gsl_interp_accel *acc;
 	gsl_interp_accel *ach;
@@ -85,68 +88,12 @@ class nanosphere{
 		
 	std::vector<std::pair<double,std::complex<double>>>  steady_state(char* mdl , char* mtl ,char* hst ,double omemi, double omema, int omeN=10000, char* sol=0, double rho=0);
 
-
-	double find_Ome_fourier(int nfft, std::vector<std::complex<double>> wave, double dt){
-	    double Ome, rOme, iOme, iMax=0, rMax=0, nom;
-	    double data[2*nfft];
-		std::vector<std::pair<double,std::complex<double>>> vfour;
-		gsl_fft_complex_wavetable * wavetable;
-		gsl_fft_complex_workspace * workspace;
-
-		wavetable = gsl_fft_complex_wavetable_alloc (nfft);
-		workspace = gsl_fft_complex_workspace_alloc (nfft);
-            std::ofstream  wve("../data/output/wave.dat");
-            if (!wve) {
-                std::cerr << "Error: Cannot open output file" << std::endl;
-                exit(1);
-            }
-            std::ofstream  frr("../data/output/fourier.dat");
-            if (!frr) {
-                std::cerr << "Error: Cannot open output file" << std::endl;
-                exit(1);
-            }
-            std::ofstream  flg("../data/output/fourier.log");
-            if (!flg) {
-                std::cerr << "Error: Cannot open output file" << std::endl;
-                exit(1);
-            }
-	    flg<<nfft<<" "<<dt<<" "<<Ome_p<<std::endl;
-		for (int i=0; i<nfft; i++) {
-			REAL(data,i) = wave[i].real();
-			IMAG(data,i) = wave[i].imag();
-			wve<<REAL(data,i)<<" "<<IMAG(data,i)<<std::endl;
-			}
-		gsl_fft_complex_forward(data, 1, nfft, wavetable, workspace);
-
-		for (int i=0; i<nfft; i++) {
-			nom=2.*pi*i/(nfft*dt);
-			if (nom>1.)  nom=nom-2*pi;
-			if (nom<-1.) nom=nom+2*pi;
-			vfour.push_back(std::make_pair(nom*Ome_p,std::complex<double>(REAL(data,i), IMAG(data,i))));
-// 			frr<<nom<<" "<<REAL(data,i)<<" "<<IMAG(data,i)<<std::endl;
-			if (rMax<fabs(REAL(data,i))){
-				rMax=fabs(REAL(data,i));
-				rOme=i;
-				}
-			if (iMax<fabs(IMAG(data,i))){
-				iMax=fabs(IMAG(data,i));
-				iOme=i;
-				}
-			}
-		Ome=pi*(rOme+iOme)/(nfft*dt);
-		if (Ome>1.)  Ome=Ome-2*pi;
-		if (Ome<-1.) Ome=Ome+2*pi;
-		Ome=Ome_p*Ome;
-		gsl_fft_complex_wavetable_free (wavetable);
-		gsl_fft_complex_workspace_free (workspace);
-		sort(vfour.begin(), vfour.end(), 
-              [](const std::pair<double, std::complex<double>>& a, const std::pair<double, std::complex<double>>& b) {
-                  return a.first < b.first;
-              });
-		for (int i=0; i<nfft; i++)
-			frr<<vfour[i].first<<" "<<real(vfour[i].second)<<" "<<imag(vfour[i].second)<<std::endl;
-	    return Ome;
-	    }
+	double find_Ome_fourier(
+		int nfft,
+		const std::vector<std::complex<double>>& wave,
+		double dt,
+		const FourierDump& dump
+	);
 	    
 	std::complex<double> numerical(char* mdl, char* mtl, char* hst,
                                double E0, double omeeV, double T, double tpump,
@@ -163,7 +110,7 @@ class nanosphere{
 #include "cup/quasi_static/frohlich.H"
 #include "cup/pump.H"
 #include "cup/quasi_static/solvers.H"
-
+#include "cup/fourier.H"
 
 
 // Inline definitions of material-related member functions
