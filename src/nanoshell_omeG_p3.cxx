@@ -23,6 +23,7 @@
 #include <armadillo>
 #include "headers/mathNN.H"
 #include "headers/nanoshell.H"
+#define CUP_BACKEND_QUASI_STATIC
 #include "headers/cup.H"
 #include "headers/extract.H"
 #include "headers/ns_ISS.H"
