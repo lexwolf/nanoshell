@@ -1,4 +1,5 @@
 #!/bin/bash
+CXXFLAGS="${CXXFLAGS:-} -I../include"
 # scripts/GxN.bash
 #
 # Gain × Frequency numerical runs using nanoshell_num (nsn)
@@ -33,11 +34,11 @@ fi
 
 if $use_compile; then
   echo "> Compiling frohlich and nanoshell_num..."
-  g++ -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib \
+  g++ $CXXFLAGS -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib \
       ../src/frohlich.cxx -o ../bin/fro \
       -lgsl -lgslcblas -lm -larmadillo
 
-  g++ -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib \
+  g++ $CXXFLAGS -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib \
       ../src/nanoshell_num.cxx -o ../bin/nsn \
       -lgsl -lgslcblas -lm -larmadillo
 fi

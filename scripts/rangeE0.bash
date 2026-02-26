@@ -1,4 +1,5 @@
 #!/bin/bash
+CXXFLAGS="${CXXFLAGS:-} -I../include"
 export LC_NUMERIC="en_US.UTF-8"
 script_dir="$(cd "$(dirname "$0")" && pwd)"
 cd "$script_dir" || exit 1
@@ -77,8 +78,8 @@ fi
 
 if [ "$compile_requested" = true ]; then
     echo "> Compiling codes..."
-    g++ -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib ../src/frohlich.cxx -o ../bin/fro -lgsl -lgslcblas -lm -larmadillo
-    g++ -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/nanoshell_num_anl.cxx -o ../bin/nsh -lgsl -lgslcblas -lm -larmadillo
+    g++ $CXXFLAGS -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib ../src/frohlich.cxx -o ../bin/fro -lgsl -lgslcblas -lm -larmadillo
+    g++ $CXXFLAGS -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/nanoshell_num_anl.cxx -o ../bin/nsh -lgsl -lgslcblas -lm -larmadillo
     echo "> ...done compiling!"
 fi
 

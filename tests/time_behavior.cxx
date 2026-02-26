@@ -22,9 +22,9 @@
 #include <fstream>
 #include <armadillo>
 #include <string>
-#include "../src/headers/math33.H"
-#include "../src/headers/nanoshell.H"
-#include "../src/headers/cup.H"
+#include "nano_geo_matrix/core/mathNN.H"
+#include "nano_geo_matrix/geometry/nanoshell.H"
+#include "nano_geo_matrix/cup/cup.H"
 
 /*
 g++ -Iinclude -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib time_behavior.cxx -o tim -lgsl -lgslcblas -lm -larmadillo

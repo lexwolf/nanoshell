@@ -21,11 +21,11 @@
 #include <iomanip>
 #include <fstream>
 #include <armadillo>
-#include "headers/mathNN.H"
-#include "headers/nanoshell.H"
+#include "nano_geo_matrix/core/mathNN.H"
+#include "nano_geo_matrix/geometry/nanoshell.H"
 #define CUP_BACKEND_QUASI_STATIC
-#include "headers/cup.H"
-#include "headers/ns_ISS.H"
+#include "nano_geo_matrix/cup/cup.H"
+#include "nano_geo_matrix/geometry/ns_ISS.H"
 
 using namespace std;
 
