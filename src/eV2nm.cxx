@@ -28,7 +28,7 @@
 #define j2eV 6.24150636309e18
 
 /** Compila con
-g++ ../src/eV2nm.cxx -o ../bin/eV2nm
+g++ -Iinclude ../src/eV2nm.cxx -o ../bin/eV2nm
 **/
 using namespace std;
 

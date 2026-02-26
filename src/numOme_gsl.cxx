@@ -29,7 +29,7 @@
 #define IMAG(z,i) ((z)[2*(i)+1])
 
 /** compila con 
- g++ ../src/numOme_gsl.cxx -o ../bin/nom -lgsl -lgslcblas -lm
+ g++ -Iinclude ../src/numOme_gsl.cxx -o ../bin/nom -lgsl -lgslcblas -lm
 **/ 
 
 using namespace std;

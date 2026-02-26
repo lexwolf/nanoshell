@@ -27,7 +27,7 @@
 #include "../src/headers/cup.H"
 
 /*
-g++ -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib steady_state.cxx -o sts -lgsl -lgslcblas -lm -larmadillo
+g++ -Iinclude -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib steady_state.cxx -o sts -lgsl -lgslcblas -lm -larmadillo
 */
 
 using namespace std;

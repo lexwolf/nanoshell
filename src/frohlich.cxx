@@ -28,7 +28,7 @@
 
 using namespace std;
 /*
-g++ -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib ../src/frohlich.cxx -o ../bin/fro -lgsl -lgslcblas -lm -larmadillo
+g++ -Iinclude -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib ../src/frohlich.cxx -o ../bin/fro -lgsl -lgslcblas -lm -larmadillo
 */
 
     

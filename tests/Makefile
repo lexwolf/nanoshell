@@ -1,5 +1,7 @@
 CC = g++
+CXXFLAGS += -Iinclude
 CFLAGS = -Wall -I../src/headers -L../src/lib
+CFLAGS += $(CXXFLAGS)
 LIBS = -lgsl -lgslcblas -lm -larmadillo
 
 # List of test programs
