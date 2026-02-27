@@ -3,8 +3,8 @@
 #include "nano_geo_matrix/cup/pump.hpp"
 
 // includes
-#include "nano_geo_matrix/mie/gimme_p.hpp"
-#include "nano_geo_matrix/geometry/single_mie.hpp"
+#include "nano_geo_matrix/mie/geometry/gimme_p.hpp"
+#include "nano_geo_matrix/mie/geometry/single.hpp"
 
 
 // Mie backend solvers & observables extracted from cupN.H.

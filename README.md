@@ -85,7 +85,7 @@ To include and use the functions defined in `cup.H`, you must include the follow
 
 ```cpp
 #include "../src/headers/math33.hpp"
-#include "../src/headers/nanoshell.hpp"
+#include "nano_geo_matrix/quasi_static/geometry/nanoshell.hpp"
 #include "../src/headers/cup.hpp"
 ```
 

@@ -8,8 +8,8 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "nano_geo_matrix/mie/gimme_p.hpp"      // declares pcfc0, ..., pcfc3
-#include "nano_geo_matrix/geometry/single_mie.hpp"   // declares coefficients
+#include "nano_geo_matrix/mie/geometry/gimme_p.hpp"      // declares pcfc0, ..., pcfc3
+#include "nano_geo_matrix/mie/geometry/single.hpp"   // declares coefficients
 
 template<typename Func>
 double xzero(Func f, double a, double b, double tol = 1e-20, int max_iter = 1000) {

@@ -23,7 +23,7 @@
 #include <armadillo>
 #include <string>
 #include "nano_geo_matrix/core/mathNN.hpp"
-#include "nano_geo_matrix/geometry/nanoshell.hpp"
+#include "nano_geo_matrix/quasi_static/geometry/nanoshell.hpp"
 #include "nano_geo_matrix/cup/cup.hpp"
 
 /*
