@@ -21,10 +21,10 @@
 #include <iomanip>
 #include <fstream>
 #include <armadillo>
-#include "nano_geo_matrix/core/mathNN.H"
-#include "nano_geo_matrix/geometry/nanoshell.H"
+#include "nano_geo_matrix/core/mathNN.hpp"
+#include "nano_geo_matrix/geometry/nanoshell.hpp"
 #define CUP_BACKEND_QUASI_STATIC
-#include "nano_geo_matrix/cup/cup.H"
+#include "nano_geo_matrix/cup/cup.hpp"
 
  /*
 g++ -Iinclude -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib ../src/steady_state.cxx -o ../bin/sts -lgsl -lgslcblas -lm -larmadillo

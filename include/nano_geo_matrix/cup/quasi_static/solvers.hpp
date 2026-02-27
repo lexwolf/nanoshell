@@ -1,7 +1,7 @@
 #ifndef CUP_QUASI_STATIC_SOLVERS_H
 #define CUP_QUASI_STATIC_SOLVERS_H
 
-#include "nano_geo_matrix/cup/pump.H"
+#include "nano_geo_matrix/cup/pump.hpp"
 
 // Quasi-static solver routines extracted from cup.H.
 // Note: default arguments must appear only in declarations (inside class nanosphere).

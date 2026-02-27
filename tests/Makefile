@@ -1,6 +1,7 @@
 CC = g++
-CXXFLAGS += -Iinclude
-CFLAGS = -Wall -I../src/headers -L../src/lib
+CXXFLAGS += -I../include
+CXXFLAGS += -DCUP_BACKEND_QUASI_STATIC
+CFLAGS = -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib
 CFLAGS += $(CXXFLAGS)
 LIBS = -lgsl -lgslcblas -lm -larmadillo
 

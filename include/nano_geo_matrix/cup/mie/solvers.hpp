@@ -1,10 +1,10 @@
 #pragma once
 
-#include "nano_geo_matrix/cup/pump.H"
+#include "nano_geo_matrix/cup/pump.hpp"
 
 // includes
-#include "nano_geo_matrix/mie/gimme_p.H"
-#include "nano_geo_matrix/geometry/single_mie.H"
+#include "nano_geo_matrix/mie/gimme_p.hpp"
+#include "nano_geo_matrix/geometry/single_mie.hpp"
 
 
 // Mie backend solvers & observables extracted from cupN.H.

@@ -84,9 +84,9 @@ This file specifies time-dependent simulation parameters:
 To include and use the functions defined in `cup.H`, you must include the following headers in your code in the specified order:
 
 ```cpp
-#include "../src/headers/math33.H"
-#include "../src/headers/nanoshell.H"
-#include "../src/headers/cup.H"
+#include "../src/headers/math33.hpp"
+#include "../src/headers/nanoshell.hpp"
+#include "../src/headers/cup.hpp"
 ```
 
 ### Material Initialization

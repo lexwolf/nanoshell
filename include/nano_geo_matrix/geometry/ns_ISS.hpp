@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-#include "nano_geo_matrix/core/extract.H"
+#include "nano_geo_matrix/core/extract.hpp"
 
 std::complex<double> gammaD (std::complex<double>** A, double Ome){
     std::complex<double> gamdD = (A[1][1]-img*Ome)*(A[2][2]-img*Ome)-A[1][2]*A[2][1];

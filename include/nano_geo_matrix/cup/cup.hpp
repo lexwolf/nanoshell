@@ -14,10 +14,10 @@
 # error "You must define CUP_BACKEND_QUASI_STATIC or CUP_BACKEND_MIE before including cup.H"
 #endif
 
-#include "nano_geo_matrix/cup/config.H"
+#include "nano_geo_matrix/cup/config.hpp"
 
 #ifdef CUP_BACKEND_QUASI_STATIC
-#include "nano_geo_matrix/cup/quasi_static/heating.H"
+#include "nano_geo_matrix/cup/quasi_static/heating.hpp"
 #endif
 
 // Forward decls used by signatures (definition in cup/fourier.H)
@@ -200,19 +200,19 @@ nanosphere::calculate_mie_coefficient(int order, double omega, double eps_b,
 // -----------------------------------------------------------------------------
 // Implementations / extracted headers (must come AFTER class definition)
 // -----------------------------------------------------------------------------
-#include "nano_geo_matrix/cup/pump.H"
-#include "nano_geo_matrix/cup/fourier.H"
-#include "nano_geo_matrix/cup/materials.H"
+#include "nano_geo_matrix/cup/pump.hpp"
+#include "nano_geo_matrix/cup/fourier.hpp"
+#include "nano_geo_matrix/cup/materials.hpp"
 
 #ifdef CUP_BACKEND_QUASI_STATIC
-#include "nano_geo_matrix/cup/quasi_static/frohlich.H"
-#include "nano_geo_matrix/cup/quasi_static/solvers.H"
+#include "nano_geo_matrix/cup/quasi_static/frohlich.hpp"
+#include "nano_geo_matrix/cup/quasi_static/solvers.hpp"
 #endif
 
 #ifdef CUP_BACKEND_MIE
-#include "nano_geo_matrix/cup/mie/frohlich.H"
-#include "nano_geo_matrix/cup/mie/solvers.H"
-#include "nano_geo_matrix/cup/mie/mie_extras.hxx"
+#include "nano_geo_matrix/cup/mie/frohlich.hpp"
+#include "nano_geo_matrix/cup/mie/solvers.hpp"
+#include "nano_geo_matrix/cup/mie/mie_extras.tpp"
 #endif
 
 #endif // CUP_H
