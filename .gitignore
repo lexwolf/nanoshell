@@ -26,3 +26,14 @@ bin/**
 *.swo
 *.kate-swp
 .*.kate-swp
+
+# Ignore build intermediates accidentally created under include/
+include/**/*.o
+include/**/*.obj
+include/**/*.a
+include/**/*.so
+include/**/*.d
+include/**/*.lo
+include/**/*.la
+include/**/*.mod
+include/**/*.pcm
