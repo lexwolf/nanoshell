@@ -8,7 +8,7 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "nano_geo_matrix/mie/geometry/gimme_p.hpp"      // declares pcfc0, ..., pcfc3
+#include "nano_geo_matrix/mie/geometry/gimme_p.hpp"  // declares pcfc0, ..., pcfc3
 #include "nano_geo_matrix/mie/geometry/single.hpp"   // declares coefficients
 
 template<typename Func>
