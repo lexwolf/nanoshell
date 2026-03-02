@@ -28,7 +28,7 @@ using namespace std;
 
 /*
  * Compila con
- * g++ ../src/delta2tau.cxx -o ../bin/delta2tau
+ * g++ -Iinclude ../src/delta2tau.cxx -o ../bin/delta2tau
  */
 
 int main(int argc, char** argv){

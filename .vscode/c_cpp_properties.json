@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/src/headers",
+                "${default}",
+                "/usr/include/eigen3"
+            ],
+            "defines": ["CUP_BACKEND_QUASI_STATIC"],
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerPath": "/usr/bin/g++",
+            "compilerArgs": [
+                "-DUSE_MYBESSEL"
+            ]
+        }
+    ],
+    "version": 4
+}
+

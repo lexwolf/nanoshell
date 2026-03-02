@@ -1,4 +1,5 @@
 #!/bin/bash
+CXXFLAGS="${CXXFLAGS:-} -I../include"
 set -o pipefail
 export LC_NUMERIC="en_US.UTF-8"
 
@@ -98,8 +99,8 @@ fi
 if [ "$compile_requested" = true ]; then
     echo
     echo "> Compiling codes..."
-    g++ -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/rho2ome_sp.cxx -o ../bin/rho2ome_sp -lgsl -lgslcblas -lm -larmadillo || exit 1
-    g++ -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/nanoshell_ome_al_p3.cxx -o ../bin/oap -lgsl -lgslcblas -lm -larmadillo || exit 1
+    g++ $CXXFLAGS -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/rho2ome_sp.cxx -o ../bin/rho2ome_sp -lgsl -lgslcblas -lm -larmadillo || exit 1
+    g++ $CXXFLAGS -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/nanoshell_ome_al_p3.cxx -o ../bin/oap -lgsl -lgslcblas -lm -larmadillo || exit 1
     echo "> ...Done!"
     echo
 fi

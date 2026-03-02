@@ -5,8 +5,8 @@
  * This file is intentionally lightweight and header-only.
  */
 
-#ifndef CUP_CONFIG_H
-#define CUP_CONFIG_H
+#pragma once
+
 
 #include <complex>
 #include <math.h>
@@ -48,6 +48,4 @@ double eV2nm(double ome){
   double lam;
   lam=cc/(ome*eV2j/h)*1.e9;
   return lam;
-  }
-
-#endif // CUP_CONFIG_H
+}

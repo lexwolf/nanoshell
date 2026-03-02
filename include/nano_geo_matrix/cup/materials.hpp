@@ -4,8 +4,7 @@
  *
  * IMPORTANT: this header must be included AFTER class nanosphere is declared.
  */
-#ifndef CUP_MATERIALS_H
-#define CUP_MATERIALS_H
+#pragma once
 
 inline void nanosphere::set_metal(const char* mtl, const char* mdl, int sel)
 {
@@ -248,5 +247,3 @@ odv[2] = GamM;
 
 return odv;
 }
-
-#endif // CUP_MATERIALS_H
