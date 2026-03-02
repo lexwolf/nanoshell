@@ -6,6 +6,7 @@ export LC_NUMERIC="en_US.UTF-8"
 # --- paths (assumes script is launched from ../src as in your draft) ---
 SRC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SRC_DIR/.." && pwd)"
+CXXFLAGS="${CXXFLAGS:-} -I$ROOT_DIR/include"
 
 INPUT_FILE="$ROOT_DIR/data/input/nanosphere_eV.dat"
 TIME_FILE="$ROOT_DIR/data/input/time.dat"
@@ -50,16 +51,16 @@ write_input() {
 
 # --- compile ---
 echo "> Compiling selected sources..."
-g++ -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib \
+g++ $CXXFLAGS -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib \
   "$ROOT_DIR/src/frohlich.cxx" -o "$BIN_DIR/fro" -lgsl -lgslcblas -lm -larmadillo
 
-g++ -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib \
+g++ $CXXFLAGS -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib \
   "$ROOT_DIR/src/steady_state.cxx" -o "$BIN_DIR/sts" -lgsl -lgslcblas -lm -larmadillo
 
-g++ -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib \
+g++ $CXXFLAGS -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib \
   "$ROOT_DIR/src/nanoshell_num.cxx" -o "$BIN_DIR/nsn" -lgsl -lgslcblas -lm -larmadillo
 
-g++ -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib \
+g++ $CXXFLAGS -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib \
   "$ROOT_DIR/src/nanoshell_anl.cxx" -o "$BIN_DIR/nsa" -lgsl -lgslcblas -lm -larmadillo
 echo "> Compilation complete."
 

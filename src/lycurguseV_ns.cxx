@@ -21,16 +21,16 @@
 #include <iomanip>
 #include <fstream>
 #include <armadillo>
-#include "headers/mathNN.H"
-#include "headers/nanoshell.H"
+#include "nano_geo_matrix/core/mathNN.hpp"
+#include "nano_geo_matrix/quasi_static/geometry/nanoshell.hpp"
 #define CUP_BACKEND_QUASI_STATIC
-#include "headers/cup.H"
-#include "headers/ns_ISS.H"
+#include "nano_geo_matrix/cup/cup.hpp"
+#include "nano_geo_matrix/quasi_static/spaser/nanoshell_intensity_steady_state.hpp"
 
 using namespace std;
 
 /** Compila con: 
-g++ -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/lycurguseV_ns.cxx -o ../bin/lyns -lgsl -lgslcblas -lm -larmadillo
+g++ -Iinclude -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/lycurguseV_ns.cxx -o ../bin/lyns -lgsl -lgslcblas -lm -larmadillo
 **/
 
 

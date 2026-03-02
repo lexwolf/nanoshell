@@ -21,15 +21,15 @@
 #include <iomanip>
 #include <fstream>
 #include <armadillo>
-#include "headers/mathNN.H"
-#include "headers/nanoshell.H"
+#include "nano_geo_matrix/core/mathNN.hpp"
+#include "nano_geo_matrix/quasi_static/geometry/nanoshell.hpp"
 #define CUP_BACKEND_QUASI_STATIC
-#include "headers/cup.H"
+#include "nano_geo_matrix/cup/cup.hpp"
 
 using namespace std;
 
 /** Compila con: 
-g++ -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/rho2ome_sp.cxx -o ../bin/rho2ome_sp -lgsl -lgslcblas -lm -larmadillo
+g++ -Iinclude -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/rho2ome_sp.cxx -o ../bin/rho2ome_sp -lgsl -lgslcblas -lm -larmadillo
 **/
 
 int main(int argc, char ** argv){

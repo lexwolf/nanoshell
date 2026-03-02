@@ -1,4 +1,5 @@
 #!/bin/bash
+CXXFLAGS="${CXXFLAGS:-} -I../include"
 
 export LC_NUMERIC="en_US.UTF-8"
 
@@ -42,13 +43,13 @@ mkdir -p ../img/output/GIF/intime
 if $use_compile; then
   echo "> Compiling selected sources..."
   # Always compile steady-state and frohlich
-  g++ -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib ../src/steady_state.cxx -o ../bin/sts -lgsl -lgslcblas -lm -larmadillo
-  g++ -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib ../src/frohlich.cxx -o ../bin/fro -lgsl -lgslcblas -lm -larmadillo
+  g++ $CXXFLAGS -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib ../src/steady_state.cxx -o ../bin/sts -lgsl -lgslcblas -lm -larmadillo
+  g++ $CXXFLAGS -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib ../src/frohlich.cxx -o ../bin/fro -lgsl -lgslcblas -lm -larmadillo
   # Compile time-dependent module depending on plot mode
   if [ "$plot_mode" == "num" ]; then
-    g++ -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib ../src/nanoshell_num.cxx -o ../bin/nsn -lgsl -lgslcblas -lm -larmadillo
+    g++ $CXXFLAGS -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib ../src/nanoshell_num.cxx -o ../bin/nsn -lgsl -lgslcblas -lm -larmadillo
   elif [ "$plot_mode" == "anl" ]; then
-    g++ -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib ../src/nanoshell_anl.cxx -o ../bin/nsa -lgsl -lgslcblas -lm -larmadillo
+    g++ $CXXFLAGS -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib ../src/nanoshell_anl.cxx -o ../bin/nsa -lgsl -lgslcblas -lm -larmadillo
   else
     echo "Warning: No time-dependency mode selected. Skipping time-code compilation."
   fi

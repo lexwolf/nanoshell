@@ -26,3 +26,22 @@ bin/**
 *.swo
 *.kate-swp
 .*.kate-swp
+
+# Ignore build intermediates accidentally created under include/
+include/**/*.o
+include/**/*.obj
+include/**/*.a
+include/**/*.so
+include/**/*.d
+include/**/*.lo
+include/**/*.la
+include/**/*.mod
+include/**/*.pcm
+
+# Ignore test executables built in-place under tests/
+tests/time_behavior
+tests/threshold
+tests/steady_state
+tests/tim
+tests/trs
+tests/sts
