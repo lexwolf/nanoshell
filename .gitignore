@@ -37,3 +37,11 @@ include/**/*.lo
 include/**/*.la
 include/**/*.mod
 include/**/*.pcm
+
+# Ignore test executables built in-place under tests/
+tests/time_behavior
+tests/threshold
+tests/steady_state
+tests/tim
+tests/trs
+tests/sts
