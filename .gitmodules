@@ -1,0 +1,3 @@
+[submodule "extern/nano_geo_matrix"]
+	path = extern/nano_geo_matrix
+	url = https://github.com/lexwolf/nano_geo_matrix.git

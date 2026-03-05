@@ -23,7 +23,7 @@
 #include <sstream>
 #include <iomanip>
 
-// g++ -Iinclude ../src/eV2ex.cxx -o ../bin/eV2ex
+// g++ -Iextern/nano_geo_matrix/include ../src/eV2ex.cxx -o ../bin/eV2ex
 
 void wavelengthToRGB(double wavelength, double& red, double& green, double& blue) {
 

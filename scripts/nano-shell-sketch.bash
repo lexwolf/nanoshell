@@ -1,5 +1,5 @@
 #!/bin/bash
-CXXFLAGS="${CXXFLAGS:-} -I../include"
+CXXFLAGS="${CXXFLAGS:-} -I../extern/nano_geo_matrix/include"
 
 flare=false
 radius_ratio=""

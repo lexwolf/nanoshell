@@ -1,10 +1,10 @@
 Steady-state polarizability calculation results:
-  Frequency: 2.812 eV
+  Frequency: 2.8122 eV
   Metal model: drude
   Metal type: silver
   Core material: silica
-  Time range: [0, 100] ps
-  The pump is switched on at 2 ps
+  Time range: [0, 1] ps
+  The pump is switched on at 0.2 ps
   Solvent: water
   Radius ratio: 0.6
 

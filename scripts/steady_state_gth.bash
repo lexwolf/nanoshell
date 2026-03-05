@@ -1,5 +1,5 @@
 #!/bin/bash
-CXXFLAGS="${CXXFLAGS:-} -I../include"
+CXXFLAGS="${CXXFLAGS:-} -I../extern/nano_geo_matrix/include"
 export LC_NUMERIC="en_US.UTF-8"
 
 script_dir="$(cd "$(dirname "$0")" && pwd)"
