@@ -21,15 +21,15 @@
 #include <iomanip>
 #include <fstream>
 #include <armadillo>
-#include "nano_geo_matrix/core/mathNN.hpp"
-#include "nano_geo_matrix/quasi_static/geometry/nanoshell.hpp"
+#include <nano_geo_matrix/core/mathNN.hpp>
+#include <nano_geo_matrix/quasi_static/geometry/nanoshell.hpp>
 #define CUP_BACKEND_QUASI_STATIC
-#include "nano_geo_matrix/cup/cup.hpp"
-#include "nano_geo_matrix/quasi_static/spaser/nanoshell_intensity_steady_state.hpp"
-#include "nano_geo_matrix/core/Zx_tools.hpp"
+#include <nano_geo_matrix/cup/cup.hpp>
+#include <nano_geo_matrix/quasi_static/spaser/nanoshell_intensity_steady_state.hpp>
+#include <nano_geo_matrix/core/Zx_tools.hpp>
 
 /*
-g++ -Iinclude -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/nanoshell_G_p3.cxx -o ../bin/Gap -lgsl -lgslcblas -lm -larmadillo
+g++ -Iextern/nano_geo_matrix/include -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/nanoshell_G_p3.cxx -o ../bin/Gap -lgsl -lgslcblas -lm -larmadillo
 */
 
 std::vector<double> extract_ome(const ZxSeries& vectorOfPairs) {

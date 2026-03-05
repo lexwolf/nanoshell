@@ -28,7 +28,7 @@ using namespace std;
 
 /*
  * Compila con
- * g++ -Iinclude ../src/delta2tau.cxx -o ../bin/delta2tau
+ * g++ -Iextern/nano_geo_matrix/include ../src/delta2tau.cxx -o ../bin/delta2tau
  */
 
 int main(int argc, char** argv){

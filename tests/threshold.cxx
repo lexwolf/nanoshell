@@ -22,12 +22,12 @@
 #include <fstream>
 #include <armadillo>
 #include <string>
-#include "nano_geo_matrix/core/mathNN.hpp"
-#include "nano_geo_matrix/quasi_static/geometry/nanoshell.hpp"
-#include "nano_geo_matrix/cup/cup.hpp"
+#include <nano_geo_matrix/core/mathNN.hpp>
+#include <nano_geo_matrix/quasi_static/geometry/nanoshell.hpp>
+#include <nano_geo_matrix/cup/cup.hpp>
 
 /*
-g++ -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib -I../include -DCUP_BACKEND_QUASI_STATIC threshold.cxx -o threshold -lgsl -lgslcblas -lm -larmadillo
+g++ -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib -I../extern/nano_geo_matrix/include -DCUP_BACKEND_QUASI_STATIC threshold.cxx -o threshold -lgsl -lgslcblas -lm -larmadillo
 */
 
 using namespace std;

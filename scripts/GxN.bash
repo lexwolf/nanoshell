@@ -1,5 +1,5 @@
 #!/bin/bash
-CXXFLAGS="${CXXFLAGS:-} -I../include"
+CXXFLAGS="${CXXFLAGS:-} -I../extern/nano_geo_matrix/include"
 # scripts/GxN.bash
 #
 # Gain × Frequency numerical runs using nanoshell_num (nsn)

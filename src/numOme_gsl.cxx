@@ -29,7 +29,7 @@
 #define IMAG(z,i) ((z)[2*(i)+1])
 
 /** compila con 
- g++ -Iinclude ../src/numOme_gsl.cxx -o ../bin/nom -lgsl -lgslcblas -lm
+ g++ -Iextern/nano_geo_matrix/include ../src/numOme_gsl.cxx -o ../bin/nom -lgsl -lgslcblas -lm
 **/ 
 
 using namespace std;

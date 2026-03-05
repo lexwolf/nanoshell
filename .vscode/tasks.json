@@ -8,6 +8,7 @@
       "args": [
         "-Wall",
         "-g",
+        "-I${workspaceFolder}/extern/nano_geo_matrix/include",
         "-I/usr/include/",
         "-L/usr/local/lib",
         "${file}",

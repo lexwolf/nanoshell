@@ -1,5 +1,6 @@
+PROJECT_ROOT := $(abspath ..)
 CC = g++
-CXXFLAGS += -I../include
+CXXFLAGS += -I$(PROJECT_ROOT)/extern/nano_geo_matrix/include
 CXXFLAGS += -DCUP_BACKEND_QUASI_STATIC
 CFLAGS = -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib
 CFLAGS += $(CXXFLAGS)
