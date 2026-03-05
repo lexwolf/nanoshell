@@ -1,6 +1,6 @@
 reset
-omin=2.0
-omax=3.2
+omin=2.2
+omax=3.4
 at(file, row, col) = system( sprintf("awk -v row=%d -v col=%d 'NR == row {print $col}' %s", row, col, file) )
 r_list="0.8 0.7 0.6 0.5 0.4"
 n_r=words(r_list)

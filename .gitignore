@@ -45,3 +45,9 @@ tests/steady_state
 tests/tim
 tests/trs
 tests/sts
+tests/time_behavior.exe
+tests/threshold.exe
+tests/steady_state.exe
+tests/tim.exe
+tests/trs.exe
+tests/sts.exe
