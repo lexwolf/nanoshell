@@ -32,16 +32,19 @@ To compile the project, ensure the following dependencies are installed:
 ### Steps
 
 1. Run the `configure` script to check dependencies:
+
    ```bash
    ./configure
    ```
 
 2. Compile the project using the Makefile:
+
    ```bash
    make
    ```
 
 3. To clean compiled binaries:
+
    ```bash
    make clean
    ```
@@ -51,6 +54,7 @@ To compile the project, ensure the following dependencies are installed:
 ## Input Files
 
 ### 1. `data/input/nanosphere_eV.dat`
+
 This file describes the nanoshell structure parameters:
 
 | Parameter                  | Description                                                                                     | Example Value |
@@ -69,6 +73,7 @@ This file describes the nanoshell structure parameters:
 | Core material              | Material of the nanoshell core (e.g., `silica`)                                                 | silica        |
 
 ### 2. `data/input/time.dat`
+
 This file specifies time-dependent simulation parameters:
 
 | Parameter         | Description                                             | Example Value |
@@ -81,6 +86,7 @@ This file specifies time-dependent simulation parameters:
 ## Code Usage
 
 ### Including `cup.H`
+
 To include and use the functions defined in `cup.H`, you must include the following headers in your code in the specified order:
 
 ```cpp
@@ -90,14 +96,18 @@ To include and use the functions defined in `cup.H`, you must include the follow
 ```
 
 ### Material Initialization
+
 Before using subroutines in `cup.H`, you must:
 
 1. Define a `nanosphere` instance (e.g., `nanosphere ns`).
 2. Initialize it using:
+
    ```cpp
    ns.init();
    ```
+
 3. Set the metal and active medium using:
+
    ```cpp
    ns.set_metal("<metal type>", "<model>", 1);
    ns.set_active("<gain medium model>");
@@ -144,5 +154,4 @@ Contributions are welcome! If you find any bugs or have feature requests, feel f
 
 ## Contact
 
-For questions or collaboration opportunities, please reach out to Alessandro Veltri at alessandro.veltri@gmail.com.
-# Tiny sync fix
+For questions or collaboration opportunities, please reach out to Alessandro Veltri at <alessandro.veltri@gmail.com>.
