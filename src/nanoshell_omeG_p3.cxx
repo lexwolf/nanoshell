@@ -24,14 +24,14 @@
 #include <nano_geo_matrix/core/mathNN.hpp>
 #include <nano_geo_matrix/quasi_static/geometry/nanoshell.hpp>
 #define CUP_BACKEND_QUASI_STATIC
-#include <nano_geo_matrix/cup/cup.hpp>
+#include <cup/cup.hpp>
 #include <nano_geo_matrix/core/extract.hpp>
 #include <nano_geo_matrix/quasi_static/spaser/nanoshell_intensity_steady_state.hpp>
 #include <nano_geo_matrix/core/Zx_tools.hpp>
 
 
 /*
-g++ -Iextern/nano_geo_matrix/include -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/nanoshell_omeG_p3.cxx -o ../bin/oGp -lgsl -lgslcblas -lm -larmadillo
+g++ -Iextern/nano_geo_matrix/include -Iextern/nano_geo_matrix/modules -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/nanoshell_omeG_p3.cxx -o ../bin/oGp -lgsl -lgslcblas -lm -larmadillo
 */
 
 

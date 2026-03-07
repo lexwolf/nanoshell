@@ -24,10 +24,10 @@
 #include <nano_geo_matrix/core/mathNN.hpp>
 #include <nano_geo_matrix/quasi_static/geometry/nanoshell.hpp>
 #define CUP_BACKEND_QUASI_STATIC
-#include <nano_geo_matrix/cup/cup.hpp>
+#include <cup/cup.hpp>
 
  /*
-g++ -Iextern/nano_geo_matrix/include -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib ../src/steady_state.cxx -o ../bin/sts -lgsl -lgslcblas -lm -larmadillo
+g++ -Iextern/nano_geo_matrix/include -Iextern/nano_geo_matrix/modules -Wall -I/usr/local/include -I/usr/include/eigen3 -L/usr/local/lib ../src/steady_state.cxx -o ../bin/sts -lgsl -lgslcblas -lm -larmadillo
 */
 
 using namespace std;

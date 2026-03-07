@@ -26,7 +26,7 @@
 using namespace std;
 
 /** Compile with:
-    g++ -Iextern/nano_geo_matrix/include eV2rads.cxx -o ../bin/eV2rads
+    g++ -Iextern/nano_geo_matrix/include -Iextern/nano_geo_matrix/modules eV2rads.cxx -o ../bin/eV2rads
 **/
 
 int main(int argc, char** argv) {

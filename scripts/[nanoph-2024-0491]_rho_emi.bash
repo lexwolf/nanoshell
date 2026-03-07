@@ -1,5 +1,5 @@
 #!/bin/bash
-CXXFLAGS="${CXXFLAGS:-} -I../extern/nano_geo_matrix/include"
+CXXFLAGS="${CXXFLAGS:-} -I../extern/nano_geo_matrix/include -I../extern/nano_geo_matrix/modules"
 set -o pipefail
 export LC_NUMERIC="en_US.UTF-8"
 
