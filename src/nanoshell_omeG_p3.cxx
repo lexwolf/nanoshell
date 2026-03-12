@@ -33,9 +33,7 @@
 /*
 Example compilation:
 
-NGM_ROOT=$(realpath ../extern/nano_geo_matrix)
-
-g++ -I"$NGM_ROOT/include" -I"$NGM_ROOT/modules" -I"$NGM_ROOT/modules/cup" -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/nanoshell_omeG_p3.cxx -o ../bin/oGp -lgsl -lgslcblas -lm -larmadillo
+NGM_ROOT="$(realpath ../extern/nano_geo_matrix)" && g++ -I"$NGM_ROOT/include" -I"$NGM_ROOT/modules" -I"$NGM_ROOT/modules/cup" -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/nanoshell_omeG_p3.cxx -o ../bin/oGp -lgsl -lgslcblas -lm -larmadillo
 */
 
 

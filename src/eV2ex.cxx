@@ -25,9 +25,7 @@
 
 // Example compilation:
 //
-// NGM_ROOT=$(realpath ../extern/nano_geo_matrix)
-//
-// g++ -I"$NGM_ROOT/include" -I"$NGM_ROOT/modules" -I"$NGM_ROOT/modules/cup" ../src/eV2ex.cxx -o ../bin/eV2ex
+// NGM_ROOT="$(realpath ../extern/nano_geo_matrix)" && g++ -I"$NGM_ROOT/include" -I"$NGM_ROOT/modules" -I"$NGM_ROOT/modules/cup" ../src/eV2ex.cxx -o ../bin/eV2ex
 
 void wavelengthToRGB(double wavelength, double& red, double& green, double& blue) {
 

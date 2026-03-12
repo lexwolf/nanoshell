@@ -28,9 +28,7 @@ using namespace std;
 /** Compile with:
     Example compilation:
 
-    NGM_ROOT=$(realpath ../extern/nano_geo_matrix)
-
-    g++ -I"$NGM_ROOT/include" -I"$NGM_ROOT/modules" -I"$NGM_ROOT/modules/cup" eV2rads.cxx -o ../bin/eV2rads
+    NGM_ROOT="$(realpath ../extern/nano_geo_matrix)" && g++ -I"$NGM_ROOT/include" -I"$NGM_ROOT/modules" -I"$NGM_ROOT/modules/cup" eV2rads.cxx -o ../bin/eV2rads
 **/
 
 int main(int argc, char** argv) {

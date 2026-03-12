@@ -33,9 +33,7 @@
 /*
 Example compilation:
 
-NGM_ROOT=$(realpath ../extern/nano_geo_matrix)
-
-g++ -I"$NGM_ROOT/include" -I"$NGM_ROOT/modules" -I"$NGM_ROOT/modules/cup" -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/nanoshell_ome_al_p3.cxx -o ../bin/oap -lgsl -lgslcblas -lm -larmadillo
+NGM_ROOT="$(realpath ../extern/nano_geo_matrix)" && g++ -I"$NGM_ROOT/include" -I"$NGM_ROOT/modules" -I"$NGM_ROOT/modules/cup" -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/nanoshell_ome_al_p3.cxx -o ../bin/oap -lgsl -lgslcblas -lm -larmadillo
 */
 
 std::vector<double> extract_ome(const ZxSeries& vectorOfPairs) {

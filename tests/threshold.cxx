@@ -29,9 +29,7 @@
 /*
 Example compilation:
 
-NGM_ROOT=$(realpath ../extern/nano_geo_matrix)
-
-g++ -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib -I"$NGM_ROOT/include" -I"$NGM_ROOT/modules" -I"$NGM_ROOT/modules/cup" -DCUP_BACKEND_QUASI_STATIC threshold.cxx -o threshold -lgsl -lgslcblas -lm -larmadillo
+NGM_ROOT="$(realpath ../extern/nano_geo_matrix)" && g++ -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib -I"$NGM_ROOT/include" -I"$NGM_ROOT/modules" -I"$NGM_ROOT/modules/cup" -DCUP_BACKEND_QUASI_STATIC threshold.cxx -o threshold -lgsl -lgslcblas -lm -larmadillo
 */
 
 using namespace std;

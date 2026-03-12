@@ -30,9 +30,7 @@
 /** Compila con
 Example compilation:
 
-NGM_ROOT=$(realpath ../extern/nano_geo_matrix)
-
-g++ -I"$NGM_ROOT/include" -I"$NGM_ROOT/modules" -I"$NGM_ROOT/modules/cup" ../src/eV2nm.cxx -o ../bin/eV2nm
+NGM_ROOT="$(realpath ../extern/nano_geo_matrix)" && g++ -I"$NGM_ROOT/include" -I"$NGM_ROOT/modules" -I"$NGM_ROOT/modules/cup" ../src/eV2nm.cxx -o ../bin/eV2nm
 **/
 using namespace std;
 
