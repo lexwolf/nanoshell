@@ -27,7 +27,11 @@
 #include <cup/cup.hpp>
 
 /*
-g++ -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib -I../extern/nano_geo_matrix/include -I../extern/nano_geo_matrix/modules -DCUP_BACKEND_QUASI_STATIC steady_state.cxx -o steady_state -lgsl -lgslcblas -lm -larmadillo
+Example compilation:
+
+NGM_ROOT=$(realpath ../extern/nano_geo_matrix)
+
+g++ -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib -I"$NGM_ROOT/include" -I"$NGM_ROOT/modules" -I"$NGM_ROOT/modules/cup" -DCUP_BACKEND_QUASI_STATIC steady_state.cxx -o steady_state -lgsl -lgslcblas -lm -larmadillo
 */
 
 using namespace std;

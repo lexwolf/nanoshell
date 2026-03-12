@@ -9,6 +9,8 @@
         "-Wall",
         "-g",
         "-I${workspaceFolder}/extern/nano_geo_matrix/include",
+        "-I${workspaceFolder}/extern/nano_geo_matrix/modules",
+        "-I${workspaceFolder}/extern/nano_geo_matrix/modules/cup",
         "-I/usr/include/",
         "-L/usr/local/lib",
         "${file}",

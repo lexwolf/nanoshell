@@ -28,7 +28,11 @@
 #define j2eV 6.24150636309e18
 
 /** Compila con
-g++ -Iextern/nano_geo_matrix/include -Iextern/nano_geo_matrix/modules ../src/eV2nm.cxx -o ../bin/eV2nm
+Example compilation:
+
+NGM_ROOT=$(realpath ../extern/nano_geo_matrix)
+
+g++ -I"$NGM_ROOT/include" -I"$NGM_ROOT/modules" -I"$NGM_ROOT/modules/cup" ../src/eV2nm.cxx -o ../bin/eV2nm
 **/
 using namespace std;
 

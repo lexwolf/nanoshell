@@ -28,7 +28,11 @@ using namespace std;
 
 /*
  * Compila con
- * g++ -Iextern/nano_geo_matrix/include -Iextern/nano_geo_matrix/modules ../src/delta2tau.cxx -o ../bin/delta2tau
+ * Example compilation:
+ *
+ * NGM_ROOT=$(realpath ../extern/nano_geo_matrix)
+ *
+ * g++ -I"$NGM_ROOT/include" -I"$NGM_ROOT/modules" -I"$NGM_ROOT/modules/cup" ../src/delta2tau.cxx -o ../bin/delta2tau
  */
 
 int main(int argc, char** argv){

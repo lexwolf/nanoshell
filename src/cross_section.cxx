@@ -28,7 +28,11 @@
 #include <nano_geo_matrix/quasi_static/spaser/nanoshell_intensity_steady_state.hpp>
 
 /*
-g++ -Iextern/nano_geo_matrix/include -Iextern/nano_geo_matrix/modules -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/cross_section.cxx -o ../bin/crs -lgsl -lgslcblas -lm -larmadillo
+Example compilation:
+
+NGM_ROOT=$(realpath ../extern/nano_geo_matrix)
+
+g++ -I"$NGM_ROOT/include" -I"$NGM_ROOT/modules" -I"$NGM_ROOT/modules/cup" -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/cross_section.cxx -o ../bin/crs -lgsl -lgslcblas -lm -larmadillo
 */
 
 using namespace std;

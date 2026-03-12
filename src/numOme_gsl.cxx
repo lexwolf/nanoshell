@@ -29,7 +29,11 @@
 #define IMAG(z,i) ((z)[2*(i)+1])
 
 /** compila con 
- g++ -Iextern/nano_geo_matrix/include -Iextern/nano_geo_matrix/modules ../src/numOme_gsl.cxx -o ../bin/nom -lgsl -lgslcblas -lm
+ Example compilation:
+
+ NGM_ROOT=$(realpath ../extern/nano_geo_matrix)
+
+ g++ -I"$NGM_ROOT/include" -I"$NGM_ROOT/modules" -I"$NGM_ROOT/modules/cup" ../src/numOme_gsl.cxx -o ../bin/nom -lgsl -lgslcblas -lm
 **/ 
 
 using namespace std;

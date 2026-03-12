@@ -30,7 +30,11 @@
 using namespace std;
 
 /** Compila con: 
-g++ -Iextern/nano_geo_matrix/include -Iextern/nano_geo_matrix/modules -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/lycurguseV_ns.cxx -o ../bin/lyns -lgsl -lgslcblas -lm -larmadillo
+Example compilation:
+
+NGM_ROOT=$(realpath ../extern/nano_geo_matrix)
+
+g++ -I"$NGM_ROOT/include" -I"$NGM_ROOT/modules" -I"$NGM_ROOT/modules/cup" -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/lycurguseV_ns.cxx -o ../bin/lyns -lgsl -lgslcblas -lm -larmadillo
 **/
 
 

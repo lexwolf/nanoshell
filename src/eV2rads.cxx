@@ -26,7 +26,11 @@
 using namespace std;
 
 /** Compile with:
-    g++ -Iextern/nano_geo_matrix/include -Iextern/nano_geo_matrix/modules eV2rads.cxx -o ../bin/eV2rads
+    Example compilation:
+
+    NGM_ROOT=$(realpath ../extern/nano_geo_matrix)
+
+    g++ -I"$NGM_ROOT/include" -I"$NGM_ROOT/modules" -I"$NGM_ROOT/modules/cup" eV2rads.cxx -o ../bin/eV2rads
 **/
 
 int main(int argc, char** argv) {

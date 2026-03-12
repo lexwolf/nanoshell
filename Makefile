@@ -1,6 +1,11 @@
 PROJECT_ROOT := $(abspath .)
+NGM_ROOT := $(realpath $(PROJECT_ROOT)/extern/nano_geo_matrix)
+NGM_INC  := $(NGM_ROOT)/include
+NGM_MOD  := $(NGM_ROOT)/modules
+NGM_CUP  := $(NGM_ROOT)/modules/cup
+
 CC = g++
-CXXFLAGS += -I$(PROJECT_ROOT)/extern/nano_geo_matrix/include -I$(PROJECT_ROOT)/extern/nano_geo_matrix/modules
+CXXFLAGS += -I$(NGM_INC) -I$(NGM_MOD) -I$(NGM_CUP)
 CFLAGS = -Wall -I/usr/include/ -I/usr/include/eigen3 -I/usr/include/eigen3 -L/usr/local/lib
 CFLAGS += $(CXXFLAGS)
 LIBS = -lgsl -lgslcblas -lm -larmadillo

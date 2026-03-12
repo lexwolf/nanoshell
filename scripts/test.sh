@@ -6,7 +6,8 @@ export LC_NUMERIC="en_US.UTF-8"
 # --- paths (assumes script is launched from ../src as in your draft) ---
 SRC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SRC_DIR/.." && pwd)"
-CXXFLAGS="${CXXFLAGS:-} -I$ROOT_DIR/extern/nano_geo_matrix/include -I$ROOT_DIR/extern/nano_geo_matrix/modules"
+NGM_ROOT="$(realpath "$ROOT_DIR/extern/nano_geo_matrix")"
+CXXFLAGS="${CXXFLAGS:-} -I$NGM_ROOT/include -I$NGM_ROOT/modules -I$NGM_ROOT/modules/cup"
 
 INPUT_FILE="$ROOT_DIR/data/input/nanosphere_eV.dat"
 TIME_FILE="$ROOT_DIR/data/input/time.dat"

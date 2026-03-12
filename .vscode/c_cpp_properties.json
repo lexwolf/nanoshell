@@ -4,10 +4,21 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/extern/nano_geo_matrix/include",
+                "${workspaceFolder}/extern/nano_geo_matrix/modules",
+                "${workspaceFolder}/extern/nano_geo_matrix/modules/cup",
                 "${default}",
                 "/usr/include/eigen3"
             ],
             "defines": ["CUP_BACKEND_QUASI_STATIC"],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/extern/nano_geo_matrix/include",
+                    "${workspaceFolder}/extern/nano_geo_matrix/modules",
+                    "${workspaceFolder}/extern/nano_geo_matrix/modules/cup",
+                    "${workspaceFolder}/src",
+                    "${workspaceFolder}/tests"
+                ]
+            },
             "cStandard": "c17",
             "cppStandard": "gnu++17",
             "intelliSenseMode": "linux-gcc-x64",
