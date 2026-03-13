@@ -1,0 +1,130 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "tests",
+					"jsonFile" : "directory-tests-Debug-b01f6abb0ab61427ef3b.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "tests",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1
+					],
+					"name" : "nano_geo_matrix",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 1,
+					"id" : "ngm_cup_mie_module_smoke::@a44f0ac069e85531cdee",
+					"jsonFile" : "target-ngm_cup_mie_module_smoke-Debug-917f7ac2c48e687bd271.json",
+					"name" : "ngm_cup_mie_module_smoke",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ngm_cup_mie_smoke::@a44f0ac069e85531cdee",
+					"jsonFile" : "target-ngm_cup_mie_smoke-Debug-702b555ae0ca7a0defdb.json",
+					"name" : "ngm_cup_mie_smoke",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ngm_cup_qs_module_smoke::@a44f0ac069e85531cdee",
+					"jsonFile" : "target-ngm_cup_qs_module_smoke-Debug-bc802d556f9b12de12f6.json",
+					"name" : "ngm_cup_qs_module_smoke",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ngm_cup_qs_smoke::@a44f0ac069e85531cdee",
+					"jsonFile" : "target-ngm_cup_qs_smoke-Debug-c095f53d4af103860f99.json",
+					"name" : "ngm_cup_qs_smoke",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ngm_smoke_mie_s::@a44f0ac069e85531cdee",
+					"jsonFile" : "target-ngm_smoke_mie_s-Debug-2a1c8cbb43708706dcee.json",
+					"name" : "ngm_smoke_mie_s",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ngm_smoke_qs_ns::@a44f0ac069e85531cdee",
+					"jsonFile" : "target-ngm_smoke_qs_ns-Debug-8ff9f61abe0cc99090ca.json",
+					"name" : "ngm_smoke_qs_ns",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ngm_smoke_qs_s::@a44f0ac069e85531cdee",
+					"jsonFile" : "target-ngm_smoke_qs_s-Debug-a06a655e126840d194c3.json",
+					"name" : "ngm_smoke_qs_s",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/alessandro/GitHub/Academia/nanoshell/build",
+		"source" : "/home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}

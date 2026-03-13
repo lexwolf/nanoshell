@@ -1,0 +1,44 @@
+[
+{
+  "directory": "/home/alessandro/GitHub/Academia/nanoshell/build",
+  "command": "/usr/bin/g++ -DUSE_MYBESSEL_BL -I/home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/include -isystem /usr/include/eigen3 -g -o tests/CMakeFiles/ngm_smoke_qs_s.dir/smoke_qs_s.cpp.o -c /home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/tests/smoke_qs_s.cpp",
+  "file": "/home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/tests/smoke_qs_s.cpp",
+  "output": "tests/CMakeFiles/ngm_smoke_qs_s.dir/smoke_qs_s.cpp.o"
+},
+{
+  "directory": "/home/alessandro/GitHub/Academia/nanoshell/build",
+  "command": "/usr/bin/g++ -DUSE_MYBESSEL_BL -I/home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/include -isystem /usr/include/eigen3 -g -o tests/CMakeFiles/ngm_smoke_qs_ns.dir/smoke_qs_ns.cpp.o -c /home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/tests/smoke_qs_ns.cpp",
+  "file": "/home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/tests/smoke_qs_ns.cpp",
+  "output": "tests/CMakeFiles/ngm_smoke_qs_ns.dir/smoke_qs_ns.cpp.o"
+},
+{
+  "directory": "/home/alessandro/GitHub/Academia/nanoshell/build",
+  "command": "/usr/bin/g++ -DUSE_MYBESSEL_BL -I/home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/include -isystem /usr/include/eigen3 -g -o tests/CMakeFiles/ngm_smoke_mie_s.dir/smoke_mie_s.cpp.o -c /home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/tests/smoke_mie_s.cpp",
+  "file": "/home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/tests/smoke_mie_s.cpp",
+  "output": "tests/CMakeFiles/ngm_smoke_mie_s.dir/smoke_mie_s.cpp.o"
+},
+{
+  "directory": "/home/alessandro/GitHub/Academia/nanoshell/build",
+  "command": "/usr/bin/g++ -DUSE_MYBESSEL_BL -I/home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/modules/cup -I/home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/include -isystem /usr/include/eigen3 -g -o tests/CMakeFiles/ngm_cup_qs_smoke.dir/cup_qs_smoke.cpp.o -c /home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/tests/cup_qs_smoke.cpp",
+  "file": "/home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/tests/cup_qs_smoke.cpp",
+  "output": "tests/CMakeFiles/ngm_cup_qs_smoke.dir/cup_qs_smoke.cpp.o"
+},
+{
+  "directory": "/home/alessandro/GitHub/Academia/nanoshell/build",
+  "command": "/usr/bin/g++ -DUSE_MYBESSEL_BL -I/home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/modules/cup -I/home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/include -isystem /usr/include/eigen3 -g -o tests/CMakeFiles/ngm_cup_mie_smoke.dir/cup_mie_smoke.cpp.o -c /home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/tests/cup_mie_smoke.cpp",
+  "file": "/home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/tests/cup_mie_smoke.cpp",
+  "output": "tests/CMakeFiles/ngm_cup_mie_smoke.dir/cup_mie_smoke.cpp.o"
+},
+{
+  "directory": "/home/alessandro/GitHub/Academia/nanoshell/build",
+  "command": "/usr/bin/g++ -DUSE_MYBESSEL_BL -I/home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/modules/cup -I/home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/include -isystem /usr/include/eigen3 -g -o tests/CMakeFiles/ngm_cup_qs_module_smoke.dir/cup_qs_module_smoke.cpp.o -c /home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/tests/cup_qs_module_smoke.cpp",
+  "file": "/home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/tests/cup_qs_module_smoke.cpp",
+  "output": "tests/CMakeFiles/ngm_cup_qs_module_smoke.dir/cup_qs_module_smoke.cpp.o"
+},
+{
+  "directory": "/home/alessandro/GitHub/Academia/nanoshell/build",
+  "command": "/usr/bin/g++ -DUSE_MYBESSEL_BL -I/home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/modules/cup -I/home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/include -isystem /usr/include/eigen3 -g -o tests/CMakeFiles/ngm_cup_mie_module_smoke.dir/cup_mie_module_smoke.cpp.o -c /home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/tests/cup_mie_module_smoke.cpp",
+  "file": "/home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix/tests/cup_mie_module_smoke.cpp",
+  "output": "tests/CMakeFiles/ngm_cup_mie_module_smoke.dir/cup_mie_module_smoke.cpp.o"
+}
+]

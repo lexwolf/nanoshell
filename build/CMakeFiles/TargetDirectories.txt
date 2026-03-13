@@ -1,0 +1,13 @@
+/home/alessandro/GitHub/Academia/nanoshell/build/CMakeFiles/test.dir
+/home/alessandro/GitHub/Academia/nanoshell/build/CMakeFiles/edit_cache.dir
+/home/alessandro/GitHub/Academia/nanoshell/build/CMakeFiles/rebuild_cache.dir
+/home/alessandro/GitHub/Academia/nanoshell/build/tests/CMakeFiles/ngm_smoke_qs_s.dir
+/home/alessandro/GitHub/Academia/nanoshell/build/tests/CMakeFiles/ngm_smoke_qs_ns.dir
+/home/alessandro/GitHub/Academia/nanoshell/build/tests/CMakeFiles/ngm_smoke_mie_s.dir
+/home/alessandro/GitHub/Academia/nanoshell/build/tests/CMakeFiles/ngm_cup_qs_smoke.dir
+/home/alessandro/GitHub/Academia/nanoshell/build/tests/CMakeFiles/ngm_cup_mie_smoke.dir
+/home/alessandro/GitHub/Academia/nanoshell/build/tests/CMakeFiles/ngm_cup_qs_module_smoke.dir
+/home/alessandro/GitHub/Academia/nanoshell/build/tests/CMakeFiles/ngm_cup_mie_module_smoke.dir
+/home/alessandro/GitHub/Academia/nanoshell/build/tests/CMakeFiles/test.dir
+/home/alessandro/GitHub/Academia/nanoshell/build/tests/CMakeFiles/edit_cache.dir
+/home/alessandro/GitHub/Academia/nanoshell/build/tests/CMakeFiles/rebuild_cache.dir
