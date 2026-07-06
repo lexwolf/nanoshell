@@ -52,14 +52,22 @@ std::pair<double, double> fnd_extrm(const ZxSeries& vkape, double Ome_p) {
 
 using namespace std;
 
-int main(){
+int main(int argc, char** argv){
     double omemi, omema, E0, eps_b, eps3, *fro, rho, omeeV, kex1, kex2, dG, wG, Ome, *res, ewh;
-    double Isat, tildeN=1, ntau1, ntau2;
+    double Isat, tildeN=1, ntau1, ntau2, Gmax_over_Gth = 40.;
     int omeN = 10000, GN=400;
     complex<double> alph, p3nm, eps1, eps2;
     
     char mtl[16], mdl[16], hst[16], sol[16], active[16];
     
+    if (argc > 1) Gmax_over_Gth = atof(argv[1]);
+    if (argc > 2) GN = atoi(argv[2]);
+    if (argc > 3) omeN = atoi(argv[3]);
+    if (Gmax_over_Gth <= 0. || GN <= 0 || omeN <= 0) {
+        cerr << "Usage: " << argv[0] << " [Gmax_over_Gth] [gain_steps] [omega_samples]" << endl;
+        return 1;
+    }
+
     res     = new double[7];
     
     std::vector<std::pair<double,std::complex<double>>> vkape;
@@ -80,7 +88,7 @@ int main(){
     
     nano>>ns.a>>ns.Dome>>ns.ome_g>>ns.G>>omemi>>omema>>mtl>>mdl>>active>>sol>>E0>>rho>>hst;
     
-    E0=1.e-8;
+    if (E0==0.) E0=1.e-30; // zero is problematic as a value for E0
     ns.init();
     eps3=ns.set_host(sol);
     eps_b=ns.set_host(hst);
@@ -88,8 +96,7 @@ int main(){
     ns.set_active(active);
     
     fro=ns.frohlich(omemi, omema, eps_b, eps3, rho);   
-//     dG=2.*fro[1]/GN;
-    dG=40.*fro[1]/GN;
+    dG=Gmax_over_Gth*fro[1]/GN;
    
     omeeV    = fro[0];
     ns.ome_g = omeeV;
