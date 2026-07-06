@@ -1,5 +1,5 @@
 reset
-set terminal pngcairo enhanced color size 2400,760 font "Arial,32" transparent
+set terminal pdfcairo enhanced color size 28cm,9cm font "Arial,24"
 
 repo = (system("test -d scripts -a -d data -a -d img; echo $?") eq "0") ? "." : ".."
 data = repo."/data/output/intensity_vs_gain/intensity_vs_gain.dat"
@@ -26,16 +26,16 @@ set style line 4 lc rgb "#666666" lw 1.5 dt 2
 set obj rect from graph 0, graph 0 to graph 1, graph 1
 set arrow 1 from 1, graph 0 to 1, graph 1 nohead ls 4 front
 
-set output repo."/img/output/intensity_vs_gain0.png"
+set output repo."/img/output/intensity_vs_gain0.pdf"
 plot data using 2:3 with lines ls 1 title "|{/Symbol a}_{SS}E_0|^2/I_{sat}"
 unset output
 
-set output repo."/img/output/intensity_vs_gain1.png"
+set output repo."/img/output/intensity_vs_gain1.pdf"
 plot data using 2:3 with lines ls 1 title "|{/Symbol a}_{SS}E_0|^2/I_{sat}", \
      data using 2:4 with lines ls 2 title "|p_{num}|^2/I_{sat}"
 unset output
 
-set output repo."/img/output/intensity_vs_gain.png"
+set output repo."/img/output/intensity_vs_gain.pdf"
 plot data using 2:3 with lines ls 1 title "|{/Symbol a}_{SS}E_0|^2/I_{sat}", \
      data using 2:4 with lines ls 2 title "|p_{num}|^2/I_{sat}", \
      data using 2:5 with lines ls 3 title "|p_{analytic}|^2/I_{sat}"

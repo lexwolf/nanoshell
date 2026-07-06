@@ -1,7 +1,7 @@
-set terminal pngcairo enhanced color size 2700,620 font "Arial,32" transparent
+set terminal pdfcairo enhanced color size 34cm,8cm font "Arial,18"
 
 repo = (system("test -d scripts -a -d data -a -d img; echo $?") eq "0") ? "." : ".."
-set output repo."/img/output/alpha_panels.png"
+set output repo."/img/output/alpha_panels.pdf"
 
 data_dir = repo."/data/output/alpha_panels"
 meta = data_dir."/metadata.dat"
@@ -44,13 +44,12 @@ if (alpha_abs_MAX == 0) alpha_abs_MAX = 1
 set xrange [xmin:xmax]
 set yrange [-1.05 * alpha_abs_MAX:1.05 * alpha_abs_MAX]
 
-set style line 1 lc rgb "black" lw 7
-set style line 2 lc rgb "#e9551a" lw 7
+set style line 1 lc rgb "black" lw 5
+set style line 2 lc rgb "#e9551a" lw 5
 set style line 3 lc rgb "#666666" lw 1.5 dt 2
 title_re = "{/Symbol a}'/4{/Symbol p}a^3"
 title_im = "{/Symbol a}''/4{/Symbol p}a^3"
 
-set key right top spacing 0.85 samplen 1.8 font ",24"
 set border lw 1.8
 set tics out nomirror
 set xtics 0.2
@@ -62,36 +61,31 @@ set grid noxtics ytics lc rgb "#dddddd" lw 0.5
 set bmargin 4
 set multiplot layout 1,6 margins 0.075,0.995,0.30,0.95 spacing 0.018,0
 
+unset key
 set arrow 1 from ome_sp, graph 0 to ome_sp, graph 1 nohead ls 3 front
-set label 1 "(a)" at graph 0.80,0.17 front font ",30"
 set label 2 "G = 0 Gth" at graph 0.01,0.08 front font ",24"
 plot f0 using 1:2 with lines ls 1 title title_re, \
      f0 using 1:3 with lines ls 2 title title_im
 
-unset key
 unset ylabel
 unset ytics
-set label 1 "(b)" at graph 0.80,0.17 front font ",30"
 set label 2 "G = 0.4 Gth" at graph 0.01,0.08 front font ",24"
 plot f1 using 1:2 with lines ls 1 title title_re, \
      f1 using 1:3 with lines ls 2 title title_im
 
-set label 1 "(c)" at graph 0.80,0.17 front font ",30"
 set label 2 "G = 0.9 Gth" at graph 0.01,0.08 front font ",24"
 plot f2 using 1:2 with lines ls 1 title title_re, \
      f2 using 1:3 with lines ls 2 title title_im
 
-set label 1 "(d)" at graph 0.80,0.17 front font ",30"
 set label 2 "G = 1.0 Gth" at graph 0.01,0.08 front font ",24"
 plot f3 using 1:2 with lines ls 1 title title_re, \
      f3 using 1:3 with lines ls 2 title title_im
 
-set label 1 "(e)" at graph 0.80,0.17 front font ",30"
 set label 2 "G = 1.04 Gth" at graph 0.01,0.08 front font ",24"
 plot f4 using 1:2 with lines ls 1 title title_re, \
      f4 using 1:3 with lines ls 2 title title_im
 
-set label 1 "(f)" at graph 0.80,0.17 front font ",30"
+set key right top spacing 0.85 samplen 1.8 font ",24"
 set label 2 "G = 1.6 Gth" at graph 0.01,0.08 front font ",24"
 plot f5 using 1:2 with lines ls 1 title title_re, \
      f5 using 1:3 with lines ls 2 title title_im
