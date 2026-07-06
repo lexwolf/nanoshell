@@ -18,10 +18,10 @@ set xtics 0, 0.2
 set ytics 1e-14, 1.e4
 set format y "10^{%T}"
 
-set style line 1 lc rgb "#e9551a" lw 6
-set style line 2 lc rgb "#2a9d55" lw 6
-set style line 3 lc rgb "#7b3294" lw 8 dt 2
-set style line 4 lc rgb "#666666" lw 1.5 dt 2
+set style line 1 lc rgb "#227345" lw 6
+set style line 2 lc rgb "#ada31a" lw 6
+set style line 3 lc rgb "#d68aff" lw 9 dt 2
+set style line 4 lc rgb "#666666" lw 1.5 dt 1
 
 set obj rect from graph 0, graph 0 to graph 1, graph 1
 set arrow 1 from 1, graph 0 to 1, graph 1 nohead ls 4 front
@@ -38,5 +38,13 @@ unset output
 set output repo."/img/output/intensity_vs_gain.pdf"
 plot data using 2:3 with lines ls 1 title "|{/Symbol a}_{SS}E_0|^2/I_{sat}", \
      data using 2:4 with lines ls 2 title "|p_{num}|^2/I_{sat}", \
+     data using 2:5 with lines ls 3 title "|p_{analytic}|^2/I_{sat}"
+
+unset logscale y
+set format y "%g"
+set ytics 0, 0.025
+set yrange [:0.05]
+set output repo."/img/output/intensity_vs_gain_nl.pdf"
+plot data using 2:4 with lines ls 2 title "|p_{num}|^2/I_{sat}", \
      data using 2:5 with lines ls 3 title "|p_{analytic}|^2/I_{sat}"
 unset output
