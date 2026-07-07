@@ -1,20 +1,22 @@
 reset
 omin=1.8
-omax=3.6
+omax=3.65
 at(file, row, col) = system( sprintf("awk -v row=%d -v col=%d 'NR == row {print $col}' %s", row, col, file) )
+
 r_list="0.8 0.7 0.6 0.5 0.4"
 n_r=words(r_list)
-xmax_list="3 3 3 3 3"
-ymax_list="0 0 0 0 0"
-dx_list="0.072 .216 .360 .504 .648"
+xmax_list="2.22937 2.57436 2.8122 2.98039 3.09744"
+ymax_list="0.00179166 0.00126799 0.000817899 0.000482422 0.000252764"
+dx_list="0.04063 0.02564 -0.0122 0.00961 0.06256"
 
 # Editable production layout, in plot coordinates.
-# Order follows r_list. Change these values, then rerun:
-#   gnuplot [nanoph-2024-0491]_rho_emi.gp
-sketch_x_list="3.072 3.216 3.36 3.504 3.648"
-sketch_y_list="0 0 0 0 0"
-label_x_list="3.2304 3.3744 3.5184 3.6624 3.8064"
-label_y_list="0 0 0 0 0"
+# Order follows r_list. These values reproduce the hand-tuned rho.gp layout.
+# Change these values, then rerun:
+#   gnuplot [nanoph-2024-0491]_rho_emi_PRODUCTION.gp
+sketch_x_list="2.27 2.60 2.80 2.99 3.16"
+sketch_y_list="0.1743 0.1275 0.0893 0.0468 0.0085"
+label_x_list="2.49 2.82 3.02 3.21 3.38"
+label_y_list="0.1934 0.1467 0.1084 0.0659 0.0276"
 
 omegaB(i) = at(sprintf("../data/output/rho/omeB-%s.dat", word(r_list,i)),1,1)
 xmax(i) = real(word(xmax_list,i))
@@ -40,7 +42,7 @@ unset colorbox
 # DONE
 
 set term pdf color enhanced size 10cm, 8cm;
-set output "../img/output/[nanoph-2024-0491]_rho.pdf"
+set output "../img/output/[nanoph-2024-0491]_rho_PRODUCTION.pdf"
 
 set multiplot
 # PLOTTING THE VISIBLE SPECTRUM
@@ -49,7 +51,7 @@ set size 0.991,0.25
 set pm3d map
 unset ytics
 set lmargin at screen 0.13
-set rmargin at screen 0.97
+set rmargin at screen 0.99
 set bmargin at screen 0.15
 set tmargin at screen 0.2
 set xlabel "ℏ{/Symbol w}_{em} (eV)" offset 0,-0.3
@@ -73,16 +75,15 @@ div=10**power
 
 scaleY(y)=y/(div*Isat)
 
-# Determine dynamic y-range and place thumbnails/labels near peaks
+# Determine dynamic y-range and place thumbnails/labels from editable lists.
 max_plot_y = 0
 do for [i=1:n_r] {
     py = scaleY(ymax_raw(i))
     if (py > max_plot_y) { max_plot_y = py }
 }
-if (max_plot_y <= 0) { max_plot_y = 1 }
 set yrange [0:max_plot_y*1.1]
 
-set for [i=1:n_r] pixmap (3+i) sprintf("../data/output/rho/%s.png", word(r_list,i)) at first sketch_x(i), first sketch_y(i) width screen 0.08
+set for [i=1:n_r] pixmap (3+i) sprintf("../data/output/rho/%s.png", word(r_list,i)) at first sketch_x(i), first sketch_y(i) width screen 0.09
 set for [i=1:n_r] label sprintf("{/Symbol r} = %s", word(r_list,i)) at first label_x(i), first label_y(i) left
 
 set ylabel "I_{em}/I_{sat}"

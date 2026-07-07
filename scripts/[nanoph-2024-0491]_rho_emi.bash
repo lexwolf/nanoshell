@@ -9,6 +9,7 @@ export LC_NUMERIC="en_US.UTF-8"
 # ---- float helpers (comparisons only) ----
 f_le() { awk -v a="$1" -v b="$2" 'BEGIN{print (a<=b)?1:0}'; }
 f_lt() { awk -v a="$1" -v b="$2" 'BEGIN{print (a<b)?1:0}'; }
+f_gt() { awk -v a="$1" -v b="$2" 'BEGIN{print (a>b)?1:0}'; }
 
 script_dir="$(cd "$(dirname "$0")" && pwd)"
 cd "$script_dir" || exit 1
@@ -16,9 +17,10 @@ cd "$script_dir" || exit 1
 compile_requested=false
 range_override=""
 rho_range_override=""
+branch_mode="bright"
 
 show_help() {
-    echo "Usage: bash $0 [-c] [-h] [-r omi:oma] [-rho \"0.4 0.5 0.6 0.7 0.8\"]"
+    echo "Usage: bash $0 [-c] [-h] [-r omi:oma] [-rho \"0.4 0.5 0.6 0.7 0.8\"] [--branch MODE|--dark|--secondary]"
     echo ""
     echo "Options:"
     echo "  -c    --compile    Compile the codes before executing the script"
@@ -26,6 +28,9 @@ show_help() {
     echo "  -r    --range      Override ome_min:ome_max (eV) e.g. 2.0:3.5"
     echo "  -rho  --rho-range  Space-separated, increasing positive numbers for rho values (default: 0.4 0.5 0.6 0.7 0.8)"
     echo "                    (NOTE: quote the list, e.g. -rho \"0.4 0.6 0.8\")"
+    echo "  --branch MODE      Branch selection: bright, secondary, lowest, highest (default: bright)"
+    echo "  --dark             Alias for --branch secondary"
+    echo "  --secondary        Alias for --branch secondary"
 }
 
 # ---- CLI parsing ----
@@ -49,11 +54,33 @@ while [ $# -gt 0 ]; do
             rho_range_override="$2"
             shift 2
             ;;
+        --branch)
+            if [ -z "${2:-}" ]; then
+                echo "Error: --branch requires bright, secondary, lowest, or highest" >&2
+                exit 1
+            fi
+            branch_mode="$2"
+            shift 2
+            ;;
+        --dark|--secondary)
+            branch_mode="secondary"
+            shift
+            ;;
         --) shift; break ;;
         -*) echo "Unknown option: $1" >&2; show_help; exit 1 ;;
         *)  echo "Unexpected argument: $1" >&2; show_help; exit 1 ;;
     esac
 done
+
+case "$branch_mode" in
+    bright|secondary|dark|lowest|highest) ;;
+    primary) branch_mode="bright" ;;
+    *) echo "Error: unknown branch mode '$branch_mode'. Valid modes are: bright, secondary, dark, lowest, highest." >&2; exit 1 ;;
+esac
+
+if [ "$branch_mode" = "dark" ]; then
+    branch_mode="secondary"
+fi
 
 if [ -n "$range_override" ] && [[ "$range_override" != *:* ]]; then
     echo "Error: -r|--range requires omemi:omema" >&2
@@ -123,6 +150,14 @@ trap cleanup EXIT
 echo "> WARNING: $input_file will be temporarily overwritten during the calculations."
 
 read a Dome ome21 G omemi omema metal model gain_model solvent E0 rho host < "$input_file"
+plot_omi="$omemi"
+plot_oma="$omema"
+
+if [ "$model" = "spline" ]; then
+    echo "Error: spline metal management is still under development for this rho-emission script." >&2
+    echo "Please change the metal model in $input_file from 'spline' to 'drude' and rerun." >&2
+    exit 1
+fi
 
 # ---- range selection ----
 if [ -n "$range_override" ]; then
@@ -137,7 +172,11 @@ if [ -n "$range_override" ]; then
 elif [ "$metal" == "gold" ]; then
     ex1=1.6; ex2=2.8; omi=1.6; oma=2.8
 elif [ "$metal" == "silver" ]; then
-    ex1=2.0; ex2=4.5; omi=2.2; oma=3.4
+    if [ "$branch_mode" = "secondary" ] || [ "$branch_mode" = "highest" ]; then
+        ex1=3.0; ex2=6.5; omi=$ex1; oma=$ex2
+    else
+        ex1=1.5; ex2=4.5; omi=$ex1; oma=$ex2
+    fi
 else
     echo "Error: metal='$metal' not handled and no -r override provided." >&2
     exit 1
@@ -170,18 +209,13 @@ for rho in "${rho_values[@]}"; do
     prev_rho="$rho"
 done
 
-# ---- prepare output dir ----
-echo "> Removing existing directory ../data/output/rho"
-rm -fr ../data/output/rho
-echo "> Creating directory ../data/output/rho"
-mkdir -p ../data/output/rho
+omeG_values=()
+Gth_values=()
+omeG_min=""
+omeG_max=""
 
-# ---- main loop ----
 for rho in "${rho_values[@]}"; do
-    echo "> rho = $rho"
-
-    # safer than backticks/array splitting
-    out="$(../bin/rho2ome_sp "$rho" 2>&1)"
+    out="$(../bin/rho2ome_sp "$rho" "$branch_mode" 2>&1)"
     rc=$?
     if [ $rc -ne 0 ]; then
         echo "Error: rho2ome_sp exited with code $rc for rho=$rho" >&2
@@ -190,7 +224,6 @@ for rho in "${rho_values[@]}"; do
         exit 1
     fi
 
-    # take the first two numeric tokens from output (ignore colors / messages)
     read -r omeG Gth < <(awk '
         {
         for(i=1;i<=NF;i++){
@@ -210,10 +243,81 @@ for rho in "${rho_values[@]}"; do
         exit 1
     fi
 
+    omeG_values+=("$omeG")
+    Gth_values+=("$Gth")
+
+    if [ -z "$omeG_min" ] || (( $(f_lt "$omeG" "$omeG_min") )); then
+        omeG_min="$omeG"
+    fi
+    if [ -z "$omeG_max" ] || (( $(f_gt "$omeG" "$omeG_max") )); then
+        omeG_max="$omeG"
+    fi
+done
+
+if (( $(f_lt "$oma" "$omi") )) || [ "$oma" = "$omi" ]; then
+    echo "Error: invalid frequency range: $omi:$oma" >&2
+    exit 1
+fi
+
+if [ -n "$range_override" ]; then
+    if (( $(f_lt "$omeG_min" "$omi") )) || (( $(f_gt "$omeG_max" "$oma") )); then
+        echo "Error: requested range $omi:$oma does not contain Frohlich frequencies $omeG_min:$omeG_max." >&2
+        echo "Hint: use a wider -r range." >&2
+        exit 1
+    fi
+else
+    if (( $(f_lt "$omeG_min" "$omi") )); then
+        if (( $(f_lt "$ex1" "$omi") )); then
+            omi="$ex1"
+        else
+            omi="$omeG_min"
+        fi
+    fi
+    if (( $(f_gt "$omeG_max" "$oma") )); then
+        if (( $(f_gt "$ex2" "$oma") )); then
+            oma="$ex2"
+        else
+            oma="$omeG_max"
+        fi
+    fi
+fi
+
+for idx in "${!rho_values[@]}"; do
+    rho="${rho_values[$idx]}"
+    omeG="${omeG_values[$idx]}"
+
+    if (( $(f_lt "$omeG" "$plot_omi") )); then
+        suggested=$(awk -v x="$omeG" 'BEGIN{printf "%.6g", x-0.1}')
+        echo "WARNING: rho=$rho peak at $omeG eV is outside the selected plot range $plot_omi:$plot_oma eV." >&2
+        echo "         Consider moving the left limit to about $suggested eV." >&2
+    elif (( $(f_gt "$omeG" "$plot_oma") )); then
+        suggested=$(awk -v x="$omeG" 'BEGIN{printf "%.6g", x+0.1}')
+        echo "WARNING: rho=$rho peak at $omeG eV is outside the selected plot range $plot_omi:$plot_oma eV." >&2
+        echo "         Consider moving the right limit to about $suggested eV." >&2
+    fi
+done
+
+echo "> Calculation frequency window: $omi:$oma eV"
+echo "> Plot frequency window: $plot_omi:$plot_oma eV"
+echo "> Branch selection mode: $branch_mode"
+
+# ---- prepare output dir ----
+echo "> Removing existing directory ../data/output/rho"
+rm -fr ../data/output/rho
+echo "> Creating directory ../data/output/rho"
+mkdir -p ../data/output/rho
+mkdir -p ../img/output
+
+# ---- main loop ----
+for idx in "${!rho_values[@]}"; do
+    rho="${rho_values[$idx]}"
+    omeG="${omeG_values[$idx]}"
+    Gth="${Gth_values[$idx]}"
+    echo "> rho = $rho"
 
     GG=$(echo "1.2*$Gth" | bc -l)
 
-    echo "> Setting the gain at the frohlich frequency ome_sp = $omeG eV"
+    echo "> Setting the gain at the $branch_mode frohlich frequency ome_sp = $omeG eV"
     echo "> and setting the gain at 1.2*Gth = $GG ..."
     {
         echo "$a $Dome $omeG $GG $omi $oma $metal $model $gain_model $solvent $E0 $rho $host"
@@ -228,7 +332,7 @@ for rho in "${rho_values[@]}"; do
     cp "../data/output/oGp/ome_p3.dat" "../data/output/rho/$rho.dat" || exit 1
     echo "$omeG" > "../data/output/rho/omeB-$rho.dat"
 
-    bash nano-shell-sketch.bash "$rho" || { echo "Error: nano-shell-sketch.bash failed for rho=$rho" >&2; exit 1; }
+    bash nano-shell-sketch.bash --branch "$branch_mode" "$rho" || { echo "Error: nano-shell-sketch.bash failed for rho=$rho" >&2; exit 1; }
     [ -f "../img/nanoshell.png" ] || { echo "Error: nano-shell-sketch did not produce ../img/nanoshell.png" >&2; exit 1; }
     mv "../img/nanoshell.png" "../data/output/rho/$rho.png" || exit 1
 done
@@ -249,10 +353,11 @@ for rho in "${rho_values[@]}"; do
     fi
 
     read x_max y_max < <(
-      awk '
+      awk -v lo="$plot_omi" -v hi="$plot_oma" '
         BEGIN { m=-1e300; x="NaN"; seen=0 }
         $1 ~ /^-?([0-9]+([.][0-9]*)?|[.][0-9]+)([eE][-+]?[0-9]+)?$/ &&
-        $2 ~ /^-?([0-9]+([.][0-9]*)?|[.][0-9]+)([eE][-+]?[0-9]+)?$/ {
+        $2 ~ /^-?([0-9]+([.][0-9]*)?|[.][0-9]+)([eE][-+]?[0-9]+)?$/ &&
+        $1 >= lo && $1 <= hi {
             seen=1
             if($2>m){ m=$2; x=$1 }
         }
@@ -280,11 +385,12 @@ xmax_list_str="${xmax_rev[*]}"
 ymax_list_str="${ymax_rev[*]}"
 
 # ---- compute dx adjustments (avoid NaN into bc) ----
-dx_base=$(printf '%.10g' "$(echo "0.04*($oma-$omi)" | bc -l)")
+dx_base=$(printf '%.10g' "$(echo "0.04*($plot_oma-$plot_omi)" | bc -l)")
 declare -a dx_adjust
 sketch_size=$dx_base
 prev_edge=-1e30
 prev_peak=""
+cluster_n=0
 
 for idx in "${!xmax_rev[@]}"; do
     xval=${xmax_rev[$idx]}
@@ -292,6 +398,7 @@ for idx in "${!xmax_rev[@]}"; do
     if [[ "$xval" == "NaN" ]]; then
         dx_adjust[$idx]=$dx_base
         prev_peak=""
+        cluster_n=0
         continue
     fi
 
@@ -301,14 +408,18 @@ for idx in "${!xmax_rev[@]}"; do
     if [ -n "$prev_peak" ]; then
         gap=$(echo "$xval - $prev_peak" | bc -l)
         if (( $(awk -v g="$gap" -v s="$sketch_size" 'BEGIN{print (g < 3*s)?1:0}') )); then
-            dx_val=$(echo "$dx_base*2" | bc -l)
+            dx_val=$(echo "$dx_base*(2+$cluster_n)" | bc -l)
             desired=$(echo "$xval + $dx_val" | bc -l)
+            cluster_n=$((cluster_n + 1))
+        else
+            cluster_n=0
         fi
     fi
 
     if (( $(f_le "$desired" "$prev_edge") )); then
-        dx_val=$(echo "$dx_base*2" | bc -l)
+        dx_val=$(echo "$dx_base*(2+$cluster_n)" | bc -l)
         desired=$(echo "$xval + $dx_val" | bc -l)
+        cluster_n=$((cluster_n + 1))
     fi
 
     dx_adjust[$idx]=$dx_val
@@ -317,12 +428,66 @@ for idx in "${!xmax_rev[@]}"; do
 done
 
 dx_list_str="${dx_adjust[*]}"
+label_gap=$(printf '%.10g' "$(echo "2.2*$dx_base" | bc -l)")
+plot_isat=0.0926567
+plot_power=-1
+plot_div=$(awk -v p="$plot_power" 'BEGIN{printf "%.12g", 10^p}')
+
+max_plot_y=$(printf '%.10g' "$(printf '%s\n' "${ymax_rev[@]}" | awk -v isat="$plot_isat" -v div="$plot_div" '
+    BEGIN { max=0 }
+    $1 != "NaN" {
+        y=$1/(div*isat)
+        if (y > max) max=y
+    }
+    END { print max }
+')")
+
+sketch_x=()
+sketch_y=()
+label_x=()
+label_y=()
+for idx in "${!xmax_rev[@]}"; do
+    xval=${xmax_rev[$idx]}
+    yval=${ymax_rev[$idx]}
+    dxval=${dx_adjust[$idx]}
+
+    if [[ "$xval" == "NaN" || "$yval" == "NaN" ]]; then
+        sketch_x+=("NaN")
+        sketch_y+=("NaN")
+        label_x+=("NaN")
+        label_y+=("NaN")
+        continue
+    fi
+
+    sx=$(printf '%.10g' "$(echo "$xval + $dxval" | bc -l)")
+    sy=$(awk -v y="$yval" -v isat="$plot_isat" -v div="$plot_div" 'BEGIN{printf "%.10g", 0.9*y/(div*isat)}')
+    lx=$(printf '%.10g' "$(echo "$sx + $label_gap" | bc -l)")
+
+    close_next=0
+    if [ "$idx" -lt $((${#xmax_rev[@]} - 1)) ]; then
+        next=${xmax_rev[$((idx+1))]}
+        if [[ "$next" != "NaN" ]]; then
+            close_next=$(awk -v a="$xval" -v b="$next" -v dx="$dx_base" 'BEGIN{print ((b-a) < 3*dx) ? 1 : 0}')
+        fi
+    fi
+    ly=$(awk -v sy="$sy" -v max="$max_plot_y" -v cn="$close_next" 'BEGIN{printf "%.10g", sy + (0.03 + 0.06*cn)*max}')
+
+    sketch_x+=("$sx")
+    sketch_y+=("$sy")
+    label_x+=("$lx")
+    label_y+=("$ly")
+done
+
+sketch_x_list_str="${sketch_x[*]}"
+sketch_y_list_str="${sketch_y[*]}"
+label_x_list_str="${label_x[*]}"
+label_y_list_str="${label_y[*]}"
 
 # ---- write gnuplot script (your original content preserved) ----
 cat > "[nanoph-2024-0491]_rho_emi.gp" <<EOF
 reset
-omin=${omi}
-omax=${oma}
+omin=${plot_omi}
+omax=${plot_oma}
 at(file, row, col) = system( sprintf("awk -v row=%d -v col=%d 'NR == row {print \$col}' %s", row, col, file) )
 r_list="${rho_list_rev[*]}"
 n_r=words(r_list)
@@ -330,10 +495,22 @@ xmax_list="${xmax_list_str}"
 ymax_list="${ymax_list_str}"
 dx_list="${dx_list_str}"
 
+# Editable production layout, in plot coordinates.
+# Order follows r_list. Change these values, then rerun:
+#   gnuplot [nanoph-2024-0491]_rho_emi.gp
+sketch_x_list="${sketch_x_list_str}"
+sketch_y_list="${sketch_y_list_str}"
+label_x_list="${label_x_list_str}"
+label_y_list="${label_y_list_str}"
+
 omegaB(i) = at(sprintf("../data/output/rho/omeB-%s.dat", word(r_list,i)),1,1)
 xmax(i) = real(word(xmax_list,i))
 ymax_raw(i) = real(word(ymax_list,i))
 dx(i) = real(word(dx_list,i))
+sketch_x(i) = real(word(sketch_x_list,i))
+sketch_y(i) = real(word(sketch_y_list,i))
+label_x(i) = real(word(label_x_list,i))
+label_y(i) = real(word(label_y_list,i))
 
 # SETTING THE VISIBLE SPECTRUM IMAGE AT THE BOTTOM
 set samples 200
@@ -367,7 +544,7 @@ set xtics offset 0,-0.5
 splot[omin:omax] x t ""
 # DONE
 
-Isat=0.0926567
+Isat=${plot_isat}
 
 unset xlabel
 
@@ -378,7 +555,7 @@ unset xtics
 set yrange [:0.2]
 set ytics 0, 0.1
 
-power=-1
+power=${plot_power}
 div=10**power
 
 scaleY(y)=y/(div*Isat)
@@ -389,10 +566,11 @@ do for [i=1:n_r] {
     py = scaleY(ymax_raw(i))
     if (py > max_plot_y) { max_plot_y = py }
 }
+if (max_plot_y <= 0) { max_plot_y = 1 }
 set yrange [0:max_plot_y*1.1]
 
-set for [i=1:n_r] pixmap (3+i) sprintf("../data/output/rho/%s.png", word(r_list,i)) at first (xmax(i)+dx(i)), first (0.9*scaleY(ymax_raw(i))) width screen 0.08
-set for [i=1:n_r] label sprintf("{/Symbol r} = %s", word(r_list,i)) at first (xmax(i)+dx(i)), first (0.9*scaleY(ymax_raw(i))-0.01)
+set for [i=1:n_r] pixmap (3+i) sprintf("../data/output/rho/%s.png", word(r_list,i)) at first sketch_x(i), first sketch_y(i) width screen 0.08
+set for [i=1:n_r] label sprintf("{/Symbol r} = %s", word(r_list,i)) at first label_x(i), first label_y(i) left
 
 set ylabel "I_{em}/I_{sat}"
 set xrange [omin:omax]

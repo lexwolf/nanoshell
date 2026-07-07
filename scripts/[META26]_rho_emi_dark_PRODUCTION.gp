@@ -1,20 +1,20 @@
 reset
-omin=1.8
-omax=3.6
+omin=2.8
+omax=4.6
 at(file, row, col) = system( sprintf("awk -v row=%d -v col=%d 'NR == row {print $col}' %s", row, col, file) )
 r_list="0.8 0.7 0.6 0.5 0.4"
 n_r=words(r_list)
-xmax_list="3 3 3 3 3"
-ymax_list="0 0 0 0 0"
-dx_list="0.072 .216 .360 .504 .648"
+xmax_list="4.0616 4.00718 3.95415 3.90505 3.86317"
+ymax_list="0.000111855 9.62592e-05 6.56003e-05 3.49817e-05 1.35141e-05"
+dx_list="0.044 .132 .220 .308 .396"
 
 # Editable production layout, in plot coordinates.
 # Order follows r_list. Change these values, then rerun:
 #   gnuplot [nanoph-2024-0491]_rho_emi.gp
-sketch_x_list="3.072 3.216 3.36 3.504 3.648"
-sketch_y_list="0 0 0 0 0"
-label_x_list="3.2304 3.3744 3.5184 3.6624 3.8064"
-label_y_list="0 0 0 0 0"
+sketch_x_list="3.85 3.79 3.75 3.7 3.66"
+sketch_y_list="0.01086478366 0.0085 0.0058 0.0025 0.0002"
+label_x_list="3.6 3.54 3.5 3.45 3.41"
+label_y_list="0.01195126366 0.0095 0.0068 0.0035 0.0012"
 
 omegaB(i) = at(sprintf("../data/output/rho/omeB-%s.dat", word(r_list,i)),1,1)
 xmax(i) = real(word(xmax_list,i))
@@ -40,7 +40,7 @@ unset colorbox
 # DONE
 
 set term pdf color enhanced size 10cm, 8cm;
-set output "../img/output/[nanoph-2024-0491]_rho.pdf"
+set output "../img/output/[META26]_rho_dark_PRODUCTION.pdf"
 
 set multiplot
 # PLOTTING THE VISIBLE SPECTRUM
@@ -48,7 +48,7 @@ set origin 0,0.03
 set size 0.991,0.25
 set pm3d map
 unset ytics
-set lmargin at screen 0.13
+set lmargin at screen 0.16
 set rmargin at screen 0.97
 set bmargin at screen 0.15
 set tmargin at screen 0.2
@@ -66,7 +66,7 @@ set tmargin at screen 0.94
 unset xtics
 
 set yrange [:0.2]
-set ytics 0, 0.1
+set ytics 0, 0.004
 
 power=-1
 div=10**power

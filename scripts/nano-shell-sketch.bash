@@ -6,10 +6,14 @@ CXXFLAGS="${CXXFLAGS:-} -I$NGM_ROOT/include -I$NGM_ROOT/modules -I$NGM_ROOT/modu
 
 flare=false
 radius_ratio=""
+branch_mode="bright"
 
 show_usage() {
-    echo "Usage: bash $0 [-f|--flare] <rho>"
+    echo "Usage: bash $0 [-f|--flare] [--branch MODE|--dark|--secondary] <rho>"
     echo "  -f, --flare  Overlay the flare effect from the original sketch"
+    echo "  --branch MODE  Branch selection: bright, secondary, lowest, highest (default: bright)"
+    echo "  --dark         Alias for --branch secondary"
+    echo "  --secondary    Alias for --branch secondary"
 }
 
 while [ $# -gt 0 ]; do
@@ -21,6 +25,18 @@ while [ $# -gt 0 ]; do
         -h|--help)
             show_usage
             exit 0
+            ;;
+        --branch)
+            if [ -z "${2:-}" ]; then
+                echo "Error: --branch requires bright, secondary, lowest, or highest" >&2
+                exit 1
+            fi
+            branch_mode="$2"
+            shift 2
+            ;;
+        --dark|--secondary)
+            branch_mode="secondary"
+            shift
             ;;
         -*)
             echo "Unknown option: $1" >&2
@@ -40,9 +56,19 @@ if [ -z "$radius_ratio" ]; then
     exit 1
 fi
 
+case "$branch_mode" in
+    bright|secondary|dark|lowest|highest) ;;
+    primary) branch_mode="bright" ;;
+    *) echo "Error: unknown branch mode '$branch_mode'. Valid modes are: bright, secondary, dark, lowest, highest." >&2; exit 1 ;;
+esac
+
+if [ "$branch_mode" = "dark" ]; then
+    branch_mode="secondary"
+fi
+
 g++ $CXXFLAGS ../src/eV2ex.cxx -o ../bin/eV2ex
 g++ $CXXFLAGS -Wall -I/usr/include/ -I/usr/include/eigen3 -L/usr/local/lib ../src/rho2ome_sp.cxx -o ../bin/rho2ome_sp -lgsl -lgslcblas -lm -larmadillo
-resu=($(./../bin/rho2ome_sp "$radius_ratio"))
+resu=($(./../bin/rho2ome_sp "$radius_ratio" "$branch_mode"))
 
 inner_circle_color=$(./../bin/eV2ex "${resu[0]}")
 echo "${resu[0]} $inner_circle_color"

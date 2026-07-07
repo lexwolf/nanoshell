@@ -92,7 +92,7 @@ int main(){
 
     fro=ns.frohlich(omemi, omema, eps_b, eps3, rho);
 
-    p3    = intensity_steady_state(ns, mdl, mtl, hst, 0.641, 3.8, sol, rho, omeN);
+    p3    = intensity_steady_state(ns, mdl, mtl, hst, omemi, omema, sol, rho, omeN);
 
     valph = ns.steady_state(mdl, mtl, hst, omemi, omema, omeN, sol, rho);
 
