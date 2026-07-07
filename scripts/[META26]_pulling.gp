@@ -1,20 +1,22 @@
 reset
 omin=1.8
-omax=3.6
+omax=3.65
 at(file, row, col) = system( sprintf("awk -v row=%d -v col=%d 'NR == row {print $col}' %s", row, col, file) )
-r_list="0.8 0.7 0.6 0.5 0.4"
+
+r_list="0.6"
 n_r=words(r_list)
 xmax_list="2.22937 2.57436 2.8122 2.98039 3.09744"
 ymax_list="0.00179166 0.00126799 0.000817899 0.000482422 0.000252764"
-dx_list="0.072 0.072 0.072 .144 .216"
+dx_list="0.04063 0.02564 -0.0122 0.00961 0.06256"
 
 # Editable production layout, in plot coordinates.
-# Order follows r_list. Change these values, then rerun:
-#   gnuplot [nanoph-2024-0491]_rho_emi.gp
-sketch_x_list="2.30137 2.64636 2.8842 3.12439 3.31344"
-sketch_y_list="0.1740288614 0.1231633546 0.07944477841 0.04685897512 0.02455166221"
-label_x_list="2.45977 2.80476 3.0426 3.28279 3.47184"
-label_y_list="0.1798298114 0.1289643046 0.09684762841 0.06426182512 0.03035261221"
+# Order follows r_list. These values reproduce the hand-tuned rho.gp layout.
+# Change these values, then rerun:
+#   gnuplot [nanoph-2024-0491]_rho_emi_PRODUCTION.gp
+sketch_x_list="2.27 2.60 2.80 2.99 3.16"
+sketch_y_list="0.1743 0.1275 0.0893 0.0468 0.0085"
+label_x_list="2.49 2.82 3.02 3.21 3.38"
+label_y_list="0.1934 0.1467 0.1084 0.0659 0.0276"
 
 omegaB(i) = at(sprintf("../data/output/rho/omeB-%s.dat", word(r_list,i)),1,1)
 xmax(i) = real(word(xmax_list,i))
@@ -39,8 +41,8 @@ set palette functions f(k*gray+omin)*r(k*gray+omin),g(k*gray+omin),f(k*gray+omin
 unset colorbox
 # DONE
 
-set term pdf color enhanced size 10cm, 8cm;
-set output "../img/output/[nanoph-2024-0491]_rho.pdf"
+set term pdf color enhanced size 12cm, 10cm font "Arial,18";
+set output "../img/output/[META26]_pulling.pdf"
 
 set multiplot
 # PLOTTING THE VISIBLE SPECTRUM
@@ -48,8 +50,8 @@ set origin 0,0.03
 set size 0.991,0.25
 set pm3d map
 unset ytics
-set lmargin at screen 0.13
-set rmargin at screen 0.97
+set lmargin at screen 0.18
+set rmargin at screen 0.98
 set bmargin at screen 0.15
 set tmargin at screen 0.2
 set xlabel "ℏ{/Symbol w}_{em} (eV)" offset 0,-0.3
@@ -65,30 +67,21 @@ set bmargin at screen 0.2
 set tmargin at screen 0.94
 unset xtics
 
-set yrange [:0.2]
-set ytics 0, 0.1
+set yrange [:1]
+set ytics 0, 0.2
 
-power=-1
+power=-2
 div=10**power
 
 scaleY(y)=y/(div*Isat)
 
-# Determine dynamic y-range and place thumbnails/labels near peaks
-max_plot_y = 0
-do for [i=1:n_r] {
-    py = scaleY(ymax_raw(i))
-    if (py > max_plot_y) { max_plot_y = py }
-}
-if (max_plot_y <= 0) { max_plot_y = 1 }
-set yrange [0:max_plot_y*1.1]
-
-set for [i=1:n_r] pixmap (3+i) sprintf("../data/output/rho/%s.png", word(r_list,i)) at first sketch_x(i), first sketch_y(i) width screen 0.08
-set for [i=1:n_r] label sprintf("{/Symbol r} = %s", word(r_list,i)) at first label_x(i), first label_y(i) left
+set pixmap 3 "../data/output/rho/0.6.png" at graph 0.86, graph 0.8 width screen 0.09
+set label "{/Symbol r} = 0.6" at graph 0.7, graph 0.875 left
 
 set ylabel "I_{em}/I_{sat}"
 set xrange [omin:omax]
 set label sprintf("x10^{%d}", power) at graph 0, 1.03
 
-plot for [i=n_r:1:-1] sprintf("../data/output/rho/%s.dat", word(r_list,i)) u ($1):($2/(div*Isat)) w filledcurves fs transparent solid 0.50 lw 1 lc palette cb omegaB(i) t ""
+plot for [i=n_r:1:-1] "../data/output/rho/0.6.dat" u ($1):($2/(div*Isat)) w filledcurves fs transparent solid 0.50 lw 1 lc palette cb omegaB(i) t ""
 unset multiplot
 unset output
