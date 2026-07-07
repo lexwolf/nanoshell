@@ -8,9 +8,11 @@ xmax_list="4.0616 4.00718 3.95415 3.90505 3.86317"
 ymax_list="0.000111855 9.62592e-05 6.56003e-05 3.49817e-05 1.35141e-05"
 dx_list="0.044 .132 .220 .308 .396"
 
-# Editable production layout, in plot coordinates.
+# Editable production layout, in plot coordinates, authored with layout_power.
 # Order follows r_list. Change these values, then rerun:
 #   gnuplot [nanoph-2024-0491]_rho_emi.gp
+layout_power=-1
+layout_div=10**layout_power
 sketch_x_list="3.85 3.79 3.75 3.7 3.66"
 sketch_y_list="0.01086478366 0.0085 0.0058 0.0025 0.0002"
 label_x_list="3.6 3.54 3.5 3.45 3.41"
@@ -21,9 +23,10 @@ xmax(i) = real(word(xmax_list,i))
 ymax_raw(i) = real(word(ymax_list,i))
 dx(i) = real(word(dx_list,i))
 sketch_x(i) = real(word(sketch_x_list,i))
-sketch_y(i) = real(word(sketch_y_list,i))
+layoutY(y) = y*layout_div/div
+sketch_y(i) = layoutY(real(word(sketch_y_list,i)))
 label_x(i) = real(word(label_x_list,i))
-label_y(i) = real(word(label_y_list,i))
+label_y(i) = layoutY(real(word(label_y_list,i)))
 
 # SETTING THE VISIBLE SPECTRUM IMAGE AT THE BOTTOM
 set samples 200
@@ -68,7 +71,7 @@ unset xtics
 set yrange [:0.2]
 set ytics 0, 0.004
 
-power=-1
+power=-3
 div=10**power
 
 scaleY(y)=y/(div*Isat)
@@ -81,6 +84,7 @@ do for [i=1:n_r] {
 }
 if (max_plot_y <= 0) { max_plot_y = 1 }
 set yrange [0:max_plot_y*1.1]
+set ytics 0, layoutY(0.004)
 
 set for [i=1:n_r] pixmap (3+i) sprintf("../data/output/rho/%s.png", word(r_list,i)) at first sketch_x(i), first sketch_y(i) width screen 0.08
 set for [i=1:n_r] label sprintf("{/Symbol r} = %s", word(r_list,i)) at first label_x(i), first label_y(i) left
