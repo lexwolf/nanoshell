@@ -63,6 +63,8 @@ done
 
 bin_targets=(../bin/fro ../bin/nsISS ../bin/oap)
 src_targets=(../src/frohlich.cxx ../src/nanoshell_ISS.cxx ../src/nanoshell_ome_al_p3.cxx)
+sketch_src_targets=(../src/eV2ex.cxx ../src/rho2ome_sp.cxx)
+sketch_script="nano-shell-sketch.bash"
 
 missing=()
 missing_exec=false
@@ -79,6 +81,12 @@ else
         fi
     done
 fi
+
+for src in "${sketch_src_targets[@]}"; do
+    [ -f "$src" ] || missing+=("$src (sketch source)")
+done
+
+[ -f "$sketch_script" ] || missing+=("$sketch_script (script)")
 
 if [ ${#missing[@]} -gt 0 ]; then
     if [ "$compile_requested" = true ]; then
@@ -180,15 +188,32 @@ echo "> Running oap..."
     exit 1
 }
 cp -f "../data/output/oGp/ome_p3.dat" "$out_dir/ome_p3.dat"
+echo "$omega_th" > "$out_dir/omeB.dat"
+
+echo "> Rendering nanoshell sketch for rho = $rho..."
+if ! bash "$sketch_script" "$rho" > "$out_dir/nano-shell-sketch.log" 2>&1; then
+    echo "Error: $sketch_script failed for rho=$rho" >&2
+    echo "See $out_dir/nano-shell-sketch.log for details." >&2
+    exit 1
+fi
+[ -f "../img/nanoshell.png" ] || {
+    echo "Error: $sketch_script did not produce ../img/nanoshell.png" >&2
+    exit 1
+}
+mv -f "../img/nanoshell.png" "$out_dir/$rho.png"
 
 {
     echo "# pulling.bash metadata"
     echo "omega_th $omega_th"
+    echo "omeB $omega_th"
     echo "Gth $Gth"
     echo "G 1.2*Gth $gain"
+    echo "rho $rho"
 } > "$out_dir/pulling.info"
 
 echo "> Wrote $out_dir/ns_intensity_SS.dat"
 echo "> Wrote $out_dir/ome_p3.dat"
+echo "> Wrote $out_dir/omeB.dat"
+echo "> Wrote $out_dir/$rho.png"
 echo "> Wrote $out_dir/pulling.info"
 echo "> Done. Original input restored automatically."

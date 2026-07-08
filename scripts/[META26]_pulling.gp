@@ -2,30 +2,8 @@ reset
 omin=1.8
 omax=3.65
 at(file, row, col) = system( sprintf("awk -v row=%d -v col=%d 'NR == row {print $col}' %s", row, col, file) )
-
-r_list="0.6"
-n_r=words(r_list)
-xmax_list="2.22937 2.57436 2.8122 2.98039 3.09744"
-ymax_list="0.00179166 0.00126799 0.000817899 0.000482422 0.000252764"
-dx_list="0.04063 0.02564 -0.0122 0.00961 0.06256"
-
-# Editable production layout, in plot coordinates.
-# Order follows r_list. These values reproduce the hand-tuned rho.gp layout.
-# Change these values, then rerun:
-#   gnuplot [nanoph-2024-0491]_rho_emi_PRODUCTION.gp
-sketch_x_list="2.27 2.60 2.80 2.99 3.16"
-sketch_y_list="0.1743 0.1275 0.0893 0.0468 0.0085"
-label_x_list="2.49 2.82 3.02 3.21 3.38"
-label_y_list="0.1934 0.1467 0.1084 0.0659 0.0276"
-
-omegaB(i) = at(sprintf("../data/output/rho/omeB-%s.dat", word(r_list,i)),1,1)
-xmax(i) = real(word(xmax_list,i))
-ymax_raw(i) = real(word(ymax_list,i))
-dx(i) = real(word(dx_list,i))
-sketch_x(i) = real(word(sketch_x_list,i))
-sketch_y(i) = real(word(sketch_y_list,i))
-label_x(i) = real(word(label_x_list,i))
-label_y(i) = real(word(label_y_list,i))
+omegaB = at("../data/output/pulling/omeB.dat",1,1)
+rho = at("../data/input/nanosphere_eV.dat",1,12)
 
 # SETTING THE VISIBLE SPECTRUM IMAGE AT THE BOTTOM
 set samples 200
@@ -75,13 +53,14 @@ div=10**power
 
 scaleY(y)=y/(div*Isat)
 
-set pixmap 3 "../data/output/rho/0.6.png" at graph 0.86, graph 0.8 width screen 0.09
-set label "{/Symbol r} = 0.6" at graph 0.7, graph 0.875 left
+set pixmap 3 sprintf("../data/output/pulling/%s.png", rho) at graph 0.86, graph 0.8 width screen 0.09
+set label sprintf("{/Symbol r} = %s", rho) at graph 0.7, graph 0.875 left
 
 set ylabel "I_{em}/I_{sat}"
 set xrange [omin:omax]
 set label sprintf("x10^{%d}", power) at graph 0, 1.03
 
-plot for [i=n_r:1:-1] "../data/output/rho/0.6.dat" u ($1):($2/(div*Isat)) w filledcurves fs transparent solid 0.50 lw 1 lc palette cb omegaB(i) t ""
+plot "../data/output/pulling/ome_p3.dat" u ($1):($2/(div*Isat)) w filledcurves fs transparent solid 0.50 lw 1 lc palette cb omegaB t "", \
+     "../data/output/ns_intensity_SS.dat" u ($1):($5/(div*Isat)) w l lw 2 lc palette cb omegaB t "";
 unset multiplot
 unset output
