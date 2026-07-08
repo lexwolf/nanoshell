@@ -15,7 +15,7 @@ LDFLAGS="-L/usr/local/lib"
 LIBS="-lgsl -lgslcblas -lm -larmadillo"
 
 compile_requested=false
-out_dir="../output/pulling"
+out_dir="../data/output/pulling"
 
 show_help() {
     echo "Usage: bash $0 [-c] [-h] [-o output_dir]"

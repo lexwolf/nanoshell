@@ -12,6 +12,7 @@ bin/**
 # Allow output top-level dirs so we can keep skeletons with .gitkeep
 !data/output/
 !img/output/
+!data/output/pulling/
 
 # Track .gitkeep placeholders anywhere in these trees
 !data/**/.gitkeep
