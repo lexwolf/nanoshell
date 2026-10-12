@@ -32,7 +32,7 @@ set lmargin at screen 0.18
 set rmargin at screen 0.98
 set bmargin at screen 0.15
 set tmargin at screen 0.2
-set xlabel "ℏ{/Symbol w}_{em} (eV)" offset 0,-0.3
+set xlabel "Energy (eV)" offset 0,-0.3
 set xtics offset 0,-0.5
 splot[omin:omax] x t ""
 # DONE
