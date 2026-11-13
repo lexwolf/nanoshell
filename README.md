@@ -155,3 +155,31 @@ Contributions are welcome! If you find any bugs or have feature requests, feel f
 ## Contact
 
 For questions or collaboration opportunities, please reach out to Alessandro Veltri at <alessandro.veltri@gmail.com>.
+
+## Validate automatic convergence against Supplementary Fig. 1
+
+`scripts/validate_convergence.bash` builds an optimized
+`bin/emission_convergence` driver against the pinned `nano_geo_matrix` submodule.
+Run the wrapper from any directory. It requires the saved Fig. 1 input snapshots
+and traces in `data/output/[nanoph-2024-0491]_rangeE0/`, plus gnuplot and Python 3.
+It preserves those files and all repo inputs.
+
+The workflow runs the four raw seeds at the saved fixed duration, then runs them
+with `T=0` at default convergence settings and with all relative tolerances halved.
+It uses only the shared CUP detector, with 0.1 ps automatic output spacing; the
+analytical solution is not needed for this numerical experiment. Results live in
+`data/output/convergence_validation/`. Existing validation output
+causes the wrapper to stop rather than overwrite a previous experiment.
+
+The summary script checks fixed-duration traces byte-for-byte against the saved
+reproduction and reads the solver's convergence metadata into `summary.tsv`.
+Peak-to-peak statistics come from the detector at full integration resolution,
+normalized by the saved paper `Isat`. The PNG in `img/output/` shows accepted tails
+including confirmation, with default and tighter settings overlaid. That preview
+uses sampled output and the solver's existing rounded field columns; very weak
+ripples may show serialization noise. It is not used to calculate the statistics.
+
+Flat classifications are tolerance-based: a small periodic ripple or residual
+transient may be below flatness resolution. Their reported collective variation
+is not necessarily a converged periodic amplitude. Compare tolerance settings
+before interpreting weak-seed peak-to-peak values physically.
