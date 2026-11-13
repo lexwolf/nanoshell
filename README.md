@@ -183,3 +183,60 @@ Flat classifications are tolerance-based: a small periodic ripple or residual
 transient may be below flatness resolution. Their reported collective variation
 is not necessarily a converged periodic amplitude. Compare tolerance settings
 before interpreting weak-seed peak-to-peak values physically.
+
+## Residual modulation scan (no figures)
+
+`scripts/scan_residual_modulation.py` compiles the convergence driver with `-O2`
+inside its output directory. Supply `--input INPUT --time TIME --frequencies
+FREQUENCIES.json --output NEW_DIRECTORY`; paths are relative to your current
+working directory. The frequency JSON must contain exactly the keys `1.05`,
+`1.10`, `1.15`, each with an explicit list of positive excitation energies in eV.
+An empty list skips a gain. The explicit token `"threshold"` selects the computed
+threshold energy for a smoke check. No frequency ranges are generated. Select
+actual off-threshold values yourself; `2.811` eV is the existing validation
+excitation, not a proposed scan boundary.
+
+Each point runs at both tolerance factors 1 and 0.5, with `E0/Esat=1e-9`.
+`--cadence-ps` defaults to 0.1. `--timeout-seconds` defaults to 120 per run;
+this is a wall-clock kill limit, **not** a physical-time cap. The solver has no
+configurable automatic physical ceiling: its unchanged limit is 100000 ps.
+Timeouts and failures remain unclassified, retain null modulation, and are
+retried on resume. Completed points (including maximum-duration results) are
+reused only when the manifest matches. Use a new directory to change settings.
+Do not run concurrent scans into the same directory.
+
+Normalization follows `src/Esat.cxx`: in its energy-time convention,
+`ntau2=2/Dome`, `ntau1=5*ntau2`, so
+`Esat=sqrt(1/(abs(G)*ntau1))=sqrt(Dome/(10*abs(G)))`.
+The driver passes `raw_E0=1e-9*Esat` directly to CUP in the same field units as
+existing reproduction drivers; this is not a field in SI V/m. CUP's internal
+time is additionally scaled by the plasma energy (`tau2=2*Ome_p/Dome`);
+that internal scaling must not be substituted into this field convention.
+The gain-switching manuscript is not included here: **verify its saturation
+convention against this formula before using these results in a referee reply**.
+The driver records both field values, saturation intensity, gain and threshold.
+
+`summary.json`, `summary.tsv`, and per-point `result.json` retain all detector
+metadata, effective tolerances, actual cadence, integration timestep inferred
+from cadence/step count, termination reason and accepted interval endpoints.
+Mean intensity and collective peak-to-peak range are the shared detector's
+full-resolution `norm(dip)` statistics, including confirmation. Relative
+modulation is their ratio `(Imax-Imin)/mean(I)`, not percent; a zero mean yields
+null. No independent detector or sampled-row estimate is used. Period is only
+meaningful for periodic classifications. Flat results are explicitly
+`flat_tolerance_dependent`; unclassified cases never imply zero modulation.
+Default and tighter results stay separate.
+
+The detector may accept a finite plateau before later evolution or a beat whose
+variation falls below its resolution across the 40 ps default flat evidence and
+confirmation interval. Confirmation reduces but cannot exclude that ambiguity;
+flat acceptance is not proof of absence of a slow beat. Tightening tolerances
+is a sensitivity check, not such a proof. No new convergence rule is added.
+
+Snapshots include input/time files, frequency lists, driver/scan sources,
+repository and submodule commits and patches, source hashes, build log and each
+run's command/log. Shared inputs, paper outputs, and earlier validation results
+are untouched. The driver retains its old five-argument interface (2.811 eV);
+optional trailing arguments are excitation energy (or `threshold`), gain ratio,
+normalized field ratio, and output cadence. `prepare` mode writes normalization
+metadata without integration. Existing fixed/automatic callers remain valid.
