@@ -85,5 +85,5 @@
         "locale": "cpp",
         "queue": "cpp"
     },
-    "cmake.sourceDirectory": "/home/alessandro/GitHub/Academia/nanoshell/extern/nano_geo_matrix"
+    "cmake.sourceDirectory": "${workspaceFolder}/extern/nano_geo_matrix"
 }
