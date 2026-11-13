@@ -60,6 +60,30 @@ mu=10 D is an explicit manuscript assumption; changes in mu require updating
 that assumption. It cancels from the numerical field ratio, but affects the
 reported SI field and density. The Debye conversion is 3.33564e-30 C m.
 
+## Shared saturation utility and solver validation
+
+The driver now obtains its normalized scales from
+`nano_geo_matrix/core/saturation_scale.hpp`, with explicit plasma and linewidth
+energies in eV and `tau1_over_tau2=5`. It supplies the actual CUP
+`normalized_variables()[0]` as normalized tau1 and uses `require_match`:
+disagreement fails before output creation or integration. The driver exposes
+no relaxation override; its normalization must match the solver actually used.
+The independent SI construction above remains a cross-check.
+
+Driver metadata retains the existing normalization convention and SI fields,
+and adds the shared utility convention, linewidth, requested/effective ratio,
+energy-derived/effective/supplied normalized tau1, normalized tau2, policy,
+comparison tolerance, match flag, and override flag. Scan manifests identify the
+shared scale convention and policy; source snapshots and hashes include the
+utility header in addition to the pinned library revision. Existing manifests
+therefore cannot be resumed under the migrated implementation.
+
+This is a migration of the corrected driver calculation, not a correction to
+legacy reproduction utilities. Tiny floating-point rounding differences in
+normalized scales may result from the utility's wider intermediate arithmetic;
+raw-input trajectories and convergence rules are unchanged. The library pin
+contains both the saturation utility and post-acceptance observation feature.
+
 ## Original convergence interval
 
 The shared CUP detector remains the sole convergence detector. Its accepted
@@ -133,3 +157,13 @@ immediately at detection and writes diagnostic settings/windows incrementally at
 window completion. A later wall timeout therefore retains completed evidence,
 but the scan still marks the run and its overall assessment unresolved. Optional
 `--manuscript PATH` saves the source text and its hash alongside provenance.
+
+## Migration regression checks
+
+`tests/test_residual_workflow.py DRIVER` checks scale metadata at all three
+gains, saved raw-input traces, disabled observation, continuation, and cadence
+independence in temporary directories. Its optional `--reference-driver PATH`
+compares all existing prepare-mode metadata against a pre-migration binary
+with relative tolerance 1e-14. `tests/test_residual_manifest.py` checks header
+snapshots/hashes, normalization authority, and incompatible-resume rejection
+with compilation mocked and no frequencies requested; it never runs a solver.

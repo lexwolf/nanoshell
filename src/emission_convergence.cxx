@@ -8,7 +8,9 @@
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
+#include <memory>
 #include <nano_geo_matrix/core/mathNN.hpp>
+#include <nano_geo_matrix/core/saturation_scale.hpp>
 #include <nano_geo_matrix/quasi_static/geometry/nanoshell.hpp>
 #define CUP_BACKEND_QUASI_STATIC
 #include <cup/cup.hpp>
@@ -41,11 +43,16 @@ int main(int argc, char** argv) {
         const double frequency=argc>6 ? (std::string(argv[6])=="threshold" ? threshold_frequency : positive(argv[6])) : 2.811;
         if(argc>7 && std::string(argv[7])!="input") ns.G=positive(argv[7])*threshold_gain;
         // Manuscript SI scale converted with Eunit=sqrt(n*hbar*omega_p/epsilon0).
-        const double esat=std::sqrt(ns.Dome/(10.*std::abs(ns.G)*ns.Ome_p));
+        // Validate the actual solver relaxation against explicit energy inputs.
+        const std::unique_ptr<double[]> solver_relaxation(ns.normalized_variables());
+        nano_geo_matrix::saturation::Inputs saturation_inputs{ns.Ome_p, ns.Dome, ns.G};
+        saturation_inputs.supplied_tau1_normalized=solver_relaxation[0];
+        const auto saturation=nano_geo_matrix::saturation::calculate(saturation_inputs);
+        const double esat=saturation.Esat_normalized;
         constexpr double hbar_si=1.054571817e-34, ev_si=1.602176634e-19, eps0_si=8.8541878128e-12;
         constexpr double mu_si=10.*3.33564e-30; // manuscript: 10 Debye
         const double omega_p_si=ns.Ome_p*ev_si/hbar_si;
-        const double tau2_si=2.*hbar_si/(ns.Dome*ev_si), tau1_si=5.*tau2_si;
+        const double tau2_si=2.*hbar_si/(ns.Dome*ev_si), tau1_si=saturation.inputs.tau1_over_tau2*tau2_si;
         const double density=3.*hbar_si*eps0_si*std::abs(ns.G)/(mu_si*mu_si*tau2_si);
         const double field_unit=std::sqrt(density*hbar_si*omega_p_si/eps0_si);
         const double esat_si=hbar_si/mu_si*std::sqrt(3./(tau1_si*tau2_si));
@@ -60,13 +67,25 @@ int main(int argc, char** argv) {
           <<"\nEsat_solver_units\t"<<esat<<"\nraw_E0\t"<<field<<"\nE0_over_Esat\t"<<field/esat
           <<"\nnormalization_convention\tmanuscript_SI_to_plasma_scaled_CUP_v1"
           <<"\nnormalization_verified\ttrue"
+          <<"\nsaturation_scale_convention\t"<<saturation.convention
+          <<"\nlinewidth_eV\t"<<saturation.inputs.linewidth_eV
+          <<"\ntau1_over_tau2\t"<<saturation.inputs.tau1_over_tau2
+          <<"\neffective_tau1_over_tau2\t"<<saturation.effective_tau1_over_tau2
+          <<"\ntau1_normalized\t"<<saturation.tau1_normalized
+          <<"\ntau2_normalized\t"<<saturation.tau2_normalized
+          <<"\nenergy_derived_tau1_normalized\t"<<saturation.energy_derived_tau1_normalized
+          <<"\nsupplied_tau1_normalized\t"<<*saturation.inputs.supplied_tau1_normalized
+          <<"\ntau1_policy\t"<<nano_geo_matrix::saturation::policy_name(saturation.inputs.tau1_policy)
+          <<"\ntau1_match_relative_tolerance\t"<<saturation.tau1_match_relative_tolerance
+          <<"\nsupplied_tau1_matches\t"<<(saturation.supplied_tau1_matches ? "true" : "false")
+          <<"\ntau1_mismatch_overridden\t"<<(saturation.mismatch_overridden ? "true" : "false")
           <<"\nmu_C_m\t"<<mu_si<<"\nhbar_J_s\t"<<hbar_si<<"\neV_J\t"<<ev_si<<"\nepsilon0_F_m\t"<<eps0_si
           <<"\nplasma_energy_eV\t"<<ns.Ome_p<<"\nplasma_angular_frequency_s_inv\t"<<omega_p_si
           <<"\ntau1_s\t"<<tau1_si<<"\ntau2_s\t"<<tau2_si<<"\nemitter_density_m_inv3\t"<<density
           <<"\nfield_unit_V_m\t"<<field_unit<<"\npolarization_unit_C_m2\t"<<eps0_si*field_unit
           <<"\nEsat_V_m\t"<<esat_si<<"\nraw_E0_V_m\t"<<field*field_unit
           <<"\nlegacy_Esat_solver_units\t"<<esat*std::sqrt(ns.Ome_p)
-          <<"\nIsat_solver_units\t"<<esat*esat<<"\nrequested_output_interval_ps\t"<<cadence
+          <<"\nIsat_solver_units\t"<<saturation.Isat_normalized<<"\nrequested_output_interval_ps\t"<<cadence
           <<"\ntolerance_factor\t"<<factor<<"\nautomatic_ceiling_ps\t100000\n";
         provenance.close();
         if(mode=="prepare") return 0;

@@ -58,13 +58,14 @@ def main():
     a.output.mkdir(parents=True, exist_ok=True)
     binary = a.output/'emission_convergence'
     ngm = ROOT/'extern/nano_geo_matrix'
-    sources = [ROOT/'src/emission_convergence.cxx', Path(__file__).resolve(), ROOT/'src/residual_diagnostic.hpp', ROOT/'docs/residual_modulation.md']
+    sources = [ROOT/'src/emission_convergence.cxx', Path(__file__).resolve(), ROOT/'src/residual_diagnostic.hpp', ROOT/'docs/residual_modulation.md', ngm/'include/nano_geo_matrix/core/saturation_scale.hpp']
     manifest = dict(frequencies=frequencies, input_sha256=digest(a.input), time_sha256=digest(a.time),
                     repo_commit=subprocess.check_output(['git','rev-parse','HEAD'], cwd=ROOT, text=True).strip(),
                     submodule_commit=subprocess.check_output(['git','rev-parse','HEAD'], cwd=ngm, text=True).strip(),
                     source_sha256={str(x.relative_to(ROOT)):digest(x) for x in sources},
                     cadence_ps=a.cadence_ps, timeout_seconds=a.timeout_seconds,
                     normalization='manuscript_SI_to_plasma_scaled_CUP_v1: Esat=sqrt(Dome/(10*abs(G)*Ome_p))',
+                    saturation_scale=dict(convention='inversion_one_plasma_scaled_saturation_v1', tau1_over_tau2=5., tau1_policy='require_match', supplied_tau1='CUP normalized_variables()[0]'),
                     manuscript_sha256=digest(a.manuscript) if a.manuscript else None,
                     diagnostic=dict(window_ps=a.diagnostic_window_ps, windows=a.diagnostic_windows, range_rtol=a.range_rtol, range_atol=a.range_atol, mean_rtol=a.mean_rtol),
                     repo_diff_sha256=hashlib.sha256(subprocess.check_output(['git','diff','HEAD'], cwd=ROOT)).hexdigest(),

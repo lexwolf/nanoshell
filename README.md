@@ -212,7 +212,11 @@ The corrected scan uses `Esat_num=sqrt(Dome/(10*abs(G)*Ome_p))` and
 utilities and raw-input calls retain their behavior; old scan results require
 regeneration. [The derivation and diagnostic definitions](docs/residual_modulation.md)
 explain the density-dependent numerical unit and record all SI conversion
-factors. The manuscript assumption is mu=10 D.
+factors. The manuscript assumption is mu=10 D. The driver now uses the shared
+saturation utility and validates normalized tau1 against CUP's actual solver
+relaxation with `require_match`; no override is exposed. Metadata records the
+comparison and authority, and scan provenance includes the utility header.
+See [shared utility validation](docs/residual_modulation.md#shared-saturation-utility-and-solver-validation).
 
 The convergence-plus-confirmation range is now explicitly an **interval
 variation**, stored as `accepted_interval_peak_to_peak` and
