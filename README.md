@@ -200,32 +200,44 @@ Each point runs at both tolerance factors 1 and 0.5, with `E0/Esat=1e-9`.
 `--cadence-ps` defaults to 0.1. `--timeout-seconds` defaults to 120 per run;
 this is a wall-clock kill limit, **not** a physical-time cap. The solver has no
 configurable automatic physical ceiling: its unchanged limit is 100000 ps.
-Timeouts and failures remain unclassified, retain null modulation, and are
-retried on resume. Completed points (including maximum-duration results) are
+Timeouts and failures leave the later observation unresolved and are retried
+on resume. Any original accepted convergence evidence already saved is retained. Completed points (including maximum-duration results) are
 reused only when the manifest matches. Use a new directory to change settings.
 Do not run concurrent scans into the same directory.
 
-Normalization follows `src/Esat.cxx`: in its energy-time convention,
-`ntau2=2/Dome`, `ntau1=5*ntau2`, so
-`Esat=sqrt(1/(abs(G)*ntau1))=sqrt(Dome/(10*abs(G)))`.
-The driver passes `raw_E0=1e-9*Esat` directly to CUP in the same field units as
-existing reproduction drivers; this is not a field in SI V/m. CUP's internal
-time is additionally scaled by the plasma energy (`tau2=2*Ome_p/Dome`);
-that internal scaling must not be substituted into this field convention.
-The gain-switching manuscript is not included here: **verify its saturation
-convention against this formula before using these results in a referee reply**.
-The driver records both field values, saturation intensity, gain and threshold.
+Normalization is now verified against the gain-switching manuscript and the
+working units in [Recalde et al. (2023)](https://doi.org/10.3390/ma16051911).
+The corrected scan uses `Esat_num=sqrt(Dome/(10*abs(G)*Ome_p))` and
+`raw_E0=1e-9*Esat_num`. The earlier scan omitted `Ome_p`. Historical reproduction
+utilities and raw-input calls retain their behavior; old scan results require
+regeneration. [The derivation and diagnostic definitions](docs/residual_modulation.md)
+explain the density-dependent numerical unit and record all SI conversion
+factors. The manuscript assumption is mu=10 D.
 
-`summary.json`, `summary.tsv`, and per-point `result.json` retain all detector
-metadata, effective tolerances, actual cadence, integration timestep inferred
-from cadence/step count, termination reason and accepted interval endpoints.
-Mean intensity and collective peak-to-peak range are the shared detector's
-full-resolution `norm(dip)` statistics, including confirmation. Relative
-modulation is their ratio `(Imax-Imin)/mean(I)`, not percent; a zero mean yields
-null. No independent detector or sampled-row estimate is used. Period is only
-meaningful for periodic classifications. Flat results are explicitly
-`flat_tolerance_dependent`; unclassified cases never imply zero modulation.
-Default and tighter results stay separate.
+The convergence-plus-confirmation range is now explicitly an **interval
+variation**, stored as `accepted_interval_peak_to_peak` and
+`accepted_relative_interval_range`. It is not automatically a persistent
+modulation amplitude. Means and ranges use the shared detector's full-resolution
+`norm(dip)` statistics. Flat classification remains tolerance dependent.
+
+The scan continues the same physical trajectory after acceptance by default,
+observing three later windows of at least 40 ps each. Configure
+`--diagnostic-window-ps`, `--diagnostic-windows`, `--range-rtol`, `--range-atol`,
+and `--mean-rtol`; use `--diagnostic-window-ps 0` to disable observation. Durations above the
+solver's 100000 ps ceiling are rejected.
+Periodic observations use complete cycles identified by CUP's existing extrema
+tracker and span at least five detected periods per window. Flat observations
+use the configured duration and full-resolution trapezoidal means. The original
+convergence decision/time remains separate from the later terminal time.
+
+`summary.json` and `summary.tsv` contain normalization, convergence and diagnostic
+settings/results. `late_windows.tsv` records each late window's endpoints,
+mean, min/max, range, relative range and cycle count. The diagnostic reports
+stable interval variation, decaying variation, mean drift, or unresolved evidence
+using the documented comparison tolerances. Results from each convergence
+tolerance remain separate. Zero-mean or incomplete diagnostics stay unresolved;
+timeouts never imply zero modulation. No persistent-amplitude extrapolation is
+made.
 
 The detector may accept a finite plateau before later evolution or a beat whose
 variation falls below its resolution across the 40 ps default flat evidence and
@@ -238,5 +250,9 @@ repository and submodule commits and patches, source hashes, build log and each
 run's command/log. Shared inputs, paper outputs, and earlier validation results
 are untouched. The driver retains its old five-argument interface (2.811 eV);
 optional trailing arguments are excitation energy (or `threshold`), gain ratio,
-normalized field ratio, and output cadence. `prepare` mode writes normalization
+normalized field ratio, output cadence, diagnostic window duration (0 disables),
+window count, range relative tolerance, range absolute tolerance, and mean
+relative tolerance. `prepare` mode writes normalization
 metadata without integration. Existing fixed/automatic callers remain valid.
+
+For an auditable scan, `--manuscript PATH` also snapshots the manuscript source.

@@ -1,0 +1,101 @@
+{
+  "sources": {
+    "4": {
+      "submission_pdf": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/Nanophotonics/First_Round/Emission Paper/qbelow.pdf",
+      "working_pdf": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/versions/Draft 2/img/work/below/img/qbelow.pdf",
+      "sha256": "6f88b0a82fdc8b8b69251e1fa0645331d164a183b91f99453dd429aa2760a133",
+      "byte_identical": true,
+      "plot_script": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/versions/Draft 2/img/work/below/qbelow_last.gp",
+      "plot_script_sha256": "45c77fce78790f549870473d5e1a39b10216b732aa0a183620cda970f36c7bbb"
+    },
+    "6": {
+      "submission_pdf": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/Nanophotonics/First_Round/Emission Paper/qabove.pdf",
+      "working_pdf": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/versions/Draft 2/img/work/above/img/qabove.pdf",
+      "sha256": "c9dc9af85c998f1a774d65369f8a5a6bddf2ef161ec1c48d6ce945994922f0c5",
+      "byte_identical": true,
+      "plot_script": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/versions/Draft 2/img/work/above/qabove.gp",
+      "plot_script_sha256": "1e30a89e622e92811e58ac6ed61d1a369c27e64b4f9295fd9170cb72973c794f"
+    },
+    "8": {
+      "submission_pdf": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/Nanophotonics/First_Round/Emission Paper/int_and_N.pdf",
+      "working_pdf": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/versions/Draft 2/img/work/above/img/int_and_N.pdf",
+      "sha256": "52be6903dc4bdf4089f4166eac6072353889ec6713bf743bbcf90b46a1b2257b",
+      "byte_identical": true,
+      "plot_script": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/versions/Draft 2/img/work/above/int_and_N.gp",
+      "plot_script_sha256": "550c6850409eee2f5fe9c9a3f9e2522f4d25230ed2203ee8096a93345a3f4e32"
+    },
+    "9": {
+      "submission_pdf": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/Nanophotonics/First_Round/Emission Paper/Ome_zero_n_right.pdf",
+      "working_pdf": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/versions/Draft 2/img/work/Ome_zero_and_right/img/Ome_zero_n_right.pdf",
+      "sha256": "de9d146f094bd6e58d06df9396a4d6e26dd176f34cc4bfb377627fe66c191830",
+      "byte_identical": true,
+      "plot_script": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/versions/Draft 2/img/work/Ome_zero_and_right/Ome_zero_n_right.gp",
+      "plot_script_sha256": "79e344a5ae4c735b70c744583f08c0051cd11d13e37c4fe00677a4f6211f1dff"
+    },
+    "10": {
+      "submission_pdf": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/Nanophotonics/First_Round/Emission Paper/Grange.pdf",
+      "working_pdf": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/versions/Draft 2/img/work/char/img/Grange.pdf",
+      "sha256": "7c037cd4285b61144e5233bc82157fe17c901f1cb97351b8033f710029d7271c",
+      "byte_identical": true,
+      "plot_script": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/versions/Draft 2/img/work/char/Grange_last.gp",
+      "plot_script_sha256": "b7f1428c9a231d5713fc13a7a21daac76ba33f8cde2bb7f71b79d5413352be56"
+    },
+    "11": {
+      "submission_pdf": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/Nanophotonics/First_Round/Emission Paper/rho.pdf",
+      "working_pdf": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/versions/Draft 2/img/work/rho/img/rho.pdf",
+      "sha256": "4201f5956c1aedadf2cc1620bd4c1cdc3fb00b0c28b0a23a23b97230c28ec4f9",
+      "byte_identical": true,
+      "plot_script": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/versions/Draft 2/img/work/rho/tuning.gp",
+      "plot_script_sha256": "0f6de8a057341363b3a8490f6ad366322a7963673fe4886085728c78dac65fa2"
+    },
+    "S1": {
+      "submission_pdf": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/Nanophotonics/First_Round/Emission Paper/rangeE0.pdf",
+      "working_pdf": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/versions/Draft 2/img/work/Supp/img/rangeE0.pdf",
+      "sha256": "43427aabb7cb20575663ad0a57955e789ead8db42bc280ef496dadd9ad5fbcb3",
+      "byte_identical": true,
+      "plot_script": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/versions/Draft 2/img/work/Supp/dull_rangeE0.gp",
+      "plot_script_sha256": "52b97d5ac78c969f99ed4e3024e29680f49a8b237e08284b7e6e49b1395be0a8"
+    }
+  },
+  "archived_solver": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/versions/Draft 2/img/work/Supp/headers/cup.H",
+  "archived_solver_sha256": "6d1b37143ed93f31e8145daf846e3ebe9706afcb3525882eb658434508ac82a0",
+  "archived_Esat_utility": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/versions/Draft 2/img/work/Supp/Esat.cxx",
+  "archived_Esat_utility_sha256": "8c58b074fbdd0c1f9b17491b72b1400c32ba304504ea34e9a3985a7e91503565",
+  "raw_fig8": "/home/alessandro/Nextcloud/Work/Research/Papers/Archive/ns_paper/versions/Draft 2/img/work/above/out/numtime.dat",
+  "raw_fig8_sha256": "ceee615775e3ef3490777cc6d32933d34fed8992b8a0f353870a6bb7d601e35a",
+  "fig8": {
+    "raw_intensity": 4.86619879745e-05,
+    "legacy_Isat": 0.110087,
+    "equation_consistent_Isat": 0.011467379031260773,
+    "legacy_normalized_intensity": 0.00044203210165142114,
+    "corrected_normalized_intensity": 0.004243514393467283,
+    "saved_N": 0.990085,
+    "core_intensity": 0.00011484799662440001,
+    "core_correctly_normalized": 0.010015191467144966,
+    "core_legacy_normalized": 0.0010432475825883165,
+    "resonant_steady_inversion_prediction": 0.010014291702227673
+  },
+  "limitations": [
+    "Final Wiley PDF supplied and checked directly for equations, definitions and Fig. 9 axes; no embedded-object binary/pixel comparison performed.",
+    "Figure 11 fixed denominator across different gains needs per-curve raw-unit provenance; do not assign a uniform factor 9.6 to its full geometry sweep.",
+    "Figure 4 archived data record G=0.033, while normalization corresponds to approximately 0.25*Gth=0.03372675. This additional mismatch requires separate treatment.",
+    "The original exact seed-to-Esat labels require per-run provenance; do not apply a universal label correction based on rounded legends."
+  ],
+  "final_pdf_check": {
+    "library_file_id": "libfile_e5b83e795f588191afbdf8a225678a00",
+    "filename": "nano.pdf",
+    "pages": 21,
+    "checked_pdf_pages": [
+      3,
+      4,
+      12,
+      13,
+      14,
+      15
+    ],
+    "figure9_intensity_axis_maximum": 0.0005,
+    "figure9_zero_detuning_archived_legacy_intensity": 0.00044625335594815005,
+    "figure9_zero_detuning_equation_consistent_intensity": 0.004284038494091949,
+    "comparison": "Direct final-PDF text and axis-label checks; no binary or pixel figure comparison"
+  }
+}
