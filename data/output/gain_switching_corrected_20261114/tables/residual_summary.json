@@ -1,0 +1,26 @@
+[
+  {
+    "gain_ratio": 1.05,
+    "recorded_energies": 240,
+    "paired_stable": 178,
+    "unresolved_or_unstable": 62,
+    "largest_paired_stable_percent": 0.002226521534189529,
+    "energy_of_largest_eV": 2.8122
+  },
+  {
+    "gain_ratio": 1.1,
+    "recorded_energies": 201,
+    "paired_stable": 166,
+    "unresolved_or_unstable": 35,
+    "largest_paired_stable_percent": 0.0008246768009018742,
+    "energy_of_largest_eV": 2.8122
+  },
+  {
+    "gain_ratio": 1.15,
+    "recorded_energies": 231,
+    "paired_stable": 203,
+    "unresolved_or_unstable": 28,
+    "largest_paired_stable_percent": 0.00046929944605856493,
+    "energy_of_largest_eV": 2.8122
+  }
+]

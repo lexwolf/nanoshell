@@ -1,0 +1,206 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{hyperref}
+% Inline definitions keep this response letter standalone in the editor.
+% Shared revision markup for the article, supplement, and response letter.
+\RequirePackage{xcolor}
+\definecolor{revisionblue}{RGB}{0,70,160}
+\newif\ifshowrevisions
+\showrevisionstrue
+% Change the preceding line to \showrevisionsfalse for clean output.
+\newcommand{\revised}[1]{{\ifshowrevisions\color{revisionblue}\fi #1}}
+% For multi-paragraph changes or blocks containing displayed equations.
+\newenvironment{revision}{\begingroup\ifshowrevisions\color{revisionblue}\fi}{\endgroup}
+
+% Changes addressing minor comments; controlled by the same clean-output switch.
+\definecolor{revisiongreen}{RGB}{0,105,60}
+\newcommand{\minorrevised}[1]{{\ifshowrevisions\color{revisiongreen}\fi #1}}
+\newenvironment{minorrevision}{\begingroup\ifshowrevisions\color{revisiongreen}\fi}{\endgroup}
+
+
+\hypersetup{colorlinks=true,urlcolor=revisionblue,linkcolor=revisionblue}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.6em}
+
+% Reviewer wording is kept separate from author responses and exact revised text.
+\newcommand{\reviewercomment}[1]{\begin{quote}\small #1\end{quote}}
+\newcommand{\response}[1]{\par\textbf{Response.} #1\par}
+\newcommand{\manuscripttext}[2]{\par\textbf{Revised manuscript (#1).}\begin{quote}\revised{#2}\end{quote}}
+\newcommand{\supplementtext}[2]{\par\textbf{Revised supplementary material (#1).}\begin{quote}\revised{#2}\end{quote}}
+\newcommand{\minormanuscripttext}[2]{\par\textbf{Revised manuscript (#1).}\begin{quote}\minorrevised{#2}\end{quote}}
+\newcommand{\minorsupplementtext}[2]{\par\textbf{Revised supplementary material (#1).}\begin{quote}\minorrevised{#2}\end{quote}}
+\newcommand{\pendingresponse}{\response{\textit{Pending: to be discussed and completed.}}}
+
+\begin{document}
+\begin{center}
+{\Large\bfseries Response to the referee comments}\\[0.6em]
+Manuscript ID: 620039\\
+\textit{Transient emission dynamics and gain switching in metal nanoshell spasers}\\
+Optical Materials Express
+\end{center}
+
+Dear Alexandre Baron and Reviewer,
+
+We thank you for your careful assessment of our manuscript and for the constructive comments. We address the comments individually below. The referee's comments are reproduced verbatim, followed by our responses. As revisions are completed, the exact added or revised passages will be quoted with their locations in the manuscript or supplementary material. Revised text addressing major comments is highlighted in blue; changes addressing minor comments are highlighted in dark green.
+
+\section*{Reviewer 1: overall assessment}
+\reviewercomment{
+Dear Editor and authors:
+
+I have thoroughly read and reviewed the manuscript entitled “Transient emission dynamics and gain switching in metal nanoshell spasers” by Perez and colleagues. The manuscript investigates transient emission dynamics and gain switching in metal nanoshell spasers using a slightly modified version of the time-dependent quasi-static model previously developed in Ref. 19. The authors perform a systematic study of emission turn-on times as a function of gain, probe amplitude, and probe frequency, and subsequently apply the model to periodically modulated pumping in order to analyze gain-switched pulse generation.
+
+The topic is relevant to the plasmonics and nanolaser communities, and the manuscript addresses questions that are not covered in detail in the previous literature, particularly concerning transient dynamics and gain-switched operation. The numerical work appears carefully performed and the results are generally consistent with the adopted framework. That said, my main concern is not with the correctness of the calculations but with the presentation and interpretation of the results. At several points the manuscript provides a detailed description of numerical trends without sufficiently discussing the underlying physics. Thus, I believe the manuscript can become suitable for publication after minor revisions.
+}
+
+\response{We thank the referee for the careful reading of our manuscript, the positive assessment of the relevance of the topic and the numerical work, and the constructive suggestions concerning presentation and physical interpretation. We take the request for a clearer physical discussion as a central guide for the revision.}
+
+\section*{Reviewer 1: major comments}
+% The original report labels both final major comments as 4).
+% We distinguish them by sequence below while preserving their original labels.
+
+\subsection*{Major comment 1 (original label: 1)}
+\label{r1-major-1}
+\reviewercomment{
+1) Introduction: The Introduction would benefit from substantial restructuring to improve its accessibility and scientific motivation. At present, it reads largely as a sequence of literature statements and technical developments, with a strong emphasis on differentiating the present work from Ref. 19. As a result, the broader scientific motivation and the specific knowledge gap addressed by the manuscript are not always clear. For example, the concepts of spasing, transient emission dynamics, and gain switching are introduced rather abruptly, often before their relevance has been sufficiently established. Furthermore, the Introduction does not clearly articulate why the study of turn-on dynamics, frequency pulling, and gain-switched operation is of particular interest in nanoscale plasmonic lasers. And finally, the discussion of gain switching appears somewhat disconnected from the preceding narrative. Since gain modulation is a mature topic in laser physics, including semiconductor lasers, a broader contextualization of the problem would help readers understand how the present work relates to the existing body of knowledge. As a general comment,  the Introduction would benefit from a clearer progression from the broader field, to the specific scientific questions addressed here, to the limitations of previous work, and finally to the contribution of the present manuscript.
+}
+\response{We thank the referee for identifying the need for a clearer scientific narrative. We have substantially rewritten and reorganized the entire Introduction, rather than adding isolated definitions to the previous text. It now progresses from the motivation for compact optical components and localized excitation, through the problem of metal losses and the role of gain, to the physical principle of spasing. We then introduce the active-core metallic nanoshell and explain why steady-state emission properties alone cannot determine emission build-up or the response to changing pumping.
+
+The discussion of previous work is now grouped around this temporal question. We acknowledge the model and results established in Ref.~19, while identifying the systematic comparison of turn-on dynamics as the next question. In particular, we explain why frequency pulling motivates comparing transient delays for conditions associated with the same final emission frequency and intensity.
+
+We have also connected gain switching directly to the preceding discussion of emission build-up. Its operating principle is explained before the literature examples, with context from semiconductor lasers, related nanolaser platforms, and shaped-pump excitation of nanoparticle plasmons. The final paragraph states the two contributions of the present work: systematic turn-on characterization under fixed pumping and a gain-switching case study under periodic inversion modulation. This restructuring establishes the concepts before using them, clarifies the motivation for each part of the study, and makes the transition from transient characterization to pulse generation explicit. The rewritten Introduction is highlighted in blue in the revised manuscript.}
+
+\subsection*{Major comment 2 (original label: 2)}
+\label{r1-major-2}
+\reviewercomment{
+2) Methods: Section 2.1 relies heavily on Ref. 19, which is not a problem by itself. But the matrices A(N) and b(N) are central to both the method and the physical interpretation of the results, and presently they are missing in the manuscript, and one is required to consult Ref. 19 to check them. I strongly recommend that the explicit expressions of A(N) and b(N) be reproduced either in the main text or in the Supplementary Information.
+}
+\response{The expressions for $\mathbf A(N)$ and $\mathbf b(N)$ were already included in the submitted Supplementary Information, Sec.~S1.C, Eqs.~(S22)--(S23), together with the material matrices and geometry coefficients needed to construct them. However, the main text referred readers to Ref.~19 rather than to these expressions in our own Supplementary Information, which may have obscured their availability. We have replaced that reference with a direct pointer to the relevant section and equations in our Supplementary Information.}
+\manuscripttext{Sec.~2.1}{The geometry matrix $\mathbf A(N)$ and source vector $\mathbf b(N)$ are given in Eqs.~(S22)--(S23) of our Supplementary Information, Sec.~S1.C, with the material matrices and geometry coefficients defined in the preceding equations.}
+
+
+\subsection*{Major comment 3 (original label: 3)}
+\label{r1-major-3}
+\reviewercomment{
+3) Results: My main conceptual concern with the manuscript is that the physical role of the probe field remains unclear. Throughout Section 3, the probe field plays a central role in defining the observed dynamics, yet its physical role is not clearly established. To start with, why is a weak probe always required? If the objective is to construct the autonomous solution, why is a tiny probe field introduced instead of assigning small nonzero initial values to the polarization amplitudes as is customarily done in laser simulations? Although parts of these questions are touched upon, I believe the manuscript would greatly benefit from a more direct and transparent discussion.
+}
+\response{We thank the referee for requesting this clarification. A weak continuing probe is not a physical requirement for autonomous spasing; it is the excitation protocol chosen in our calculations. Above threshold, the field-free state is unstable, and a perturbation with a nonzero projection onto a growing mode can initiate emission. However, the deterministic equations contain no spontaneous-noise term: with both $\mathbf q=0$ and $E_0=0$, the polarization remains exactly zero. We therefore use a continuing coherent probe to supply a reproducible seed and to investigate systematically the dependence on excitation amplitude and frequency.
+
+A temporary seed field or nonzero initial polarization could also initiate growth. The continuing coherent probe provides a controlled, reproducible excitation with a specified amplitude and frequency. This choice allows us to isolate how the excitation conditions affect emission onset. Figure~2 and Sec.~3.2.1 explicitly characterize its influence, identifying the weak-seeding regime and the crossover to a probe-dominated response. The present analysis focuses on deterministic coherent seeding, with the continuing probe providing a well-defined excitation protocol throughout the amplitude and frequency scans. We have added the following clarification in Sec.~2.3 of the manuscript.}
+\manuscripttext{Sec.~2.3}{In the deterministic model, the initial state $\mathbf q=0$ remains field-free when $E_0=0$, even when it is unstable above threshold, because no spontaneous-noise term is included. A continuing coherent probe is used here as a reproducible seeding protocol, rather than as a requirement for autonomous emission. A temporary seed field or nonzero initial polarization can also initiate growth; their transient dynamics are not compared here. The continuing probe is not a stochastic noise model, and its influence beyond weak seeding is examined through the probe-amplitude scan in Sec.~3.2.1.}
+
+
+\subsection*{Major comment 4 (original label: 4)}
+\label{r1-major-4}
+\reviewercomment{
+4) Results: A stronger discussion of the underlying physics would significantly improve the scientific value of the work. Several sections (3.1, 3.2.2, 3.2.3) describe numerical trends but provide little discussion of their physical origin. There are several questions that remain unanswered. For example: Why is the turn-on time shortest near the threshold frequency? Why does the turn-on time increase toward the edges of the excitability interval? Why do the left and right frequency-pulling branches exhibit different turn-on times despite converging to the same final state? What physical mechanism produces the branch asymmetry? This is important for a physics paper, especially one relying on a semianalytical method, that should be more transparent to the underlying physics.
+}
+\pendingresponse
+
+\subsection*{Major comment 5 (original label: 4)}
+\label{r1-major-5}
+\reviewercomment{
+4) Results: In Fig. 2 the authors vary both gain and probe amplitude and discuss a transition from a gain-dominated regime to a probe-dominated regime. However, based on the formalism presented, I would expect situations where responses associated with both the autonomous frequency and the probe frequency coexist. In such a case, the temporal signal may not be strictly CW and could contain beating at the frequency difference between the relevant spectral components. Under these conditions, is the definition of a unique turn-on time always meaningful? What does the stabilized temporal response actually look like for weak, intermediate, and strong probe amplitudes? It would be useful if the authors could provide representative temporal traces, perhaps as insets or in the Supplementary Information.
+}
+\response{We thank the referee for raising the distinction between emission onset and a stationary continuous-wave response. Figure~2 is evaluated at $\omega=\omega_{\mathrm{th}}$. With our convention $\omega_{\mathrm{em}}=\omega-\Omega(\omega)$ and $\Omega(\omega_{\mathrm{th}})=0$, the probe and autonomous emission coincide in frequency in the weak-probe limit, so the proposed nonzero-detuning beating mechanism is absent in that limit. As explained alongside its definition in Sec.~2.4, the reported turn-on time is a first-crossing observable that does not require steady-state settling.
+
+For Figs.~3--4, which use $E_0/E_{\mathrm{sat}}=10^{-9}$, we have added a frequency-resolved late-time diagnostic in Supplementary Sec.~S5 and Table~S2. It measures peak-to-peak intensity variation relative to the time-weighted mean in post-acceptance observation windows, at full integration resolution, using default and halved convergence tolerances. At the 507 of 672 recorded energies satisfying the paired-stability criteria, the largest variations are $0.00223\%$, $0.000825\%$, and $0.000469\%$ for the three gains. The diagnostic supports nearly stationary weak-probe emission at the reliably observed points.
+
+We have added the following clarifications to the main text and documented the diagnostic and its limitations in the Supplementary Information.}
+
+
+
+\manuscripttext{Sec.~3.2.1}{The probe-amplitude scan in Fig.~2 is performed at $\omega=\omega_{\mathrm{th}}$, where the autonomous frequency-pulling relation gives $\Omega=0$ and hence $\omega_{\mathrm{em}}=\omega$. Thus, in the weak-probe autonomous limit, there is no nonzero probe--emission frequency difference to produce beating.}
+\manuscripttext{Sec.~3.2.2}{For the weak-probe scans in Figs.~3--4, additional calculations at $E_0/E_{\mathrm{sat}}=10^{-9}$ quantify late-window intensity variation over the recorded excitation-energy grids (Supplementary Information, Sec.~S5, Table~S2). At frequencies with stable late-time observations under both convergence-tolerance settings, the relative peak-to-peak intensity variations are small, supporting a nearly stationary weak-probe response (Supplementary Information, Sec.~S5, Table~S2).}
+% Still required before finalizing this response: representative weak/intermediate/strong-probe temporal traces requested for Fig. 2.
+
+
+\section*{Reviewer 1: minor comments}
+
+\subsection*{Minor comment 1}
+\label{r1-minor-1}
+\reviewercomment{
+1) The final sentence of the Abstract could be interpreted as presenting gain switching as a direct application of the probe-field framework. Since the gain-switched operation considered later in the manuscript arises from periodic modulation of the inversion rather than from probe excitation, I recommend rephrasing this sentence to clarify the relationship between these two parts of the work.
+}
+\response{We have revised the final two sentences of the Abstract to distinguish the fixed-pump turn-on analysis from the gain-switching case study. The revised wording identifies gain switching as a separate application of the same dynamical model, driven by sinusoidal modulation of the prescribed inversion, rather than by probe excitation.}
+\minormanuscripttext{Abstract}{As a separate application of the same dynamical model, sinusoidal modulation of the prescribed inversion generates gain-switched pulses whose timing and intensity depend on the coupled field growth and inversion depletion. Together, the fixed-pump turn-on analysis and the periodically pumped case study characterize complementary aspects of temporal control in a single nanoshell spaser.}
+
+
+\subsection*{Minor comment 2}
+\label{r1-minor-2}
+\reviewercomment{
+2) Line 90: please explicitly state that $\rho_{ij}$ are density-matrix elements.
+}
+\response{We have explicitly identified $\rho_{ij}$ as the density-matrix elements of the two-level emitters at their first occurrence in Sec.~2.1.}
+\minormanuscripttext{Sec.~2.1}{The dimensionless inversion is $N=\rho_{22}-\rho_{11}$, where $\rho_{ij}$ are the density-matrix elements of the two-level emitters and $\rho_{11}+\rho_{22}=1$.}
+
+
+\subsection*{Minor comment 3}
+\label{r1-minor-3}
+\reviewercomment{
+3) Line 91: define n when first introduced.
+}
+\response{We have defined $n$ immediately after the coupled dynamical equations, where it first appears.}
+\minormanuscripttext{Sec.~2.1}{Here, $n$ is the number density of active emitters in the core.}
+
+
+\subsection*{Minor comment 4}
+\label{r1-minor-4}
+\reviewercomment{
+4) Line 91-92: “population-density difference” would be more naturally described as “population inversion” in standard laser terminology.
+}
+\response{We have adopted the terminology ``population inversion per unit volume for $nN$, distinguishing it from the dimensionless inversion $N$.}
+\minormanuscripttext{Sec.~2.1}{$nN$ is the corresponding population inversion per unit volume.}
+
+
+\subsection*{Minor comment 5}
+\label{r1-minor-5}
+\reviewercomment{
+5) Lines 114-115: I do not understand this sentence and suggest rewriting it.
+}
+\response{We have rewritten this sentence to state explicitly that the coupling is evaluated in its algebraically simplified form, which remains well defined at zero prescribed inversion.}
+\minormanuscripttext{Sec.~2.1}{Using $G(t)=G_{\max}\widetilde N(t)$, we evaluate the coupling directly as $\Gamma_gN(t)=-i\epsilon_0G_{\max}N(t)/\tau_2$. This expression remains well defined when the prescribed inversion $\widetilde N(t)$ is zero.}
+
+
+\subsection*{Minor comment 6}
+\label{r1-minor-6}
+\reviewercomment{
+6) Lines 122-123: I do not understand the statement regarding “finite-time pulse or detection threshold”. Please clarify.
+}
+\response{We have replaced the phrase ``finite-time pulse or detection threshold'' with an explicit distinction between the stationary instability threshold and the subsequent field build-up needed to reach an observable intensity or form a pulse during finite-duration pumping.}
+\minormanuscripttext{Sec.~2.1}{This stationary threshold marks the onset of linear instability under constant pumping. It does not specify when the growing field reaches an observable intensity or whether a finite interval of above-threshold pumping is long enough for a pulse to develop.}
+
+
+\subsection*{Minor comment 7}
+\label{r1-minor-7}
+\reviewercomment{
+7) Section 3.1: it is not immediately clear which carrier frequency ($\omega$) is used in the calculations. Please state this explicitly.
+}
+\response{We have stated explicitly at the start of Sec.~3.1 that the carrier frequency is scanned across the study-frequency curve, that the continuing probe is applied at this frequency, and that the emission frequency follows from the frequency-pulling relation.}
+\minormanuscripttext{Sec.~3.1}{In these calculations, the carrier frequency $\omega$ is varied across the study-frequency curve shown in Fig.~1. The continuing probe is applied at this frequency, while the physical emission frequency is obtained from $\omega_{\mathrm{em}}=\omega-\Omega(\omega)$.}
+
+
+\subsection*{Minor comment 8}
+\label{r1-minor-8}
+\reviewercomment{
+8) Figure 5: what is the origin of the apparent feature/noise around 20 ps in the left-branch trace?
+}
+\pendingresponse
+
+\subsection*{Minor comment 9}
+\label{r1-minor-9}
+\reviewercomment{
+9) Lines 388-390: the statement that weak intensities are unresolved on a linear scale could be resolved by using a logarithmic scale or by adding a zoomed inset.
+}
+\pendingresponse
+
+\subsection*{Minor comment 10}
+\label{r1-minor-10}
+\reviewercomment{
+10) The ordering of authors differs between the main manuscript and the Supplementary Information. Please correct this inconsistency.
+}
+\response{We understand this comment to refer to the submission-generated cover page of the Supplementary Information, since the supplementary source itself contains no author list. We will ensure that the author order in the submission metadata, and consequently on the generated cover page, matches that of the main manuscript upon resubmission.}
+
+\end{document}

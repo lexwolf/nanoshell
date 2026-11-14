@@ -1,0 +1,197 @@
+{
+  "script": "Gain_Switching/scripts/sm_protocol_check.py",
+  "schema_version": 1,
+  "operation": "Post-processing and provenance checks of existing data only; no simulation or figure generation",
+  "representative_fixed_pump": {
+    "notebook_source": "NEW_stuff/TimeBehavior.ipynb",
+    "notebook_sha256": "a11723f678d5ede7fccbc6aafc21052c3c8435cd7d8d049345b292919cfbef0c",
+    "extraction": {
+      "selected_time_interval_ps": [
+        0.0,
+        200.0
+      ],
+      "common_available_time_interval_ps": [
+        0.000342818,
+        200.0
+      ],
+      "intensity": "(column4^2 + column5^2)/Esat^2; columns counted from 1",
+      "onset": "First ascending crossing of 0.81 times each record's own maximum intensity, linearly interpolated",
+      "late_mean": "Arithmetic mean of saved intensity samples in 150 <= t <= 200 ps; not a time-weighted mean",
+      "normalization_source": "Esat=0.317931 in TimeBehavior.ipynb and the gain-matched probe-sweep header"
+    },
+    "records": [
+      {
+        "source": "NEW_stuff/Data/Representative/1.1Gth.dat",
+        "sha256": "6533b5ca2c8fa8d6abb842bb0a8b1fe41dac10480dbd2c4b338febedafbb2768",
+        "header": {
+          "G": 0.148397,
+          "ome": 2.8122,
+          "ome_em": 2.8122
+        },
+        "notebook_cell_index": 0,
+        "notebook_step_label": 1.0,
+        "saved_rows": 583399,
+        "first_saved_time_ps": 0.000274255,
+        "last_saved_time_ps": 200.0,
+        "Esat": 0.317931,
+        "t_on_ps": 8.11172470888057,
+        "crossing_bracket_ps": [
+          8.1117,
+          8.11204
+        ],
+        "peak_I_over_Isat": 0.004413681357611739,
+        "threshold_I_over_Isat": 0.0035750818996655087,
+        "late_mean_I_over_Isat": 0.004413674700674841,
+        "late_saved_samples": 145851,
+        "late_first_saved_time_ps": 150.0,
+        "last_100000_sample_mean_I_over_Isat": 0.00441367366997566,
+        "last_100000_sample_start_ps": 165.718,
+        "final_N": 0.90909,
+        "first_saved_dip_over_alpha_real": 3.1793108535885414e-10,
+        "first_saved_dip_over_alpha_imag": 1.690215278149951e-16
+      },
+      {
+        "source": "NEW_stuff/Data/Representative/1.1Gthadj.dat",
+        "sha256": "49ddd35f7e1e8d19a0e3bd6695783df7cee5ce9ca14261d74d689f05dfdbc8f1",
+        "header": {
+          "G": 0.148397,
+          "ome": 2.8122,
+          "ome_em": 2.8122
+        },
+        "notebook_cell_index": 1,
+        "notebook_step_label": 0.5,
+        "saved_rows": 530362,
+        "first_saved_time_ps": 0.000342818,
+        "last_saved_time_ps": 200.0,
+        "Esat": 0.317931,
+        "t_on_ps": 8.111777837850626,
+        "crossing_bracket_ps": [
+          8.11177,
+          8.11215
+        ],
+        "peak_I_over_Isat": 0.004413681357611739,
+        "threshold_I_over_Isat": 0.0035750818996655087,
+        "late_mean_I_over_Isat": 0.004413674659295714,
+        "late_saved_samples": 132592,
+        "late_first_saved_time_ps": 150.0,
+        "last_100000_sample_mean_I_over_Isat": 0.004413673853373173,
+        "last_100000_sample_start_ps": 162.29,
+        "final_N": 0.90909,
+        "first_saved_dip_over_alpha_real": 3.1793085545504926e-10,
+        "first_saved_dip_over_alpha_imag": 7.209462290603225e-16
+      }
+    ],
+    "absolute_onset_difference_ps": 5.312897005538275e-05,
+    "onset_difference_relative_to_dt1": 6.549651518279227e-06,
+    "absolute_late_mean_difference": 4.137912755497464e-11,
+    "limitations": [
+      "Step labels come from commented file paths in notebook cells 0 and 1; those cells actively read different TimeBehavior files. The present metrics are freshly computed from the Representative records.",
+      "The headers do not record integration steps or the full generating configuration. The exact modified simulation source is unavailable.",
+      "Neither record includes the t=0 state. Saved timestamps and field components are rounded; printed sample cadence is not the integration step.",
+      "This single fixed-pump comparison does not establish convergence order, a numerical error bound, or the accuracy of gain-switched pulses.",
+      "The 100000-sample tail spans different physical intervals in the two records; the primary comparison uses the common 150-200 ps interval."
+    ]
+  },
+  "probe_peak_sweeps": {
+    "extraction": "E0/Esat is column3; the normalized maximum dipolar response is (column4/header Esat)^2; columns counted from 1",
+    "physical_scope": "Maximum dipolar response under a continuous coherent probe; not a calibrated emitted power, autonomous emission, or necessarily a stationary intensity",
+    "records": [
+      {
+        "source": "Gain_Switching/Data/ProbeSweep/middle/1.05Gth.dat",
+        "sha256": "42588ff138d4578adf88f61f1f74b6cb2600499613f9c88d001bdc0d2b308959",
+        "header": {
+          "G": 0.141652,
+          "ome": 2.8122,
+          "Esat": 0.325413
+        },
+        "gain_ratio": 1.05,
+        "rows": 500,
+        "weak_probe_endpoint": {
+          "saved_row_index": 0,
+          "E0_over_Esat": 1e-15,
+          "maximum_dipolar_amplitude": 0.0152868,
+          "maximum_I_over_Isat": 0.0022068020054874854,
+          "supplied_t_on_ps": 33.2408
+        },
+        "largest_probe_endpoint": {
+          "saved_row_index": 499,
+          "E0_over_Esat": 1.0,
+          "maximum_dipolar_amplitude": 25.1124,
+          "maximum_I_over_Isat": 5955.341127930191,
+          "supplied_t_on_ps": 0.132876
+        },
+        "largest_recorded_response": {
+          "saved_row_index": 499,
+          "E0_over_Esat": 1.0,
+          "maximum_dipolar_amplitude": 25.1124,
+          "maximum_I_over_Isat": 5955.341127930191,
+          "supplied_t_on_ps": 0.132876
+        }
+      },
+      {
+        "source": "Gain_Switching/Data/ProbeSweep/middle/1.1Gth.dat",
+        "sha256": "88a252146c1b123b27b1f38f05bfe0a564fde9ba4d2d7a33c0984f459b55e615",
+        "header": {
+          "G": 0.148397,
+          "ome": 2.8122,
+          "Esat": 0.317931
+        },
+        "gain_ratio": 1.1,
+        "rows": 500,
+        "weak_probe_endpoint": {
+          "saved_row_index": 0,
+          "E0_over_Esat": 1e-15,
+          "maximum_dipolar_amplitude": 0.0211217,
+          "maximum_I_over_Isat": 0.0044135900069297304,
+          "supplied_t_on_ps": 17.4037
+        },
+        "largest_probe_endpoint": {
+          "saved_row_index": 499,
+          "E0_over_Esat": 1.0,
+          "maximum_dipolar_amplitude": 24.5351,
+          "maximum_I_over_Isat": 5955.3859599489115,
+          "supplied_t_on_ps": 0.132876
+        },
+        "largest_recorded_response": {
+          "saved_row_index": 499,
+          "E0_over_Esat": 1.0,
+          "maximum_dipolar_amplitude": 24.5351,
+          "maximum_I_over_Isat": 5955.3859599489115,
+          "supplied_t_on_ps": 0.132876
+        }
+      },
+      {
+        "source": "Gain_Switching/Data/ProbeSweep/middle/1.15Gth.dat",
+        "sha256": "9732b4a59dedac28b7eef71ae7cf6b8633a042289e7bdf84c9d2a5c3f94027cd",
+        "header": {
+          "G": 0.155143,
+          "ome": 2.8122,
+          "Esat": 0.310942
+        },
+        "gain_ratio": 1.15,
+        "rows": 500,
+        "weak_probe_endpoint": {
+          "saved_row_index": 0,
+          "E0_over_Esat": 9.99999e-16,
+          "maximum_dipolar_amplitude": 0.0253001,
+          "maximum_I_over_Isat": 0.006620422411863291,
+          "supplied_t_on_ps": 11.9349
+        },
+        "largest_probe_endpoint": {
+          "saved_row_index": 499,
+          "E0_over_Esat": 0.999999,
+          "maximum_dipolar_amplitude": 23.9958,
+          "maximum_I_over_Isat": 5955.410355455205,
+          "supplied_t_on_ps": 0.132876
+        },
+        "largest_recorded_response": {
+          "saved_row_index": 499,
+          "E0_over_Esat": 0.999999,
+          "maximum_dipolar_amplitude": 23.9958,
+          "maximum_I_over_Isat": 5955.410355455205,
+          "supplied_t_on_ps": 0.132876
+        }
+      }
+    ]
+  }
+}

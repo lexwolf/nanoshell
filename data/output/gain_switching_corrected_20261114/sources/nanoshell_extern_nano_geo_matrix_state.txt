@@ -1,0 +1,10 @@
+commit 9689dad9c276cf107a8e26d3b93baeeade7e8df7
+Merge: 6d7b84c 41e9e68
+Author:     Alessandro Veltri <alessandro.veltri@gmail.com>
+AuthorDate: Fri Nov 13 13:10:02 2026 +0100
+Commit:     Alessandro Veltri <alessandro.veltri@gmail.com>
+CommitDate: Fri Nov 13 13:10:02 2026 +0100
+
+    Merge post-convergence observation with saturation scale utility
+origin	https://github.com/lexwolf/nano_geo_matrix.git (fetch)
+origin	https://github.com/lexwolf/nano_geo_matrix.git (push)

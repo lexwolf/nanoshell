@@ -1,0 +1,15 @@
+% Shared revision markup for the article, supplement, and response letter.
+\RequirePackage{xcolor}
+\definecolor{revisionblue}{RGB}{0,70,160}
+\newif\ifshowrevisions
+\showrevisionstrue
+% Change the preceding line to \showrevisionsfalse for clean output.
+\newcommand{\revised}[1]{{\ifshowrevisions\color{revisionblue}\fi #1}}
+% For multi-paragraph changes or blocks containing displayed equations.
+\newenvironment{revision}{\begingroup\ifshowrevisions\color{revisionblue}\fi}{\endgroup}
+
+% Changes addressing minor comments; controlled by the same clean-output switch.
+\definecolor{revisiongreen}{RGB}{0,105,60}
+\newcommand{\minorrevised}[1]{{\ifshowrevisions\color{revisiongreen}\fi #1}}
+\newenvironment{minorrevision}{\begingroup\ifshowrevisions\color{revisiongreen}\fi}{\endgroup}
+

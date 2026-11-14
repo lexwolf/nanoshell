@@ -1,0 +1,97 @@
+{
+  "files": [
+    {
+      "gain_ratio": 1.15,
+      "source": "NEW_stuff/Data/GainDependence/1.15Gth.dat",
+      "sha256": "4ae36e12385bc3e4ded3d0ca56a0af74550800fca39032bea4203010d862b1f2",
+      "Esat": 0.310942652111006,
+      "total_saved_samples": 583399
+    },
+    {
+      "gain_ratio": 1.2,
+      "source": "NEW_stuff/Extra/1.2Gth.dat",
+      "sha256": "65c4bcfdc341dbfa283dea30733485228592b306a38dd1516d6f888bd890944b",
+      "Esat": 0.30439575779608036,
+      "total_saved_samples": 583399
+    },
+    {
+      "gain_ratio": 1.25,
+      "source": "NEW_stuff/Extra/1.25Gth.dat",
+      "sha256": "93a663a31074559321c7bfdb92a02916a2c80711256aae50449276e9b52f3618",
+      "Esat": 0.2982457145872846,
+      "total_saved_samples": 583399
+    }
+  ],
+  "period_ps": 50.0,
+  "display_window_ps": [
+    12,
+    38
+  ],
+  "mechanism_cycle_ps": [
+    150,
+    200
+  ],
+  "overlay_cycles": [
+    [
+      0,
+      50
+    ],
+    [
+      50,
+      100
+    ],
+    [
+      100,
+      150
+    ],
+    [
+      150,
+      200
+    ]
+  ],
+  "normalization": "Esat=0.317931*sqrt(1.10/g); same gain_dependence.esat as the main figure",
+  "extraction": "gain_dependence.analyze_cycle on all stored samples; linearly interpolated half-maximum crossings bracketing each maximum",
+  "display": "Every 30th stored sample plus maxima, endpoints, and nearest crossing samples; plotting decimation only",
+  "pump": "Ntarget=0.5*(1-cos(2*pi*t/50))",
+  "note": "Cycle agreement measures repeatability in exported deterministic trajectories, not time-step convergence, stochastic timing uncertainty, or stability under arbitrary perturbations. Rounded timestamps limit the timing precision. No simulation is run.",
+  "plot_script": "Gain_Switching/gnuplot/sm_transition.gp",
+  "outputs": [
+    "LaTeX/sm_gain_switching_transition_mechanism.pdf",
+    "LaTeX/sm_gain_switching_transition_cycles.pdf"
+  ],
+  "summary": [
+    {
+      "gain_ratio": 1.15,
+      "final_peak_time_ps": 26.522999999999996,
+      "final_FWHM_ps": 4.0163771739954655,
+      "final_peak_Iem_over_Isat": 0.006188585127152197,
+      "final_half_rise_ps": 25.655,
+      "final_half_fall_ps": 29.671377173995456,
+      "cycle_peak_time_span_ps": 0.0005999999999950489,
+      "cycle_FWHM_span_ps": 0.0002307693598311289,
+      "cycle_peak_intensity_relative_span_percent": 0.0
+    },
+    {
+      "gain_ratio": 1.2,
+      "final_peak_time_ps": 25.233000000000004,
+      "final_FWHM_ps": 5.883522983080809,
+      "final_peak_Iem_over_Isat": 0.00881970167198265,
+      "final_half_rise_ps": 24.10499999999999,
+      "final_half_fall_ps": 29.988522983080802,
+      "cycle_peak_time_span_ps": 0.00030000000000285354,
+      "cycle_FWHM_span_ps": 0.0005229830808133329,
+      "cycle_peak_intensity_relative_span_percent": 0.0
+    },
+    {
+      "gain_ratio": 1.25,
+      "final_peak_time_ps": 25.153999999999996,
+      "final_FWHM_ps": 7.414000000000016,
+      "final_peak_Iem_over_Isat": 0.011031337945003578,
+      "final_half_rise_ps": 22.97999999999999,
+      "final_half_fall_ps": 30.394000000000005,
+      "cycle_peak_time_span_ps": 9.999999999621423e-05,
+      "cycle_FWHM_span_ps": 7.900195380727837e-05,
+      "cycle_peak_intensity_relative_span_percent": 0.0
+    }
+  ]
+}

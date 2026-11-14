@@ -1,0 +1,486 @@
+{
+  "cycle_ps": [
+    150,
+    200
+  ],
+  "normalization": "Esat=0.317931*sqrt(1.10/gain_ratio), documented fixed-tau1 scaling",
+  "note": "Additional gain cases are read from EXTRA_stuff; q companions are not needed for dipole pulse metrics. Resonant frequency headers and normalized drive reconstructed from dipole/alpha are checked. Run settings inherited from original figure; output repeatability is not a timestep convergence test. Extra/1.12Gthq.dat appears mislabeled and is not used.",
+  "files": [
+    {
+      "gain_ratio": 1.05,
+      "fwhm_ps": 2.5790000000000077,
+      "peak_Iem_over_Isat": 2.3725878630095757e-08,
+      "peak_time_ps": 28.56899999999999,
+      "Esat": 0.3254127530458159,
+      "source": "NEW_stuff/Data/GainDependence/1.05Gth.dat",
+      "sha256": "58442afca1eaf1d47d67d80b2624ff644facd7c63ddc3ef005e21064aa18020b",
+      "changes_percent": {
+        "fwhm_ps": 0.014147050787140784,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0035002362659646655
+      }
+    },
+    {
+      "gain_ratio": 1.06,
+      "fwhm_ps": 2.4636719883452827,
+      "peak_Iem_over_Isat": 1.7997337051749633e-07,
+      "peak_time_ps": 28.875,
+      "Esat": 0.3238741498493827,
+      "source": "NEW_stuff/Data/GainDependence/1.06Gth.dat",
+      "sha256": "fb5aa5882072e2245592e9e27e8591b24c5399ae44a5327df252dddd1f032255",
+      "changes_percent": {
+        "fwhm_ps": 0.02727960565932858,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    },
+    {
+      "gain_ratio": 1.07,
+      "fwhm_ps": 2.367999999999995,
+      "peak_Iem_over_Isat": 1.6528840278852844e-06,
+      "peak_time_ps": 29.165999999999997,
+      "Esat": 0.32235716656902674,
+      "source": "NEW_stuff/Data/GainDependence/1.07Gth.dat",
+      "sha256": "001341124fbeb030e1a4e849b89ee212be7b2e2e457acf720b33412a8c4a6e8b",
+      "changes_percent": {
+        "fwhm_ps": 6.001205538514354e-13,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    },
+    {
+      "gain_ratio": 1.08,
+      "fwhm_ps": 2.290584879612453,
+      "peak_Iem_over_Isat": 1.7774097637086858e-05,
+      "peak_time_ps": 29.423000000000002,
+      "Esat": 0.3208613015761899,
+      "source": "NEW_stuff/Data/GainDependence/1.08Gth.dat",
+      "sha256": "bb67be7e32de979f9e376849880f7330c99ca80e40fd135e0c0d5f5d42a037ee",
+      "changes_percent": {
+        "fwhm_ps": 0.009355542672569432,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    },
+    {
+      "gain_ratio": 1.09,
+      "fwhm_ps": 2.2395284342543107,
+      "peak_Iem_over_Isat": 0.00019393431296798463,
+      "peak_time_ps": 29.569999999999993,
+      "Esat": 0.31938606938694175,
+      "source": "NEW_stuff/Data/GainDependence/1.09Gth.dat",
+      "sha256": "63da30cbf64923b73645d0d09fe73d7bb51c7dd1b21c80e299e36e90fbb6cedd",
+      "changes_percent": {
+        "fwhm_ps": 0.009230596553054578,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    },
+    {
+      "gain_ratio": 1.1,
+      "fwhm_ps": 2.289999999999992,
+      "peak_Iem_over_Isat": 0.0011143846687355857,
+      "peak_time_ps": 29.247000000000014,
+      "Esat": 0.317931,
+      "source": "NEW_stuff/Data/GainDependence/1.1Gth.dat",
+      "sha256": "e130b35260d4836a0938458ec686782d9894c03ebfe4f735db2a55269f8fe2fe",
+      "changes_percent": {
+        "fwhm_ps": 0.023400817716890558,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    },
+    {
+      "gain_ratio": 1.11,
+      "fwhm_ps": 2.5120000000000005,
+      "peak_Iem_over_Isat": 0.0024954579538097833,
+      "peak_time_ps": 28.572000000000003,
+      "Esat": 0.3164956382676267,
+      "source": "NEW_stuff/Data/GainDependence/1.11Gth.dat",
+      "sha256": "9fc51b84c640f0664859cb0656b8cda85eda143d279e8b3b41e62b29f5fa2ec2",
+      "changes_percent": {
+        "fwhm_ps": 0.0,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    },
+    {
+      "gain_ratio": 1.12,
+      "fwhm_ps": 2.8430000000000177,
+      "peak_Iem_over_Isat": 0.0036906079044784395,
+      "peak_time_ps": 27.935000000000002,
+      "Esat": 0.31507954329748794,
+      "source": "NEW_stuff/Data/GainDependence/1.12Gth.dat",
+      "sha256": "5bf3f8481f9dc366a8773b924dff2fc92952ceb51d743a2bd58188f66346e9c7",
+      "changes_percent": {
+        "fwhm_ps": 0.0,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    },
+    {
+      "gain_ratio": 1.13,
+      "fwhm_ps": 3.222427679484838,
+      "peak_Iem_over_Isat": 0.004666239948007134,
+      "peak_time_ps": 27.391999999999996,
+      "Esat": 0.31368228788369124,
+      "source": "NEW_stuff/Data/GainDependence/1.13Gth.dat",
+      "sha256": "fa8e98bbe71d010219d35af76d903c2d69cd52febea907fe2a6ea69904a141c0",
+      "changes_percent": {
+        "fwhm_ps": 0.0066495798074191325,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    },
+    {
+      "gain_ratio": 1.14,
+      "fwhm_ps": 3.6183273907297178,
+      "peak_Iem_over_Isat": 0.005483605911957164,
+      "peak_time_ps": 26.926999999999992,
+      "Esat": 0.3123034579653342,
+      "source": "NEW_stuff/Data/GainDependence/1.14Gth.dat",
+      "sha256": "cf40379be31e426ceb5bae58ec560c9d34ff9c4af66f7c3666c5be122db642a0",
+      "changes_percent": {
+        "fwhm_ps": 0.005998819240677905,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 5.277548451443534e-14
+      }
+    },
+    {
+      "gain_ratio": 1.15,
+      "fwhm_ps": 4.0163771739954655,
+      "peak_Iem_over_Isat": 0.006188585127152197,
+      "peak_time_ps": 26.522999999999996,
+      "Esat": 0.310942652111006,
+      "source": "NEW_stuff/Data/GainDependence/1.15Gth.dat",
+      "sha256": "4ae36e12385bc3e4ded3d0ca56a0af74550800fca39032bea4203010d862b1f2",
+      "changes_percent": {
+        "fwhm_ps": 0.005745544314097658,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    },
+    {
+      "gain_ratio": 1.16,
+      "fwhm_ps": 4.409999999999997,
+      "peak_Iem_over_Isat": 0.006811283446796952,
+      "peak_time_ps": 26.164999999999992,
+      "Esat": 0.3095994810277828,
+      "source": "EXTRA_stuff/1.16Gth.dat",
+      "sha256": "746db1b45765b8e4c3d5fc1bd6cc2c16c2b56daa323fee554a6b2859c37196af",
+      "changes_percent": {
+        "fwhm_ps": 0.0,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 5.431245830384867e-14
+      }
+    },
+    {
+      "gain_ratio": 1.17,
+      "fwhm_ps": 4.79426472809115,
+      "peak_Iem_over_Isat": 0.007372124275512558,
+      "peak_time_ps": 25.854000000000013,
+      "Esat": 0.3082735670933555,
+      "source": "EXTRA_stuff/1.17Gth.dat",
+      "sha256": "c491df40cbf63386fab6e3ebb0ace824caf9c615f8c99342b1d42386e717b2f0",
+      "changes_percent": {
+        "fwhm_ps": 0.0042859920409333545,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 5.496578755783244e-14
+      }
+    },
+    {
+      "gain_ratio": 1.18,
+      "fwhm_ps": 5.169235037569052,
+      "peak_Iem_over_Isat": 0.007885815206559852,
+      "peak_time_ps": 25.584000000000003,
+      "Esat": 0.3069645439100115,
+      "source": "EXTRA_stuff/1.18Gth.dat",
+      "sha256": "32000d18757b8fac20b003683a9886b7a00b75f4a906c6f82b942b62c5e7b915",
+      "changes_percent": {
+        "fwhm_ps": 0.0038206199944551163,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    },
+    {
+      "gain_ratio": 1.19,
+      "fwhm_ps": 5.533302726807705,
+      "peak_Iem_over_Isat": 0.008364413239014119,
+      "peak_time_ps": 25.370000000000005,
+      "Esat": 0.3056720558792743,
+      "source": "EXTRA_stuff/1.19Gth.dat",
+      "sha256": "2ed7b852438d71db55f0a7a5f0f50f35d89b2d4324f98ca58587560ecca131de",
+      "changes_percent": {
+        "fwhm_ps": 0.005471146329117406,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    },
+    {
+      "gain_ratio": 1.2,
+      "fwhm_ps": 5.883522983080809,
+      "peak_Iem_over_Isat": 0.00881970167198265,
+      "peak_time_ps": 25.233000000000004,
+      "Esat": 0.30439575779608036,
+      "source": "NEW_stuff/Extra/1.2Gth.dat",
+      "sha256": "65c4bcfdc341dbfa283dea30733485228592b306a38dd1516d6f888bd890944b",
+      "changes_percent": {
+        "fwhm_ps": 0.00888933938369619,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    },
+    {
+      "gain_ratio": 1.21,
+      "fwhm_ps": 6.2183651877976445,
+      "peak_Iem_over_Isat": 0.0092642695101756,
+      "peak_time_ps": 25.18100000000001,
+      "Esat": 0.30313531446144043,
+      "source": "EXTRA_stuff/1.21Gth.dat",
+      "sha256": "fb919c8c3aeb60ee0c7c2ba5eb8821c24abc66504abdba6b3ac910420fbd8f4f",
+      "changes_percent": {
+        "fwhm_ps": 0.005872902445792738,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 5.6434830686636757e-14
+      }
+    },
+    {
+      "gain_ratio": 1.22,
+      "fwhm_ps": 6.538000000000011,
+      "peak_Iem_over_Isat": 0.009706358638166587,
+      "peak_time_ps": 25.173000000000002,
+      "Esat": 0.30189040031259967,
+      "source": "EXTRA_stuff/1.22Gth.dat",
+      "sha256": "72ca448e3df7328cd9ceb621068653c20395610ccb584c9b73b176888b1134c4",
+      "changes_percent": {
+        "fwhm_ps": 0.002628852143348189,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    },
+    {
+      "gain_ratio": 1.23,
+      "fwhm_ps": 6.8429242890030935,
+      "peak_Iem_over_Isat": 0.01014803909987692,
+      "peak_time_ps": 25.157999999999987,
+      "Esat": 0.3006606990697686,
+      "source": "EXTRA_stuff/1.23Gth.dat",
+      "sha256": "a332c88c8d8a763abdd9b86a128761ab15f9f906bfe61a650d51228df044702d",
+      "changes_percent": {
+        "fwhm_ps": 0.0031657772869837413,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 5.648642465697594e-14
+      }
+    },
+    {
+      "gain_ratio": 1.24,
+      "fwhm_ps": 7.1340000000000146,
+      "peak_Iem_over_Isat": 0.010589727220417183,
+      "peak_time_ps": 25.159999999999997,
+      "Esat": 0.2994459033985562,
+      "source": "EXTRA_stuff/1.24Gth.dat",
+      "sha256": "c67235d4468e0452befac866298423351d972e24a03e61541805d205dcf5e89a",
+      "changes_percent": {
+        "fwhm_ps": 1.9919897273902424e-13,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    },
+    {
+      "gain_ratio": 1.25,
+      "fwhm_ps": 7.414000000000016,
+      "peak_Iem_over_Isat": 0.011031337945003578,
+      "peak_time_ps": 25.153999999999996,
+      "Esat": 0.2982457145872846,
+      "source": "NEW_stuff/Extra/1.25Gth.dat",
+      "sha256": "93a663a31074559321c7bfdb92a02916a2c80711256aae50449276e9b52f3618",
+      "changes_percent": {
+        "fwhm_ps": 1.9167594706234134e-13,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    },
+    {
+      "gain_ratio": 1.26,
+      "fwhm_ps": 7.683655523552716,
+      "peak_Iem_over_Isat": 0.011472927307616,
+      "peak_time_ps": 25.15100000000001,
+      "Esat": 0.29705984223841886,
+      "source": "EXTRA_stuff/1.26Gth.dat",
+      "sha256": "1ee776c34bb5c4884d3ecb5f9d554dcddeee6f92a788ccc4f566382c725d4b86",
+      "changes_percent": {
+        "fwhm_ps": 0.00853176609208548,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 5.650214589957458e-14
+      }
+    },
+    {
+      "gain_ratio": 1.27,
+      "fwhm_ps": 7.943000000000012,
+      "peak_Iem_over_Isat": 0.011914478268087008,
+      "peak_time_ps": 25.144000000000005,
+      "Esat": 0.29588800397338577,
+      "source": "EXTRA_stuff/1.27Gth.dat",
+      "sha256": "a7b09b312af7e6fcd76f95ad9998f003e7469dbb7bb0062de7692db5463a9f36",
+      "changes_percent": {
+        "fwhm_ps": 0.0035748207233276064,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    },
+    {
+      "gain_ratio": 1.28,
+      "fwhm_ps": 8.1923879565922,
+      "peak_Iem_over_Isat": 0.012355958385968993,
+      "peak_time_ps": 25.129999999999995,
+      "Esat": 0.29472992515010143,
+      "source": "EXTRA_stuff/1.28Gth.dat",
+      "sha256": "4a84daa04612a3198b05d951935eb758d39a95633bff4fbee90b8555e5ccfb43",
+      "changes_percent": {
+        "fwhm_ps": 0.007470600139831115,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    },
+    {
+      "gain_ratio": 1.29,
+      "fwhm_ps": 8.435000000000002,
+      "peak_Iem_over_Isat": 0.012797541957902281,
+      "peak_time_ps": 25.138000000000005,
+      "Esat": 0.293585338592566,
+      "source": "EXTRA_stuff/1.29Gth.dat",
+      "sha256": "2815a5373bb5d9d293d77fe64266a0b7dedf3d556ed398614c434408705e8537",
+      "changes_percent": {
+        "fwhm_ps": 0.001255012299533268,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    },
+    {
+      "gain_ratio": 1.3,
+      "fwhm_ps": 8.669000000000011,
+      "peak_Iem_over_Isat": 0.01323899603707378,
+      "peak_time_ps": 25.123999999999995,
+      "Esat": 0.2924539843319208,
+      "source": "NEW_stuff/Extra/1.3Gth.dat",
+      "sha256": "a9e233083c1099c42ef355199f6597a577b7a81bef4dded1550874a4afefe972",
+      "changes_percent": {
+        "fwhm_ps": 0.0015893479324939012,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    },
+    {
+      "gain_ratio": 1.33,
+      "fwhm_ps": 9.329403224979984,
+      "peak_Iem_over_Isat": 0.014563469345416467,
+      "peak_time_ps": 25.12299999999999,
+      "Esat": 0.28913681861277857,
+      "source": "EXTRA_stuff/1.33Gth.dat",
+      "sha256": "f3fdf1f3187dff1a826d270f51cb47ada76fd0de6a56a5ae51c57b00d62c2906",
+      "changes_percent": {
+        "fwhm_ps": 0.0022968578174724806,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 5.656511847789677e-14
+      }
+    },
+    {
+      "gain_ratio": 1.35,
+      "fwhm_ps": 9.738910495052181,
+      "peak_Iem_over_Isat": 0.015446338270269436,
+      "peak_time_ps": 25.110000000000014,
+      "Esat": 0.2869870726693684,
+      "source": "NEW_stuff/Extra/1.35Gth.dat",
+      "sha256": "056f90602fd121ef7ce87ea1ab955c1dca3147533e6c8574ea22260db856fd45",
+      "changes_percent": {
+        "fwhm_ps": 0.00016397611327229105,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 5.659440348547192e-14
+      }
+    },
+    {
+      "gain_ratio": 1.38,
+      "fwhm_ps": 10.314621996749707,
+      "peak_Iem_over_Isat": 0.016770669042619344,
+      "peak_time_ps": 25.108000000000004,
+      "Esat": 0.2838505077527989,
+      "source": "EXTRA_stuff/1.38Gth.dat",
+      "sha256": "dc6a886681a6f4039282fbefeb6b536d637e9a342fd055b70e8712c7ddc1f11d",
+      "changes_percent": {
+        "fwhm_ps": 0.002054566153407696,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    },
+    {
+      "gain_ratio": 1.4,
+      "fwhm_ps": 10.674453654129337,
+      "peak_Iem_over_Isat": 0.017653443508146193,
+      "peak_time_ps": 25.09299999999999,
+      "Esat": 0.2818157108531085,
+      "source": "NEW_stuff/Extra/1.4Gth.dat",
+      "sha256": "317f204f33cca3af9705a1dab61bbf53be3f791f13592b4670838d0d5ed53fd7",
+      "changes_percent": {
+        "fwhm_ps": 0.0020074364601551835,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.003985095741944229
+      }
+    },
+    {
+      "gain_ratio": 1.43,
+      "fwhm_ps": 11.184116714505848,
+      "peak_Iem_over_Isat": 0.018977679042980818,
+      "peak_time_ps": 25.089,
+      "Esat": 0.2788439331363031,
+      "source": "EXTRA_stuff/1.43Gth.dat",
+      "sha256": "1782a2c1a34db91cb6cddf1fcdaa5488374168c2d9da58b5c7d718c7fa99d3c5",
+      "changes_percent": {
+        "fwhm_ps": 0.000168287564905771,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    },
+    {
+      "gain_ratio": 1.45,
+      "fwhm_ps": 11.504999999999995,
+      "peak_Iem_over_Isat": 0.01986053471230856,
+      "peak_time_ps": 25.09299999999999,
+      "Esat": 0.2769141941507115,
+      "source": "NEW_stuff/Extra/1.45Gth.dat",
+      "sha256": "967f91275368722dc657ba0bf98a682724b99eea13aaeedbe5eda6646c56c8db",
+      "changes_percent": {
+        "fwhm_ps": 0.0029553093176993084,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 5.6632745049224907e-14
+      }
+    },
+    {
+      "gain_ratio": 1.48,
+      "fwhm_ps": 11.96236585798249,
+      "peak_Iem_over_Isat": 0.021184723463592924,
+      "peak_time_ps": 25.090000000000003,
+      "Esat": 0.2740932629267351,
+      "source": "EXTRA_stuff/1.48Gth.dat",
+      "sha256": "1728486e54a3715fdfbe55aab6c23adb363361bcf936a595c0da82462b2b82c5",
+      "changes_percent": {
+        "fwhm_ps": 0.005301001633607622,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    },
+    {
+      "gain_ratio": 1.5,
+      "fwhm_ps": 12.252317344040819,
+      "peak_Iem_over_Isat": 0.022067430289253835,
+      "peak_time_ps": 25.076999999999998,
+      "Esat": 0.2722598425978389,
+      "source": "NEW_stuff/Extra/1.5Gth.dat",
+      "sha256": "e06a526dd546392bd93f3f2e653ab4868a71093fe073fc6828ec22ce521429b8",
+      "changes_percent": {
+        "fwhm_ps": 0.00027679519176885165,
+        "peak_intensity": 0.0,
+        "peak_time_ps": 0.0
+      }
+    }
+  ]
+}

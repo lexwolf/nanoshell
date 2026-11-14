@@ -1,0 +1,292 @@
+% Based on Optica's official supplemental-document template, downloaded 2026-09-28.
+% Compile from this directory: latexmk -pdf Gain-switched_emission_supplement.tex
+\documentclass[9pt]{osa-supplemental-document}
+\setboolean{shortarticle}{false}
+\setboolean{displaycopyright}{false}
+\usepackage{bm}
+\usepackage{placeins}
+\input{../revision_macros.tex}
+\renewcommand{\thesection}{S\arabic{section}}
+\title{Supplemental document}
+\author{} % Author and publication metadata are added by Optica during production.
+\begin{abstract}
+Supporting material for the study of transient emission dynamics and gain switching in metal nanoshell spasers. We give the reduction of the material equations to the coupled polarization--inversion system, document the dipolar observable and normalization, and present additional probe-response and pulse-dynamics characterizations.
+\end{abstract}
+\begin{document}
+\maketitle
+
+\section{Origin of the coupled dynamical equations}
+\label{sec:derivation}
+The governing equations (1) and (2) of the main article are the quasi-static dipolar reduction of the material equations derived by Aradian et al.~\cite{AradianArxiv:2025}. This section gives the material equations, electrostatic boundary conditions, and coefficient construction needed to obtain the coupled system. The present change to the pumping protocol is to prescribe a time-dependent equilibrium inversion while keeping the relaxation times fixed; it does not change the electrostatic boundary problem.
+
+\subsection{Material response and envelope convention}
+Let $a$ be the external radius and $\rho a$ the core radius, with $f=\rho^3$. All permittivities below are absolute permittivities; relative permittivities are their ratios to $\epsilon_0$. The passive background and dynamical parts of the displacement fields are separated as
+\begin{equation}
+\mathbf D_g=\epsilon_b\mathbf E_g+\bm\Pi_g,\qquad
+\mathbf D_m=\epsilon_\infty\mathbf E_m+\bm\Pi_m,\qquad
+\mathbf D_e=\epsilon_e\mathbf E_e.
+\label{eq:displacement}
+\end{equation}
+Subscripts $g$, $m$, and $e$ denote the gain core, metal, and exterior, respectively. For a complex envelope $\mathbf F(t)$, the real field is $\operatorname{Re}[\mathbf F(t)e^{-i\omega t}]$. The polarization $\bm\Pi_m$ describes free electrons, whereas $\bm\Pi_g$ describes the resonant emitters, excluding the passive background already included in $\epsilon_b$.
+
+The real-time Drude equation is
+\begin{equation}
+\frac{d^2\bm\Pi_{m,\mathrm{real}}}{dt^2}
++2\gamma\frac{d\bm\Pi_{m,\mathrm{real}}}{dt}
+=\epsilon_0\omega_p^2\mathbf E_{m,\mathrm{real}}.
+\label{eq:drude}
+\end{equation}
+Substitution of the envelope convention and neglect of the second derivative of the slowly varying envelope give
+\begin{align}
+\dot{\bm\Pi}_m&=\Omega_m\bm\Pi_m+\Gamma_m\mathbf E_m,\label{eq:metalenv}\\
+\Omega_m&=\frac{\omega(\omega+2i\gamma)}{2(\gamma-i\omega)},
+&\Gamma_m&=\frac{\epsilon_0\omega_p^2}{2(\gamma-i\omega)}.
+\label{eq:metalcoeff}
+\end{align}
+Thus $2\gamma$ is the conventional Drude damping rate. This envelope reduction retains the material response of the original model and is not a full Maxwell time-domain calculation.
+
+For the effective two-level gain medium, $N=\rho_{22}-\rho_{11}$ is the dimensionless population difference per emitter and $nN$ is the population-density difference. The optical coherence and population equations, after the rotating-wave approximation and isotropic averaging of the transition dipoles, give
+\begin{align}
+\dot{\bm\Pi}_g&=\Omega_g\bm\Pi_g+\Gamma_gN\mathbf E_g,\label{eq:gainenv}\\
+\Omega_g&=i(\omega-\omega_g)-\tau_2^{-1},
+&\Gamma_g&=-\frac{in\mu^2}{3\hbar}=-\frac{i\epsilon_0G_{\max}}{\tau_2},\label{eq:gaincoeff}\\
+\dot N+\frac{N-\widetilde N}{\tau_1}
+&=\frac{1}{n\hbar}\operatorname{Im}(\bm\Pi_g\cdot\mathbf E_g^*).
+\label{eq:inversionvector}
+\end{align}
+The factor $1/3$ comes from the orientational average of the transition dipoles. Here $\tau_2$ and $\tau_1$ are the coherence- and population-relaxation times, respectively. The full-inversion gain is $G_{\max}=n\mu^2\tau_2/(3\hbar\epsilon_0)$. The prescribed $\widetilde N$ is the field-free relaxation target. It is distinct from the actual inversion $N$ entering Eq.~(\ref{eq:gainenv}). In the present sinusoidal protocol, modulating $\widetilde N(t)$ at fixed $\tau_1$ is a phenomenological choice; it is not equivalent to changing a microscopic pump rate that also changes $\tau_1$.
+
+\subsection{Dipolar fields and electrostatic boundary conditions}
+Within the quasi-static approximation, write $\mathbf E=-\nabla\phi$ and $\bm\Pi=-\nabla\psi$. For the axisymmetric dipolar component, regularity at the origin and decay of the scattered field at infinity give
+\begin{align}
+\phi_g&=p_0r\cos\theta,
+&\psi_g&=q_0r\cos\theta,\label{eq:corepot}\\
+\phi_m&=p_1r\cos\theta+a^3f p_2\frac{\cos\theta}{r^2},
+&\psi_m&=q_1r\cos\theta+a^3f q_2\frac{\cos\theta}{r^2},\label{eq:metalpot}\\
+\phi_e&=-E_0r\cos\theta+a^3p_3\frac{\cos\theta}{r^2}.
+\label{eq:exteriorpot}
+\end{align}
+All coefficients are envelopes. A constant $E_0$ represents a continuing probe at the envelope reference frequency $\omega$. It is distinct from the pump represented by $\widetilde N$. The core fields are uniform: $\mathbf E_g=-p_0\hat{\mathbf z}$ and $\bm\Pi_g=-q_0\hat{\mathbf z}$. Consequently $\bm\Pi_g\cdot\mathbf E_g^*=q_0p_0^*$, with no additional minus sign.
+
+Continuity of tangential electric field and normal displacement at $r=\rho a$ and $r=a$, with no imposed free interfacial charge, yields
+\begin{align}
+p_0&=p_1+p_2,\label{eq:bc1}\\
+-\epsilon_bp_0-q_0&=-\epsilon_\infty p_1+2\epsilon_\infty p_2-q_1+2q_2,\label{eq:bc2}\\
+p_1+fp_2&=-E_0+p_3,\label{eq:bc3}\\
+-\epsilon_\infty p_1+2f\epsilon_\infty p_2-q_1+2fq_2
+&=\epsilon_e(E_0+2p_3).\label{eq:bc4}
+\end{align}
+To express the boundary conditions above compactly, we introduce the matrices $\mathbf M$ and $\mathbf R$ and define the potential-amplitude vector $\mathbf p=(p_0,p_1,p_2,p_3)^{\mathsf T}$ and the augmented input vector $\mathbf x=(q_0,q_1,q_2,E_0)^{\mathsf T}$. Here $\mathbf p$ includes the exterior amplitude $p_3$ in addition to the three internal amplitudes used in the main article. The vector $\mathbf x$ collects the three dynamical polarization amplitudes and the prescribed probe amplitude; $E_0$ is not an additional dynamical variable. Then
+\begin{equation}
+\mathbf M\mathbf p=\mathbf R\mathbf x,\qquad
+\mathbf C=\mathbf M^{-1}\mathbf R,\qquad \mathbf p=\mathbf C\mathbf x,
+\label{eq:coefficientmap}
+\end{equation}
+where matrix indices start at zero and
+\begin{align}
+\mathbf M&=\begin{pmatrix}
+1&-1&-1&0\\
+\epsilon_b&-\epsilon_\infty&2\epsilon_\infty&0\\
+0&1&f&-1\\
+0&-\epsilon_\infty&2f\epsilon_\infty&-2\epsilon_e
+\end{pmatrix},\label{eq:M}\\
+\mathbf R&=\begin{pmatrix}
+0&0&0&0\\
+-1&1&-2&0\\
+0&0&0&-1\\
+0&1&-2f&\epsilon_e
+\end{pmatrix}.\label{eq:R}
+\end{align}
+The matrices in Eqs.~(\ref{eq:M}) and (\ref{eq:R}), together with $\mathbf C=\mathbf M^{-1}\mathbf R$, specify all sixteen boundary coefficients without requiring separate expanded expressions. The entries $C_{ij}$ with $j=0,1,2$ have inverse-permittivity units; those with $j=3$ are dimensionless. They correspond to the fixed boundary coefficients denoted by $p_{ij}$ in the main article: $p_{ij}=C_{ij}$ for $i,j=0,1,2,3$. Here we use $C_{ij}$ to distinguish these coefficients from the time-dependent potential amplitudes $p_i(t)$.
+
+\subsection{Geometry matrix, inversion equation, and dipolar observable}
+Insertion of the potentials in Eqs.~(\ref{eq:metalenv}) and (\ref{eq:gainenv}) gives
+\begin{equation}
+\dot q_0=\Omega_gq_0+\Gamma_gNp_0,\qquad
+\dot q_1=\Omega_mq_1+\Gamma_mp_1,\qquad
+\dot q_2=\Omega_mq_2+\Gamma_mp_2.
+\label{eq:qcomponents}
+\end{equation}
+To separate the polarization and probe contributions in Eq.~(\ref{eq:coefficientmap}), define the upper-left $3\times3$ block $\mathbf C_q$ and the first three entries of the last column $\mathbf c_E$:
+\begin{equation}
+\mathbf C_q=(C_{ij})_{i,j=0}^{2},\qquad
+\mathbf c_E=(C_{03},C_{13},C_{23})^{\mathsf T}.
+\label{eq:Cblocks}
+\end{equation}
+The internal potential amplitudes then satisfy
+\begin{equation}
+(p_0,p_1,p_2)^{\mathsf T}=\mathbf C_q\mathbf q+\mathbf c_EE_0,
+\qquad \mathbf q=(q_0,q_1,q_2)^{\mathsf T}.
+\label{eq:internalpotentials}
+\end{equation}
+Define the diagonal material matrices
+\begin{equation}
+\mathbf D_\Omega=\operatorname{diag}(\Omega_g,\Omega_m,\Omega_m),\qquad
+\mathbf D_\Gamma(N)=\operatorname{diag}(\Gamma_gN,\Gamma_m,\Gamma_m).
+\label{eq:materialmatrices}
+\end{equation}
+Substitution into Eq.~(\ref{eq:qcomponents}) yields $\dot{\mathbf q}=\mathbf A(N)\mathbf q+\mathbf b(N)$, with
+\begin{align}
+\mathbf A(N)&=\mathbf D_\Omega+\mathbf D_\Gamma(N)\mathbf C_q,\label{eq:A}\\
+\mathbf b(N)&=E_0\mathbf D_\Gamma(N)\mathbf c_E.\label{eq:b}
+\end{align}
+Together with
+\begin{equation}
+\dot N+\frac{N-\widetilde N}{\tau_1}
+=\frac{1}{n\hbar}\operatorname{Im}(q_0p_0^*),
+\label{eq:Nscalar}
+\end{equation}
+these are precisely Eqs.~(1) and (2) of the main article. The source vector vanishes for $E_0=0$. The core row depends on the actual inversion through $\Gamma_gN=-i\epsilon_0G_{\max}N/\tau_2$; this expression remains regular when $\widetilde N=0$.
+
+The exterior coefficient is determined algebraically:
+\begin{equation}
+p_3=C_{30}q_0+C_{31}q_1+C_{32}q_2+C_{33}E_0.
+\label{eq:p3}
+\end{equation}
+Thus $C_{33}$ multiplies the applied probe, not a fourth polarization variable. Comparing Eq.~(\ref{eq:exteriorpot}) with the potential of an electric dipole in the host gives its physical dipole-moment envelope,
+\begin{equation}
+\mathcal P=4\pi\epsilon_e a^3p_3.
+\label{eq:dipole}
+\end{equation}
+The quantity $p_3$ has electric-field units; it is not itself a dipole moment. In particular, its squared modulus is a useful dipolar response measure, but is not a radiated power without the corresponding electrodynamic conversion.
+
+\subsection{Physical saturation scale and stationary threshold reference}
+The saturation scale follows by solving the stationary core polarization on resonance: $\bm\Pi_g=-in\mu^2\tau_2N\mathbf E_g/(3\hbar)$. Substitution into Eq.~(\ref{eq:inversionvector}) gives
+\begin{equation}
+N=\frac{\widetilde N}{1+|\mathbf E_g|^2/E_{\mathrm{sat}}^2},\qquad
+E_{\mathrm{sat}}^2=\frac{3\hbar^2}{\mu^2\tau_1\tau_2}.
+\label{eq:saturation}
+\end{equation}
+Here $E_{\mathrm{sat}}$ is a physical electric-field amplitude in V/m, independent of emitter density at fixed $\mu$, $\tau_1$, and $\tau_2$. This stationary relation defines a scale; it is not imposed as an instantaneous constraint during a pulse. The plotted ratio is $I/I_{\mathrm{sat}}=|p_3|^2/E_{\mathrm{sat}}^2$, with $p_3$ also expressed in V/m. Thus $I_{\mathrm{sat}}=E_{\mathrm{sat}}^2$ is a squared-field normalization, not an irradiance in W/m$^2$.
+
+The stationary threshold can likewise be calculated directly from the dimensional field equations. With $E_0=0$, the field-free state is $\mathbf q=0$, $N=\widetilde N$. Its linear field dynamics are governed by $\mathbf A(\widetilde N)$, whose gain coupling depends on the physical population-density difference $\Delta n=n\widetilde N$ through
+\begin{equation}
+\Gamma_g\widetilde N=-\frac{i\mu^2}{3\hbar}\Delta n.
+\label{eq:physicalthresholdcoupling}
+\end{equation}
+At the threshold frequency $\omega_{\mathrm{th}}$, the onset of the lasing instability corresponds to a vanishing eigenvalue. The threshold frequency $\omega_{\mathrm{th}}$ and critical population-density difference $\Delta n_{\mathrm{crit}}$ are therefore obtained jointly by solving the real and imaginary parts of $\det\mathbf A(\widetilde N)=0$, with the coupling in Eq.~(\ref{eq:physicalthresholdcoupling}), and selecting the first loss of stability as $\Delta n$ increases from zero. For an emitter concentration $n$, the corresponding inversion reference is $N_{\mathrm{crit}}=\Delta n_{\mathrm{crit}}/n$. In the gain notation of the main article,
+\begin{equation}
+G_{\mathrm{th}}=\frac{\mu^2\tau_2}{3\hbar\epsilon_0}\Delta n_{\mathrm{crit}},\qquad
+N_{\mathrm{crit}}=\frac{\Delta n_{\mathrm{crit}}}{n}=\frac{G_{\mathrm{th}}}{G_{\max}}.
+\label{eq:thresholdreference}
+\end{equation}
+No numerical rescaling of the fields or time is required for this calculation. Crossing this stationary reference during a finite pulse need not coincide with a chosen intensity onset or termination criterion: the field retains its own dynamics. It is therefore used as a reference line in the supporting plots, rather than as an exact switch for emission.
+
+\FloatBarrier
+\section{Maximum response in the fixed-pump probe scan}
+\label{sec:probe}
+The turn-on times in the main article use $90\%$ of each trajectory's own maximum dipolar amplitude. Figure~\ref{fig:probepeak} provides the complementary maximum-response data from the same resonant probe-amplitude scans. Each point is $I_{\max}/I_{\mathrm{sat}}=(|p_3|_{\max}/E_{\mathrm{sat}})^2$, using the maximum amplitude recorded in the sweep table. It is not inferred from the turn-on time. The logarithmic axes resolve both the weak-probe plateau and the much larger response to a strong continuing probe.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{sm_probe_peak_response.pdf}
+\caption{Maximum normalized dipolar response versus normalized continuing-probe amplitude for constant pumping, $\widetilde N=1$, at $\hbar\omega=2.8122$~eV. Curves show $G/G_{\mathrm{th}}=1.05$, $1.10$, and $1.15$. Both axes are logarithmic. Each curve uses the numerical saturation scale recorded in its source-file header to express the physical ratios $E_0/E_{\mathrm{sat}}$ and $I_{\max}/I_{\mathrm{sat}}$.}
+\label{fig:probepeak}
+\end{figure}
+
+At the weakest sampled probe, $E_0/E_{\mathrm{sat}}=10^{-15}$, the maxima are approximately $2.207\times10^{-3}$, $4.414\times10^{-3}$, and $6.620\times10^{-3}$ for the three increasing gains. These weak-probe plateaus are consistent with the seed-amplitude independence of the final response discussed in Ref.~\cite{AradianArxiv:2025}. At large probe amplitudes, the maximum response increases strongly and the three curves approach one another. The maximum here includes the driven response throughout the recorded calculation; it is not, by itself, a measure of autonomous emission or a steady-state intensity.
+
+This additional characterization clarifies the scope of the timing metric. A $90\%$ amplitude crossing is equivalent to $0.81I_{\max}$, so its absolute intensity level changes when $I_{\max}$ changes. In particular, the short relative response times obtained with strong probes cannot be read as an improvement in detection at one common absolute threshold. Figure~\ref{fig:probepeak} explains that distinction without testing robustness to the selected fraction; such a test would require extracting crossings at other fractions from the trajectories.
+
+\FloatBarrier
+\section{Pulse development around \texorpdfstring{$1.2\,G_{\mathrm{th}}$}{1.2 Gth}}
+\label{sec:pulses}
+We examine $G_{\max}/G_{\mathrm{th}}=1.15$, $1.20$, and $1.25$ with the main article's prescribed inversion $\widetilde N(t)=[1-\cos(2\pi t/T)]/2$, $T=50$~ps, $\omega=\omega_g=\omega_{\mathrm{th}}$, and $E_0/E_{\mathrm{sat}}=10^{-9}$. The geometry and material parameters are unchanged: the outer and core radii are $10$ and $6$~nm, respectively. These cases straddle the region where the peak-time curve rapidly approaches the prescribed-inversion maximum. They characterize a crossover in the sampled trajectories, rather than locating a new threshold exactly at $1.20\,G_{\mathrm{th}}$.
+
+\subsection{Earlier build-up and asymmetric broadening}
+Figure~\ref{fig:mechanism} shows the final recorded cycle, with local time $s=t-150$~ps. At $1.15\,G_{\mathrm{th}}$, the actual inversion rises above its stationary threshold reference before the field has grown to appreciable intensity. The intensity maximum occurs after the prescribed inversion has reached its maximum at $s=T/2=25$~ps. At the two higher gains, emission develops earlier and the actual inversion departs from the prescribed target sooner. It subsequently remains close to the threshold reference for an interval with substantial emission. This behavior is consistent with stimulated depletion balancing part of the pump-driven recovery during that interval.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\linewidth]{sm_gain_switching_transition_mechanism.pdf}
+\caption{Final-cycle inversion and normalized intensity at $G_{\max}/G_{\mathrm{th}}=1.15$, $1.20$, and $1.25$ (top to bottom). Left panels show the prescribed and actual inversions and $N_{\mathrm{crit}}=G_{\mathrm{th}}/G_{\max}$. Right panels show the intensity; horizontal segments mark its FWHM and dots mark its maximum. The vertical line at $25$~ps marks the prescribed-inversion maximum. Local time is $s=t-150$~ps; only $12$--$38$~ps of the final $50$~ps cycle is displayed.}
+\label{fig:mechanism}
+\end{figure}
+\FloatBarrier
+
+\begin{table}[htbp]
+\centering
+\caption{Pulse metrics from the final cycle, $150\leq t<200$~ps. Times are measured from the cycle start. $s_-$ and $s_+$ are the half-maximum crossings bracketing the peak. Displayed precision is not a numerical error estimate.}
+\label{tab:metrics}
+\begin{tabular}{@{}cccccc@{}}
+\toprule
+$G_{\max}/G_{\mathrm{th}}$ & $s_{\mathrm{peak}}$ (ps) & $s_-$ (ps) & $s_+$ (ps) & FWHM (ps) & $10^3I_{\mathrm{peak}}/I_{\mathrm{sat}}$\\
+\midrule
+1.15 & 26.523 & 25.655 & 29.671 & 4.016 & 6.189\\
+1.20 & 25.233 & 24.105 & 29.989 & 5.884 & 8.820\\
+1.25 & 25.154 & 22.980 & 30.394 & 7.414 & 11.031\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:metrics} separates the rising and falling contributions to the FWHM. Between $1.15$ and $1.25\,G_{\mathrm{th}}$, the rising half-maximum crossing advances by $2.675$~ps, whereas the falling crossing moves later by $0.723$~ps. Thus most of the $3.398$~ps broadening comes from the earlier rise. The corresponding peak delays relative to the pump maximum decrease from $1.523$ to $0.233$ and $0.154$~ps. The peak approaches the time of maximum prescribed inversion as the gain increases, while the broadening remains asymmetric.
+
+The higher-gain trajectories therefore support the interpretation that field build-up becomes fast enough for the emission to follow the pump near its maximum. Together with the lower threshold reference and inversion depletion, this extends the interval of substantial emission. A nonlinear increase of FWHM cannot be assigned solely to faster population depletion: the rise, depletion, continued pumping, and decay contribute together. Nor does the approximately linear peak-intensity trend at higher gain establish equality with the constant-pump steady-state solution.
+
+\subsection{Repeatability over the four recorded cycles}
+The pulse shape and timing repeat across the four recorded cycles at each of the three gains, with intensity and inversion traces nearly coinciding from the first cycle onward. Figure~\ref{fig:cycles} compares the cycles using $s=t-kT$ for $k=0,1,2,3$. The range of the four peak times is no larger than $0.0006$~ps; the FWHM range is no larger than $0.000523$~ps; and the peak intensities agree at the exported precision. These timing differences are below the approximately $0.001$~ps resolution of the late-time exported timestamps and are therefore not resolved physical shifts.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\linewidth]{sm_gain_switching_transition_cycles.pdf}
+\caption{Four-cycle overlays for the same three gains as Fig.~\ref{fig:mechanism}. Left and right panels show actual inversion and normalized intensity, respectively. The four line styles identify cycles $k+1$ with $k=0,1,2,3$, plotted against $s=t-kT$. The stationary inversion reference is shown in the left panels. The displayed interval is $12$--$38$~ps within each $50$~ps cycle.}
+\label{fig:cycles}
+\end{figure}
+
+This repeatability check shows that the approach of the pulse peak to $T/2$ with increasing gain is a difference between gain settings, rather than a progressive timing drift over the recorded cycles. It also supports using the final-cycle pulse metrics to characterize the repeating response over this interval, rather than an isolated first-cycle transient. The conclusion is restricted to the simulated deterministic trajectories and the recorded interval; attraction from other initial states, long-time stability under noise, and integration-step convergence require separate tests.
+
+\FloatBarrier
+\section{Extraction details and numerical evidence}
+\label{sec:extraction}
+\subsection{Integration algorithm and stopping criteria}
+The base \texttt{nano\_geo\_matrix} integrator uses the fixed step $\Delta(\omega_{\mathrm p}t)=1$, corresponding to approximately $6.86\times10^{-5}$~ps for $\hbar\omega_{\mathrm p}=9.6$~eV. At each step, a scalar Runge--Kutta routine first updates $N$ while holding the field-dependent source fixed. The code then constructs $\mathbf A(N)$ and $\mathbf b(N)$ and advances the polarization amplitudes with a four-stage Runge--Kutta routine. Because these updates are sequential, the use of fourth-order subroutines does not by itself establish fourth-order accuracy for the coupled system. The integrator has no adaptive absolute or relative error tolerance.
+
+The optional legacy steady-state mode tests relative changes in squared dipolar amplitude ($10^{-30}$) or successive block averages ($10^{-7}$). These quantities are stopping criteria rather than integration-error bounds. A representative comparison of trajectories labelled with integration steps $\Delta(\omega_{\mathrm p}t)=1$ and $0.5$ is presented below. The spacing and precision of saved timestamps reflect output subsampling and rounding, not necessarily the integration step.
+
+\subsection{Supporting data and pulse-metric extraction}
+The probe curves use the recorded resonant sweep tables, and the pulse analyses use the corresponding time-domain trajectories. Stored numerical field amplitudes are converted to physical electric-field units using the field scaling of Ref.~\cite{Recalde:2023}, adopted in the \texttt{nano\_geo\_matrix} implementation~\cite{NanoGeoMatrix:2026}. Probe amplitudes and dipolar responses are reported as $E_0/E_{\mathrm{sat}}$ and $I/I_{\mathrm{sat}}=|p_3|^2/E_{\mathrm{sat}}^2$, respectively, using the physical saturation field defined in Eq.~(\ref{eq:saturation}). This scale is held fixed within each run and is independent of emitter density at fixed $\mu$, $\tau_1$, and $\tau_2$. The actual inversion is read from the corresponding trajectory.
+
+For each cycle, the peak is the largest saved intensity in the half-open interval $kT\leq t<(k+1)T$. The FWHM uses the nearest rising and falling half-maximum crossings surrounding that peak, with no baseline subtraction. If $I_*$ lies between adjacent samples $(t_i,I_i)$ and $(t_{i+1},I_{i+1})$, the crossing is estimated as
+\begin{equation}
+t_* =t_i+\frac{I_*-I_i}{I_{i+1}-I_i}(t_{i+1}-t_i).
+\label{eq:interpolation}
+\end{equation}
+The same interpolation defines a first $0.81I_{\max}$ crossing when a trajectory is available. All saved samples are used for metric extraction. Plotting may retain fewer points for display, while preserving the peak and crossing features. Rounded timestamps and finite amplitude precision limit the interpretation of the final digits in Table~\ref{tab:metrics}.
+
+\subsection{Representative step-labelled comparison}
+We compare two recorded constant-pump trajectories at $G=1.10\,G_{\mathrm{th}}$. They are labelled with integration steps $\Delta(\omega_{\mathrm p}t)=1$ and $0.5$ and have matching reported gain, study energy, and emitted energy ($2.8122$~eV). Reprocessing both over the common $0$--$200$~ps window with the main article's $90\%$ amplitude criterion gives turn-on times of $8.1117247$ and $8.1117778$~ps, respectively: a difference of approximately $5.3\times10^{-5}$~ps. Their maximum normalized intensities both round to $0.00441368$. This comparison uses each trajectory's own maximum and reconstructs the intensity from the exported real and imaginary dipolar amplitudes. The quoted digits describe the comparison of the exported records, not independently established timing accuracy.
+
+The two trajectories yield closely matching turn-on times and peak responses, providing a useful consistency check for this representative constant-pump case. This complements the cycle-to-cycle repeatability assessment above: the comparisons address agreement between the two constant-pump records and repetition of the gain-switched response, respectively. The step assignments remain unverified because the corresponding run configurations and modified generating source are unavailable; a verified convergence study would be needed to determine the convergence order and quantify integration errors across the sweeps and gain-switched pulses.
+
+\subsection{Emitted-frequency convention}
+For an envelope component proportional to $e^{i\Omega t}$, the convention $e^{-i\omega t}$ gives the physical angular frequency $\omega_{\mathrm{em}}=\omega-\Omega$. The recorded sweep tables contain both the envelope-frequency shift and the emitted photon energy. The main article uses the latter, $\hbar\omega_{\mathrm{em}}$, with this sign convention. The exported energies are used as reported; no independently verified frequency uncertainties are assigned.
+
+\section{Residual intensity variation under fixed pumping}
+\label{sec:residual_modulation}
+\begin{revision}
+We quantify late-time variation of $I(t)=|p_3(t)|^2/E_{\mathrm{sat}}^2$ for the three gains and continuing-probe ratio $E_0/E_{\mathrm{sat}}=10^{-9}$ used in Figs.~3--4 of the main article. The diagnostic uses the recorded excitation-energy grids.
+
+The simulation is continued until the intensity remains approximately constant or exhibits repeating oscillations over an initial interval and an additional confirmation interval. The intensity range and time-weighted mean are then measured over subsequent observation intervals, using every integration step. The reported quantity is $100(I_{\max}-I_{\min})/\langle I\rangle$ from the last completed observation window, not from the earlier convergence-acceptance interval. Default and halved convergence tolerances are retained separately. The baseline uses three 40~ps observation windows; periodic observations span complete cycles and at least five detected periods. The rounded central energy, 2.8122~eV, uses three 2000~ps windows. Selected follow-ups extend observations at other points.
+
+Paired-stable observations require completion and stable later ranges and means at both tolerance settings. The relative intensity variations obtained with default and halved convergence tolerances are considered consistent when their difference is no greater than 5\% of their mean plus an absolute tolerance of $10^{-8}$, with variations expressed as dimensionless ratios rather than percentages. This criterion is satisfied at 507 of 672 recorded energies. The remaining 165 points are nonstationary, tolerance-sensitive, or insufficiently observed; no missing result is assigned zero modulation. The largest paired-stable variations are $0.00223\%$, $0.000825\%$, and $0.000469\%$ for the three increasing gains. All occur at the rounded central energy and are classified flat within tolerance, rather than established periodic oscillations.
+
+The central energy differs from the computed threshold by approximately $2.8~\mu$eV. Longer observations resolve sensitivity to this rounding; separate exact-threshold controls yield much smaller finite-window ranges. A finite flat observation does not exclude arbitrarily slow beating or later evolution. These calculations support a nearly stationary weak-probe response where stable paired observations exist, without assigning that conclusion to unresolved points or providing integration-step convergence bounds. They do not characterize the intermediate- and strong-probe cases of Fig.~2.
+\end{revision}
+
+\begin{table}[htbp]
+\centering
+\caption{\revised{Largest paired-stable late-window relative intensity variation at $E_0/E_{\mathrm{sat}}=10^{-9}$, and coverage of the recorded excitation-energy grids. Values are percentages of the time-weighted mean intensity. Nonstationary, tolerance-sensitive, and insufficiently observed points are excluded, so these are not bounds across the complete grids.}}
+\label{tab:residual_modulation}
+\begin{tabular}{ccc}
+\hline
+$G/G_{\mathrm{th}}$ & Largest variation (\%) & Paired-stable / sampled points \\
+\hline
+1.05 & 0.00223 & 158/240 \\
+1.10 & 0.000825 & 156/201 \\
+1.15 & 0.000469 & 193/231 \\
+\hline
+\end{tabular}
+\end{table}
+
+\bibliography{sm_references}
+\end{document}

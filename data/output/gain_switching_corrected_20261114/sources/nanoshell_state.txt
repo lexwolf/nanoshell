@@ -1,0 +1,9 @@
+commit c99187fec645256b99d2900334a363cb9807365e
+Author:     Alessandro Veltri <alessandro.veltri@gmail.com>
+AuthorDate: Fri Nov 13 13:18:49 2026 +0100
+Commit:     Alessandro Veltri <alessandro.veltri@gmail.com>
+CommitDate: Fri Nov 13 13:18:49 2026 +0100
+
+    Use shared saturation scales with solver relaxation validation
+origin	https://github.com/lexwolf/nanoshell.git (fetch)
+origin	https://github.com/lexwolf/nanoshell.git (push)

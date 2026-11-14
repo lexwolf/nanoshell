@@ -1,0 +1,236 @@
+{
+  "period_ps": 50.0,
+  "stability_tolerance_percent": 1.0,
+  "normalization": "All gains: Esat=0.317931*sqrt(1.10/g), g=Gmax/Gth",
+  "normalization_source": "Data_Description.pdf, pp. 6-7: Esat=1/sqrt(abs(G)*tau1)",
+  "normalization_convention": "Simulation units; fixed tau1; rounded anchor at g=1.10",
+  "normalization_anchors": {
+    "1.05": 0.325413,
+    "1.1": 0.317931,
+    "1.15": 0.310942
+  },
+  "physical_units_note": "doc/ns_dynamic.pdf Eq. (12) and p. 45 define the physical saturation field. Conversion from simulation units remains to be checked against the simulation source.",
+  "inferred_threshold_gain": 0.13490654205607477,
+  "files": [
+    {
+      "source": "NEW_stuff/Data/GainDependence/1.05Gth.dat",
+      "companion_sha256": "89db5e4d8e792773a54673819f371880b7f76c83df2a1a6ddce16557d97a0e89",
+      "previous_cycle": {
+        "cycle_start_ps": 100.0,
+        "peak_intensity": 2.3725878630095757e-08,
+        "peak_time_ps": 28.569999999999993,
+        "fwhm_ps": 2.5793648782495637,
+        "clear_pulse": true,
+        "reason": ""
+      },
+      "last_cycle": {
+        "cycle_start_ps": 150.0,
+        "peak_intensity": 2.3725878630095757e-08,
+        "peak_time_ps": 28.56899999999999,
+        "fwhm_ps": 2.5790000000000077,
+        "clear_pulse": true,
+        "reason": ""
+      }
+    },
+    {
+      "source": "NEW_stuff/Data/GainDependence/1.06Gth.dat",
+      "companion_sha256": "ab2607d93195ce1a54585bf44863b5f3ff5bba9c6a6e3bb9e8236caaf0a44952",
+      "previous_cycle": {
+        "cycle_start_ps": 100.0,
+        "peak_intensity": 1.7997337051749633e-07,
+        "peak_time_ps": 28.875,
+        "fwhm_ps": 2.463000000000008,
+        "clear_pulse": true,
+        "reason": ""
+      },
+      "last_cycle": {
+        "cycle_start_ps": 150.0,
+        "peak_intensity": 1.7997337051749633e-07,
+        "peak_time_ps": 28.875,
+        "fwhm_ps": 2.4636719883452827,
+        "clear_pulse": true,
+        "reason": ""
+      }
+    },
+    {
+      "source": "NEW_stuff/Data/GainDependence/1.07Gth.dat",
+      "companion_sha256": "9310970f6dd5027e55bd5a5d5053aa028545f3aef3f93959118c670d7409fc21",
+      "previous_cycle": {
+        "cycle_start_ps": 100.0,
+        "peak_intensity": 1.6528840278852844e-06,
+        "peak_time_ps": 29.165999999999997,
+        "fwhm_ps": 2.368000000000009,
+        "clear_pulse": true,
+        "reason": ""
+      },
+      "last_cycle": {
+        "cycle_start_ps": 150.0,
+        "peak_intensity": 1.6528840278852844e-06,
+        "peak_time_ps": 29.165999999999997,
+        "fwhm_ps": 2.367999999999995,
+        "clear_pulse": true,
+        "reason": ""
+      }
+    },
+    {
+      "source": "NEW_stuff/Data/GainDependence/1.08Gth.dat",
+      "companion_sha256": "ba96a3fd687da4f88d11a994289c9823a45d67b638677d88cb9aaf5152ee1732",
+      "previous_cycle": {
+        "cycle_start_ps": 100.0,
+        "peak_intensity": 1.7774097637086858e-05,
+        "peak_time_ps": 29.423000000000002,
+        "fwhm_ps": 2.2903705929904277,
+        "clear_pulse": true,
+        "reason": ""
+      },
+      "last_cycle": {
+        "cycle_start_ps": 150.0,
+        "peak_intensity": 1.7774097637086858e-05,
+        "peak_time_ps": 29.423000000000002,
+        "fwhm_ps": 2.290584879612453,
+        "clear_pulse": true,
+        "reason": ""
+      }
+    },
+    {
+      "source": "NEW_stuff/Data/GainDependence/1.09Gth.dat",
+      "companion_sha256": "d674b83bd7f10aca33e8a8b498227fea092f50cbb70ae0f139812688a42f78ab",
+      "previous_cycle": {
+        "cycle_start_ps": 100.0,
+        "peak_intensity": 0.00019393431296798463,
+        "peak_time_ps": 29.569999999999993,
+        "fwhm_ps": 2.2397351656300373,
+        "clear_pulse": true,
+        "reason": ""
+      },
+      "last_cycle": {
+        "cycle_start_ps": 150.0,
+        "peak_intensity": 0.00019393431296798463,
+        "peak_time_ps": 29.569999999999993,
+        "fwhm_ps": 2.2395284342543107,
+        "clear_pulse": true,
+        "reason": ""
+      }
+    },
+    {
+      "source": "NEW_stuff/Data/GainDependence/1.1Gth.dat",
+      "companion_sha256": "fdbb0cf2f0cbabe219903b34254da67f0db13b489cf1c69c46332d83c343d4e4",
+      "previous_cycle": {
+        "cycle_start_ps": 100.0,
+        "peak_intensity": 0.0011143846687355857,
+        "peak_time_ps": 29.247000000000014,
+        "fwhm_ps": 2.289464183966942,
+        "clear_pulse": true,
+        "reason": ""
+      },
+      "last_cycle": {
+        "cycle_start_ps": 150.0,
+        "peak_intensity": 0.0011143846687355857,
+        "peak_time_ps": 29.247000000000014,
+        "fwhm_ps": 2.289999999999992,
+        "clear_pulse": true,
+        "reason": ""
+      }
+    },
+    {
+      "source": "NEW_stuff/Data/GainDependence/1.11Gth.dat",
+      "companion_sha256": "48891ff206425131a94ecb3c2667c80603385d639bf2dd4291aa382982d22363",
+      "previous_cycle": {
+        "cycle_start_ps": 100.0,
+        "peak_intensity": 0.0024954579538097833,
+        "peak_time_ps": 28.572000000000003,
+        "fwhm_ps": 2.5120000000000005,
+        "clear_pulse": true,
+        "reason": ""
+      },
+      "last_cycle": {
+        "cycle_start_ps": 150.0,
+        "peak_intensity": 0.0024954579538097833,
+        "peak_time_ps": 28.572000000000003,
+        "fwhm_ps": 2.5120000000000005,
+        "clear_pulse": true,
+        "reason": ""
+      }
+    },
+    {
+      "source": "NEW_stuff/Data/GainDependence/1.12Gth.dat",
+      "companion_sha256": "c9b9677a674b4b283ff61301a3510238df64cc355660fff574d37e0f308d3637",
+      "previous_cycle": {
+        "cycle_start_ps": 100.0,
+        "peak_intensity": 0.0036906079044784395,
+        "peak_time_ps": 27.935000000000002,
+        "fwhm_ps": 2.8430000000000177,
+        "clear_pulse": true,
+        "reason": ""
+      },
+      "last_cycle": {
+        "cycle_start_ps": 150.0,
+        "peak_intensity": 0.0036906079044784395,
+        "peak_time_ps": 27.935000000000002,
+        "fwhm_ps": 2.8430000000000177,
+        "clear_pulse": true,
+        "reason": ""
+      }
+    },
+    {
+      "source": "NEW_stuff/Data/GainDependence/1.13Gth.dat",
+      "companion_sha256": "ac2645a261f5c4ff9f7049222f446137e9f4445f88efaa6c751b06c34109d851",
+      "previous_cycle": {
+        "cycle_start_ps": 100.0,
+        "peak_intensity": 0.004666239948007134,
+        "peak_time_ps": 27.391999999999996,
+        "fwhm_ps": 3.2226419645096485,
+        "clear_pulse": true,
+        "reason": ""
+      },
+      "last_cycle": {
+        "cycle_start_ps": 150.0,
+        "peak_intensity": 0.004666239948007134,
+        "peak_time_ps": 27.391999999999996,
+        "fwhm_ps": 3.222427679484838,
+        "clear_pulse": true,
+        "reason": ""
+      }
+    },
+    {
+      "source": "NEW_stuff/Data/GainDependence/1.14Gth.dat",
+      "companion_sha256": "a578cda56224ed75e22a8275858fe0d7cca456ca8343afa98d480bb8a2c7aa11",
+      "previous_cycle": {
+        "cycle_start_ps": 100.0,
+        "peak_intensity": 0.005483605911957164,
+        "peak_time_ps": 26.927000000000007,
+        "fwhm_ps": 3.618110340320243,
+        "clear_pulse": true,
+        "reason": ""
+      },
+      "last_cycle": {
+        "cycle_start_ps": 150.0,
+        "peak_intensity": 0.005483605911957164,
+        "peak_time_ps": 26.926999999999992,
+        "fwhm_ps": 3.6183273907297178,
+        "clear_pulse": true,
+        "reason": ""
+      }
+    },
+    {
+      "source": "NEW_stuff/Data/GainDependence/1.15Gth.dat",
+      "companion_sha256": "e20d8707e0223865ed86205a785838f7296e687fbb5b31a3ae1c4b3ae2374463",
+      "previous_cycle": {
+        "cycle_start_ps": 100.0,
+        "peak_intensity": 0.006188585127152197,
+        "peak_time_ps": 26.522999999999996,
+        "fwhm_ps": 4.016607943355297,
+        "clear_pulse": true,
+        "reason": ""
+      },
+      "last_cycle": {
+        "cycle_start_ps": 150.0,
+        "peak_intensity": 0.006188585127152197,
+        "peak_time_ps": 26.522999999999996,
+        "fwhm_ps": 4.0163771739954655,
+        "clear_pulse": true,
+        "reason": ""
+      }
+    }
+  ]
+}

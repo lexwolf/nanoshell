@@ -1,0 +1,27 @@
+{
+  "probe_grid_requested": 1500,
+  "probe_grid_completed": 1500,
+  "frequency_energies_requested": 672,
+  "frequency_source_rows": 682,
+  "frequency_completed": 649,
+  "frequency_incomplete": 23,
+  "frequency_incomplete_by_gain": {
+    "1.05": 9,
+    "1.1": 8,
+    "1.15": 6
+  },
+  "pulse_gain_cases": 34,
+  "pulse_gain_cases_completed": 34,
+  "main_figures_staged": 8,
+  "supplement_figures_staged": 3,
+  "residual_figure_staged": 1,
+  "residual_paired_stable": 547,
+  "residual_unresolved_or_unstable": 125,
+  "numerical_run_failures": 0,
+  "requested_new_batch_runs": 2985,
+  "stationary_map_points": 1001,
+  "finite_probe_stationary_spot_checks": 5,
+  "tracked_changes": false,
+  "committed": false,
+  "pushed": false
+}

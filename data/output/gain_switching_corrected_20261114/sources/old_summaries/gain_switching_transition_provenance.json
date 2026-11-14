@@ -1,0 +1,22 @@
+{
+  "files": [
+    {
+      "gain": 1.15,
+      "source": "NEW_stuff/Data/GainDependence/1.15Gth.dat",
+      "sha256": "4ae36e12385bc3e4ded3d0ca56a0af74550800fca39032bea4203010d862b1f2"
+    },
+    {
+      "gain": 1.2,
+      "source": "NEW_stuff/Extra/1.2Gth.dat",
+      "sha256": "65c4bcfdc341dbfa283dea30733485228592b306a38dd1516d6f888bd890944b"
+    },
+    {
+      "gain": 1.25,
+      "source": "NEW_stuff/Extra/1.25Gth.dat",
+      "sha256": "93a663a31074559321c7bfdb92a02916a2c80711256aae50449276e9b52f3618"
+    }
+  ],
+  "normalization": "Esat=0.317931*sqrt(1.10/g); fixed tau1",
+  "pump": "0.5*(1-cos(2*pi*t/50)), inherited from manuscript",
+  "note": "Metrics use every saved sample. Display retains every 30th point plus maxima. Repeated rounded timestamps limit timing precision; no simulation or timestep convergence test performed."
+}

@@ -1,0 +1,12 @@
+{
+  "constant": {
+    "reference_fast_bit_identical": true,
+    "refinement_max_I_difference": 1.4156328189650347e-06,
+    "refinement_relative_to_peak": 3.3410555343300155e-05
+  },
+  "periodic": {
+    "reference_fast_bit_identical": true,
+    "refinement_max_I_difference": 6.021181240211358e-08,
+    "refinement_relative_to_peak": 2.275498179664953e-05
+  }
+}

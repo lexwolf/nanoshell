@@ -1,0 +1,24 @@
+{
+  "a_nm": 10,
+  "rho": 0.6,
+  "Dome_eV": 0.15,
+  "metal": "silver",
+  "model": "drude",
+  "active": "lorentz",
+  "core": "silica",
+  "exterior": "water",
+  "initial_q": [
+    0,
+    0,
+    0
+  ],
+  "initial_N": 0,
+  "gain_center": "computed_threshold",
+  "pump_step": "Ntarget=1 for t>=0",
+  "pump_periodic": "Ntarget=(1-cos(2*pi*t/50))/2",
+  "tau1_policy": "require_match",
+  "scan_max_duration_ps": 2000,
+  "probe_max_duration_ps": 100,
+  "gain_cycles_duration_ps": 200,
+  "normalization_gain": "fixed_Gmax"
+}

@@ -1,0 +1,10 @@
+{
+  "runs_audited": 2985,
+  "normalization_mapping_errors": 0,
+  "errors": [],
+  "periodic_pump_max_abs_error": 0.0,
+  "strong_probe_dt_halving_max_difference_relative_to_peak": 0.00032061045648387054,
+  "native_metric_independent_reconstruction": "passed",
+  "full_resolution": "float64 each integration step; lossless storage",
+  "time_reference": "legacy pre-step timestamp retained for post-step state"
+}
