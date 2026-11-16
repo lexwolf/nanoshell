@@ -1,3 +1,5 @@
+Publication figures now use the adapted gnuplot scripts directly in scripts/. The normal `[OMEx]_process_plot.py` entry point updates full-resolution metrics/diagnostics and then renders the original publication layouts through `[OMEx]_publication_plots.py`. For styling-only regeneration, use the `publication_plots` action. See GNUPLOT_STYLE.md for the reference styling and deliberate range/inset differences.
+
 # OMEx gain-switching workflow layout
 
 Active scripts are in `scripts/`, prefixed `[OMEx]_`; the C++ driver is `src/[OMEx]_gain_switching.cxx`. Generated figures are in `img/output/[OMEx]_gain_switching/`, each also prefixed `[OMEx]_`; figure close-ups are in its `diagnostics/` subdirectory. `[OMEx]_` is a filename marker, not an overlay on the scientific plots. It can later be replaced by the DOI tag.

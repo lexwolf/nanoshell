@@ -11,7 +11,7 @@ for sub in ['inputs','sources/Data','sources/old_summaries','sources/nano_geo_ma
  review += [q for q in (p/sub).rglob('*') if q.is_file()]
 review += list((p/'sources/LaTeX').rglob('*.tex'))
 review += list((p/'tables').glob('*.csv'))
-review += [p/'tables'/n for n in ['coverage.json','validation.json','residual_summary.json','pdf_validation.json','plot_generation.json']]
+review += [p/'tables'/n for n in ['coverage.json','validation.json','residual_summary.json','pdf_validation.json','plot_generation.json','gain_dependence_fits.json']]
 review += [p/'compiler.txt',p/'build_command.json',p/'pilot/results.json',p/'pilot/PILOT.md',p/'REORGANIZATION_VALIDATION.json',p/'build_command_current.json',p/'compiler_current.txt']
 review=sorted(set(q for q in review if q.is_file()))
 rows=[]

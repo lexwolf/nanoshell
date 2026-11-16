@@ -13,3 +13,5 @@ The bracketed marker is a filename prefix, matching the repository's existing pu
 RELOCATION.csv maps the old paths to the new paths and records pre-move byte hashes. All 31 moved figure files and the C++ source were checked byte-for-byte. New build metadata is in build_command_current.json and compiler_current.txt; the original build records, run commands and scientific SHA256SUMS remain historical provenance. The reorganized index and review archive are separate products.
 
 No numerical arrays, parameter values, solver equations or normalization definitions changed. The full 47 GiB run archive was not moved or rerun. Scientific coverage limits are unchanged. No manuscript/submission assets were edited. No new commit or push was made for this organization pass.
+
+A later publication-styling pass replaces the initial Matplotlib publication layouts with the original gnuplot layouts, using the same corrected numerical data. The earlier byte-identical image checks describe the relocation step only. See GNUPLOT_STYLE.md and publication_plot_data/style_validation.json for the subsequent style changes.

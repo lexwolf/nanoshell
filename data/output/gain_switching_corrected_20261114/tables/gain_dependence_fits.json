@@ -1,0 +1,36 @@
+{
+  "low_gain": {
+    "gain_window": [
+      1.05,
+      1.09
+    ],
+    "points": 5,
+    "fit": "log10(Ipeak/Isat)=m*(g-1.05)+c; g=Gmax/Gth",
+    "m_decades_per_unit_gain_ratio": 99.53316067643688,
+    "c": -7.699315415408533,
+    "alpha_natural_exponential_per_unit_gain_ratio": 229.18357203214472,
+    "factor_per_gain_increment_0p01": 9.893081953757168,
+    "R_squared_log10": 0.9981579898233238,
+    "max_abs_log10_residual": 0.07454671206008445,
+    "local_segment_slopes_decades_per_unit_gain_ratio": [
+      88.00466471761955,
+      96.35430305552984,
+      103.69399723197796,
+      109.58868823330268
+    ],
+    "qualification": "Descriptive approximation over five deterministic points. Curvature remains; not a demonstrated exact exponential law or statistical uncertainty estimate."
+  },
+  "high_gain": {
+    "gain_window": [
+      1.25,
+      1.5
+    ],
+    "points": 14,
+    "fit": "Ipeak/Isat=a*g+b",
+    "a": 0.42378615442624457,
+    "b": -0.42382883689529943,
+    "R_squared_linear": 0.9999999973262726,
+    "qualification": "Descriptive fit on the specified high-gain interval; not an integration-error bound."
+  },
+  "interpretation": "Rapid approximately exponential rise at low gain, followed by a crossover toward the nearly linear high-gain dependence; no second exponential regime is inferred."
+}
