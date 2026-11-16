@@ -1,0 +1,6 @@
+{
+  "repository_HEAD": "7c180323ff31080edbbee68672a69a3ebee7957d",
+  "library_HEAD": "9689dad9c276cf107a8e26d3b93baeeade7e8df7",
+  "binary_sha256": "692be59a1ddb07e833fda8a6ab9ac829b8c12e2426bd8a31c80403712dc02ac9",
+  "worktree_status": " M img/output/[OMEx]_gain_switching/[OMEx]_gain_dependence_linear_extended.pdf\n M img/output/[OMEx]_gain_switching/[OMEx]_gain_dependence_linear_extended.png\n M scripts/[OMEx]_gain_dependence_linear_extended.gp\n?? scripts/[OMEx]_refine_pulse_midpoint.py\n"
+}

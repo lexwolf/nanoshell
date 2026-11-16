@@ -50,14 +50,14 @@ do for [kind=1:2] {
         set bmargin at screen 0.24
         set tmargin at screen 0.80
         set ylabel labels[panel] offset 0.5,0
-        set label 1 sprintf('(%s)',word('a b c',panel)) at graph (panel == 3 ? 0.88 : 0.06),0.92 front
+        set label 1 sprintf('(%s)',word('a b c',panel)) at graph (panel == 3 ? 0.83 : 0.06),0.92 front
         unset logscale y
         set autoscale y
         set ytics autofreq
         set format y '%g'
         set mytics 2
         if (panel == 2) {
-            set yrange [0:*]
+            set yrange [0:0.22]
             set format y '%.2f'
             set ytics 0.10
         }
@@ -66,26 +66,30 @@ do for [kind=1:2] {
         plot data using 1:($5==0 ? column(panel+1) : 1/0) with linespoints pointtype 7 pointsize (0.65*point_factor) linewidth 1.5 linecolor rgb colors[panel] notitle, \
              data using 1:($5!=0 ? column(panel+1) : 1/0) with points pointtype 6 pointsize (1.1*point_factor) linewidth 1.6 linecolor rgb '#B34D00' notitle
         if (panel == 2) {
-            set label 1 '(b)' at screen 0.4535,0.7552 front
+#             set label 1 '(b)' at screen 0.4535,0.7552 front
+            unset label 1
             unset xlabel
             unset ylabel
-            set object 99 rect from screen 0.46,0.58 to screen 0.625,0.74 behind fc rgb 'white' fs solid 1 noborder
-            set lmargin at screen 0.49
-            set rmargin at screen 0.61
-            set bmargin at screen 0.61
-            set tmargin at screen 0.725
+#             set object 99 rect from screen 0.46,0.31 to screen 0.625,0.47 behind fc rgb 'white' fs solid 1 noborder
+            set lmargin at screen 0.555
+            set rmargin at screen 0.66
+            set bmargin at screen 0.26
+            set tmargin at screen 0.445
             set logscale y
             set xrange [1.045:1.185]
             set yrange [1e-8:0.12]
-            set xtics ('1.05' 1.05,'1.15' 1.15) font (kind == 1 ? 'Tinos,18' : 'Tinos,54') offset 0,0.7
+            unset xtics
+#             set xtics ('1.05' 1.05,'1.15' 1.15) font (kind == 1 ? 'Tinos,18' : 'Tinos,54') offset 0,0.7
+            set x2tics mirror ('1.05' 1.05,'1.15' 1.15) font (kind == 1 ? 'Tinos,18' : 'Tinos,54') offset 0,-0.7
             set ytics ('10^{-8}' 1e-8,'10^{-6}' 1e-6,'10^{-4}' 1e-4,'10^{-2}' 1e-2) font (kind == 1 ? 'Tinos,18' : 'Tinos,54')
             set format y '%g'
             set mxtics 1
             set mytics 2
-            set label 93 sprintf('m ≈ %.1f',omex_low_m) at graph 0.68,0.16 right front textcolor rgb '#1B5E20' font (kind == 1 ? 'Tinos,18' : 'Tinos,54')
-            plot data using 1:3 with linespoints pt 7 ps (0.35*point_factor) lw 1 lc rgb colors[2] notitle, \
-                 omex_low_fit(x) with lines dt 2 lw 1.2 lc rgb '#1B5E20' notitle
+            set label 93 sprintf('m ≈ %.1f',omex_low_m) at graph 0.7,0.12 right front textcolor rgb '#1B5E20' font (kind == 1 ? 'Tinos,18' : 'Tinos,54')
+            plot omex_low_fit(x) with lines dt 1 lw 3 lc rgb '#1B5E20' notitle, \
+                 data using 1:3 with linespoints pt 7 ps (0.65*point_factor) lw 1 lc rgb colors[2] notitle
             unset label 93
+            unset x2tics
             unset object 99
             unset label 1
             unset logscale y

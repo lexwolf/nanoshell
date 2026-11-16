@@ -1,0 +1,23 @@
+{
+  "gain_ratio": 1.105,
+  "baseline": {
+    "cycle": 4.0,
+    "peak_I": 0.006965053291453491,
+    "peak_time_ps": 29.619804567630723,
+    "half_rise_ps": 28.5603978578213,
+    "half_fall_ps": 30.762547419876228,
+    "fwhm_ps": 2.2021495620549274
+  },
+  "half_step": {
+    "cycle": 4.0,
+    "peak_I": 0.006965053283986102,
+    "peak_time_ps": 29.619873131324226,
+    "half_rise_ps": 28.56043213338819,
+    "half_fall_ps": 30.762581696537097,
+    "fwhm_ps": 2.2021495631489074
+  },
+  "peak_relative_difference": 1.0721223860685744e-09,
+  "peak_time_difference_ps": 6.856369350316527e-05,
+  "fwhm_difference_ps": 1.0939800176856807e-09,
+  "metric_resolution": "every integration step; output cadence .002 ps"
+}
