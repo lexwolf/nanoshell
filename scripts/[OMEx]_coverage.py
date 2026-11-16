@@ -1,6 +1,6 @@
 from pathlib import Path
 import json,csv,collections
-p=Path(__file__).resolve().parent
+paths=__import__("[OMEx]_paths");p=paths.DATA
 rows=list(csv.DictReader((p/'tables/frequency_scan.csv').open()));missing=[r for r in rows if r['status']!='completed']
 with (p/'tables/incomplete_frequency_cases.csv').open('w',newline='') as f:w=csv.DictWriter(f,fieldnames=list(rows[0]));w.writeheader();w.writerows(missing)
 ss=json.loads((p/'tables/residual_summary.json').read_text())
@@ -8,7 +8,7 @@ coverage={'probe_grid_requested':1500,'probe_grid_completed':1500,'frequency_ene
 (p/'tables/coverage.json').write_text(json.dumps(coverage,indent=2))
 text='''# Coverage and limitations
 
-All 8 main and 3 supplementary figure assets are staged as vector PDFs and PNG previews, using the existing asset names. The residual-diagnostic figure is also staged. This is a complete set of review assets, **not a claim of complete convergence across the frequency grid**.
+All 8 main and 3 supplementary figure assets are staged as vector PDFs and PNG previews, using manuscript basenames prefixed `[OMEx]_`. The residual-diagnostic figure is also staged. This is a complete set of review assets, **not a claim of complete convergence across the frequency grid**.
 
 | Calculation | Coverage |
 | --- | --- |

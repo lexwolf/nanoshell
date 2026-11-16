@@ -1,6 +1,6 @@
 from pathlib import Path
 import json,csv,collections,numpy as np
-p=Path(__file__).resolve().parent;G=json.loads((p/'inputs/grids.json').read_text());rows=[];summary=[]
+paths=__import__("[OMEx]_paths");p=paths.DATA;paths.IMAGES.mkdir(parents=True,exist_ok=True);G=json.loads((p/'inputs/grids.json').read_text());rows=[];summary=[]
 for g,grid in G.items():
  pairs=[]
  for i,e in enumerate(grid['frequencies']):
@@ -32,4 +32,4 @@ for j,g in enumerate([1.05,1.1,1.15]):
   rr=[r for r in rows if r['gain_ratio']==g and r['tolerance_factor']==tol and r['paired_stable'] and r['percent']>0];axs[0,j].semilogy([r['frequency_eV'] for r in rr],[r['percent'] for r in rr],'.',ms=3,color=c,label=f'Tolerance ×{tol:g}')
  rr=[r for r in rows if r['gain_ratio']==g and r['tolerance_factor']==1];axs[1,j].scatter([r['frequency_eV'] for r in rr],[int(r['paired_stable']) for r in rr],s=3);axs[1,j].set_yticks([0,1],['Unresolved','Paired']);axs[1,j].set_xlabel('Excitation energy (eV)');axs[0,j].set_title(f'$G={g:.2f}G_{{th}}$');axs[0,j].legend(fontsize=8)
 axs[0,0].set_ylabel('Late-window variation (%)');fig.tight_layout()
-for ext in ['pdf','png']:fig.savefig(p/'staging'/('residual_modulation_fig3.'+ext),dpi=180)
+for ext in ['pdf','png']:fig.savefig(paths.IMAGES/(paths.PREFIX+'residual_modulation_fig3.'+ext),dpi=180)

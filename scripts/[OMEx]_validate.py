@@ -1,6 +1,6 @@
 from pathlib import Path
 import json,csv,numpy as np
-p=Path(__file__).resolve().parent
+paths=__import__("[OMEx]_paths");p=paths.DATA
 results=json.loads((p/'tables/all_results.json').read_text())+json.loads((p/'tables/residual_rerun_results.json').read_text());errors=[]
 for r in results:
  a=r['parameters'];c=r['configuration'];
@@ -10,7 +10,7 @@ for r in results:
  if a['supplied_tau1_matches']!='1' or a['tau1_policy']!='require_match':errors.append((c['name'],'relaxation validation'))
  if float(a['Gmax'])<=0 or a['gain_convention']!='Gmax=fixed_concentration_full_inversion':errors.append((c['name'],'gain convention'))
 # Recompute pulse metrics independently from all-step native records of representative cases.
-from native_io import load
+load=__import__("[OMEx]_native_io").load
 for g in [1.05,1.1,1.15,1.2,1.25,1.5]:
  folder=p/f'runs/pulse_g{g:.2f}';a=dict(l.split('\t',1) for l in (folder/'parameters.tsv').read_text().splitlines());step=float(a['integration_step_ps']);I=load(folder);start=int(np.ceil(150/step));end=min(len(I),int(np.ceil(200/step)));x=I[start:end];k=int(np.argmax(x));peak=x[k];half=peak/2;ris=np.flatnonzero((x[:-1]<half)&(x[1:]>=half));fal=np.flatnonzero((x[:-1]>=half)&(x[1:]<half));ris=ris[ris<k][-1];fal=fal[fal>=k][0]
  def cross(j):return ((start+j)+(half-x[j])/(x[j+1]-x[j]))*step-150

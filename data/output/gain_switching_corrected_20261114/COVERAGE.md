@@ -1,6 +1,6 @@
 # Coverage and limitations
 
-All 8 main and 3 supplementary figure assets are staged as vector PDFs and PNG previews, using the existing asset names. The residual-diagnostic figure is also staged. This is a complete set of review assets, **not a claim of complete convergence across the frequency grid**.
+All 8 main and 3 supplementary figure assets are staged as vector PDFs and PNG previews, using manuscript basenames prefixed `[OMEx]_`. The residual-diagnostic figure is also staged. This is a complete set of review assets, **not a claim of complete convergence across the frequency grid**.
 
 | Calculation | Coverage |
 | --- | --- |
@@ -16,4 +16,4 @@ The incomplete frequency cases are 9, 8 and 6 for gains 1.05, 1.10 and 1.15. The
 
 No nonfinite solver failures or subprocess timeouts occurred in the 2985 new batch runs. The rejected pilot early-flat edge result is retained as evidence of why a convergence-start guard was needed, not as an accepted scan result. Historical hidden frequency precision, modified generator source, scan stop settings and complete initial input snapshots remain unavailable. Assumed initial q=N=0 and pump start t=0 follow the manuscript/recorded protocol and are recorded explicitly.
 
-Original manuscript/supplement, figures, scripts and data were not overwritten. No source commits, dependency changes or pushes were performed. The older task directory minor_comment8_20261114 remains separate; only historical copies were read from it. Copied original gnuplot/processing sources are in sources/, while process_plot.py makes the new plots without writing through to submission paths.
+Original manuscript/supplement, figures, scripts and data were not overwritten. No source commits, dependency changes or pushes were performed. The older task directory minor_comment8_20261114 remains separate; only historical copies were read from it. Copied original gnuplot/processing sources are in sources/, while ../../../scripts/[OMEx]_process_plot.py makes the new plots without writing through to submission paths.

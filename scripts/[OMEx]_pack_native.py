@@ -1,8 +1,8 @@
 from pathlib import Path
 import gzip,struct,hashlib,json,concurrent.futures,time
 import numpy as np
-from native_io import MAGIC,iter_native
-p=Path(__file__).resolve().parent
+_native=__import__("[OMEx]_native_io");MAGIC=_native.MAGIC;iter_native=_native.iter_native
+paths=__import__("[OMEx]_paths");p=paths.DATA
 
 def pack(q):
  folder=q.parent;target=folder/'intensity.sf64.gz';oldbytes=q.stat().st_size

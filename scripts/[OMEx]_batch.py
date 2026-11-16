@@ -1,6 +1,6 @@
 from pathlib import Path
 import subprocess,concurrent.futures,json,time,hashlib,os,gzip,shutil,threading
-p=Path(__file__).resolve().parent
+paths=__import__("[OMEx]_paths");p=paths.DATA
 G=json.loads((p/'inputs/grids.json').read_text());pair=json.loads((p/'inputs/pair.json').read_text())
 jobs=[]
 def add(name,g,e,seed,pump,T,dt=1,cad=.02,factor=1,diag=0,minobs=0):jobs.append(dict(name=name,gain=g,energy=e,seed=seed,pump=pump,T=T,dt=dt,cadence=cad,factor=factor,diagnostic=diag,min_observe=minobs))
@@ -18,7 +18,7 @@ add('pair_left_dense',1.1,pair['left_eV'],1e-9,'step',200,cad=6.856369348370542e
 add('pair_right_literal_1p11',1.1,1.11*pair['threshold_eV'],1e-9,'step',200,cad=.001)
 for g in [1.05,1.1,1.15,1.2,1.25,1.5]:add(f'pulse_half_g{g:.2f}',g,'threshold',1e-9,'cos50',200,dt=.5,cad=.002)
 for e in [2.55,2.7,'threshold',2.95,3.1]:add(f'pulling_check_{e}',1.2,e,1e-8,'step',200,cad=.002)
-(p/'inputs/jobs.json').write_text(json.dumps(jobs,indent=2));sha=hashlib.sha256((p/'driver.cxx').read_bytes()).hexdigest();lock=threading.Lock();done=0;t0=time.monotonic()
+(p/'inputs/jobs.json').write_text(json.dumps(jobs,indent=2));sha=hashlib.sha256(paths.DRIVER_SOURCE.read_bytes()).hexdigest();lock=threading.Lock();done=0;t0=time.monotonic()
 def read(q):return dict(line.split('\t',1) for line in q.read_text().splitlines())
 def run(j):
  global done
@@ -29,7 +29,7 @@ def run(j):
   if prior.get('configuration')!=config:raise RuntimeError(f'Configuration mismatch at {folder}; use a new isolated campaign directory')
   if prior.get('returncode')==0:return prior
  args=[j['gain'],j['energy'],j['seed'],j['pump'],j['T'],j['dt'],j['cadence'],j['factor'],j['diagnostic'],1,j['min_observe']]
- cmd=[str(p/'driver'),'run',str(folder),*map(str,args)];(folder/'command.json').write_text(json.dumps(cmd,indent=2))
+ cmd=[str(paths.BINARY),'run',str(folder),*map(str,args)];(folder/'command.json').write_text(json.dumps(cmd,indent=2))
  with (folder/'run.log').open('w') as f:
   try:r=subprocess.run(cmd,stdout=f,stderr=f,timeout=120);rc=r.returncode
   except subprocess.TimeoutExpired:rc=-999

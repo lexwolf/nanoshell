@@ -1,10 +1,10 @@
 """Reproduce the new autonomous maps and paired energies from frozen inputs."""
 from pathlib import Path
 import numpy as np,json,subprocess
-p=Path(__file__).resolve().parent
+paths=__import__("[OMEx]_paths");p=paths.DATA
 
 def run(mode,out,*args):
- folder=p/out;folder.mkdir(parents=True,exist_ok=True);cmd=[str(p/'driver'),mode,str(folder),*map(str,args)];(folder/'command.json').write_text(json.dumps(cmd,indent=2))
+ folder=p/out;folder.mkdir(parents=True,exist_ok=True);cmd=[str(paths.BINARY),mode,str(folder),*map(str,args)];(folder/'command.json').write_text(json.dumps(cmd,indent=2))
  with (folder/'map.log').open('w') as log:subprocess.run(cmd,check=True,stdout=log,stderr=log)
 run('pair','inputs')
 grid=np.loadtxt(p/'sources/Data/Pulling/output/ns_intensity_SS.dat')[:,0]

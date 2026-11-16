@@ -61,3 +61,6 @@ build/
 
 # KDE/Dolphin metadata
 .directory
+
+# Python script caches
+__pycache__/

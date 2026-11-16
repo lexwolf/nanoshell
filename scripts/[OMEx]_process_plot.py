@@ -5,19 +5,20 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize, ListedColormap
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-p=Path(__file__).resolve().parent;stage=p/'staging';tables=p/'tables';diag=p/'diagnostics'
+paths=__import__("[OMEx]_paths");p=paths.DATA;stage=paths.IMAGES;tables=p/'tables';diag=paths.DIAGNOSTICS
+stage.mkdir(parents=True,exist_ok=True);diag.mkdir(parents=True,exist_ok=True)
 plt.rcParams.update({'font.family':'serif','font.size':12,'axes.labelsize':13,'axes.linewidth':.9,'xtick.direction':'in','ytick.direction':'in','xtick.top':True,'ytick.right':True,'pdf.fonttype':42,'ps.fonttype':42})
 colors=['#0072B2','#D55E00','#009E73']; gains=[1.05,1.1,1.15];G=json.loads((p/'inputs/grids.json').read_text());pair=json.loads((p/'inputs/pair.json').read_text())
 def read(q):return dict(line.split('\t',1) for line in q.read_text().splitlines())
 def record(n):return json.loads((p/'runs'/n/'result.json').read_text())
 def data(n):return np.loadtxt(p/'runs'/n/'trajectory.tsv')
 def save(fig,name,folder=stage):
- fig.savefig(folder/(name+'.pdf'),bbox_inches='tight');fig.savefig(folder/(name+'.png'),dpi=180,bbox_inches='tight');plt.close(fig)
+ fig.savefig(folder/(paths.PREFIX+name+'.pdf'),bbox_inches='tight');fig.savefig(folder/(paths.PREFIX+name+'.png'),dpi=180,bbox_inches='tight');plt.close(fig)
 def write(name,rows):
  with (tables/name).open('w',newline='') as f:
   w=csv.DictWriter(f,fieldnames=sorted(set().union(*(r.keys() for r in rows))));w.writeheader();w.writerows(rows)
 def arrays(n):
- from native_io import load
+ load=__import__("[OMEx]_native_io").load
  return load(p/'runs'/n)
 # All original 500 normalized values, with newly computed raw E0 and all-step metrics.
 probes=[]

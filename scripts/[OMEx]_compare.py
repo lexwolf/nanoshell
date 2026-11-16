@@ -1,6 +1,6 @@
 from pathlib import Path
 import csv,json,numpy as np,re
-p=Path(__file__).resolve().parent
+paths=__import__("[OMEx]_paths");p=paths.DATA
 def load(name):return list(csv.DictReader((p/'tables'/name).open()))
 new=load('gain_dependence.csv');old=list(csv.DictReader((p/'sources/old_summaries/gain_dependence_linear_extended_summary.csv').open()));old={float(r['gain_ratio']):r for r in old}
 rows=[]

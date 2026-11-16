@@ -1,4 +1,5 @@
-import batch as b,json,concurrent.futures,time
+import json,concurrent.futures,time
+b=__import__("[OMEx]_batch")
 p=b.p; b.jobs=[];G=b.G
 for g,gr in G.items():
  old={}

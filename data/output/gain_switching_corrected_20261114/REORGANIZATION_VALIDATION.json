@@ -1,0 +1,9 @@
+{
+  "python_scripts_parsed": 14,
+  "images_byte_identical": 31,
+  "driver_source_byte_identical": true,
+  "image_output_routing": "img/output/[OMEx]_gain_switching/[OMEx]_<asset>",
+  "bash_syntax_and_help": "passed",
+  "simulations_rerun": false,
+  "numerical_data_moved": false
+}

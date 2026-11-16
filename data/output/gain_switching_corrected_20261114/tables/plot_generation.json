@@ -1,5 +1,22 @@
 {
   "figures": [
+    "[OMEx]_freq_sweep_LR_panels.pdf",
+    "[OMEx]_freq_sweep_panels.pdf",
+    "[OMEx]_gain_dependence_linear_extended.pdf",
+    "[OMEx]_gain_switching_mechanism_1.1Gth.pdf",
+    "[OMEx]_gain_switching_mechanism_composite.pdf",
+    "[OMEx]_paired_frequency_temporal_traces.pdf",
+    "[OMEx]_probe_middle_single.pdf",
+    "[OMEx]_pulling.pdf",
+    "[OMEx]_residual_modulation_fig3.pdf",
+    "[OMEx]_sm_gain_switching_transition_cycles.pdf",
+    "[OMEx]_sm_gain_switching_transition_mechanism.pdf",
+    "[OMEx]_sm_probe_peak_response.pdf"
+  ],
+  "metric_resolution": "every_integration_step_native_f64",
+  "plot_source": "new trajectories and new autonomous library construction",
+  "note": "Figs3/4 use identical new run selection; Fig4 abscissa is measured phase rotation of the same trajectory at every integration step over its final complete 10 ps block plus terminal partial block; analytic reference is exported separately; no historical emission coordinates reused.",
+  "original_figures": [
     "freq_sweep_LR_panels.pdf",
     "freq_sweep_panels.pdf",
     "gain_dependence_linear_extended.pdf",
@@ -13,7 +30,5 @@
     "sm_gain_switching_transition_mechanism.pdf",
     "sm_probe_peak_response.pdf"
   ],
-  "metric_resolution": "every_integration_step_native_f64",
-  "plot_source": "new trajectories and new autonomous library construction",
-  "note": "Figs3/4 use identical new run selection; Fig4 abscissa is measured phase rotation of the same trajectory at every integration step over its final complete 10 ps block plus terminal partial block; analytic reference is exported separately; no historical emission coordinates reused."
+  "figure_directory": "img/output/[OMEx]_gain_switching"
 }
