@@ -1,0 +1,16 @@
+[
+  "g++",
+  "-O3",
+  "-std=c++17",
+  "-I/home/alessandro/GitHub/Academia/GEO_MATRIX/nanoshell/extern/nano_geo_matrix/include",
+  "-I/home/alessandro/GitHub/Academia/GEO_MATRIX/nanoshell/extern/nano_geo_matrix/modules",
+  "-I/home/alessandro/GitHub/Academia/GEO_MATRIX/nanoshell/extern/nano_geo_matrix/modules/cup",
+  "-I/usr/include/eigen3",
+  "/home/alessandro/GitHub/Academia/GEO_MATRIX/nanoshell/src/[OMEx]_gain_switching.cxx",
+  "-o",
+  "/home/alessandro/GitHub/Academia/GEO_MATRIX/nanoshell/data/output/pulling_G1p15_20261120/driver.bin",
+  "-lgsl",
+  "-lgslcblas",
+  "-lm",
+  "-larmadillo"
+]

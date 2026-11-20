@@ -1,0 +1,14 @@
+{
+  "HEAD": "2ad04c25681fee2aee02482094ff4a43503afcc4",
+  "branch": "analysis/turn-on-mechanisms",
+  "library_HEAD": "9689dad9c276cf107a8e26d3b93baeeade7e8df7",
+  "status_before": "?? docs/turn_on_mechanisms.md\n?? scripts/[OMEx]_pulling_G1p15.py\n?? scripts/[OMEx]_turn_on_analyze.py\n?? scripts/[OMEx]_turn_on_build.py\n?? scripts/[OMEx]_turn_on_edges.py\n?? scripts/[OMEx]_turn_on_linear.py\n?? scripts/[OMEx]_turn_on_mechanisms.bash\n?? scripts/[OMEx]_turn_on_package.py\n?? scripts/[OMEx]_turn_on_refine.py\n?? scripts/[OMEx]_turn_on_report.py\n?? scripts/[OMEx]_turn_on_validate.py\n?? src/[OMEx]_turn_on_matrix.cxx\n",
+  "compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "source_sha256": "030e100fa4e5d233d32ea029e3796378409e29f7ff37ce50bc6953b60c153205",
+  "binary_sha256": "51bfc40275f12947ba576513fa196672aa434d5e3488951c84574faab52adeb4",
+  "approved_sha256_before": {
+    "img/output/[OMEx]_gain_switching/[OMEx]_pulling.pdf": "524f680ab77a53b2394a050b4e44235b97293e63a649bd0f59a2789ad1d05bc2",
+    "img/output/[OMEx]_gain_switching/[OMEx]_pulling.png": "2b5761769d979c2b739032b6ac364f484944d07af1eba737f45fa7e9ca445488",
+    "scripts/[OMEx]_pulling.gp": "58229913fe6d1aa8c6c3220c280f79835a6bf0a3342b0acdc012bf98a1a41462"
+  }
+}
