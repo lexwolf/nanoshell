@@ -1,0 +1,12 @@
+{
+  "minimum_mode_separation_ps_inv": 95.94922622387743,
+  "max_eigenvector_condition": 25.566110009983362,
+  "max_biorthogonal_residual": 4.440900568822021e-16,
+  "max_frozen_forced_modal_vs_expm_relative_error": 7.681339015913672e-13,
+  "max_relative_fitted_sigma_error": 0.00036941530909628817,
+  "max_fixed_threshold_prediction_error_ps": 0.007205395208643495,
+  "max_half_step_even_delay_relative_change": 1.9892158906520407e-05,
+  "rounded_reproduction_delay_difference_ps": -2.6534529240507254e-08,
+  "max_forced_continuous_vs_split_step_complex_dipole_L2_error": 0.0007022706387421681,
+  "all_checks_passed": true
+}

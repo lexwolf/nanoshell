@@ -1,0 +1,400 @@
+\documentclass{optica-article}
+
+\journal{opticajournal}
+\articletype{Research Article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath}
+% \usepackage{amssymb}
+\usepackage{bm} 
+\usepackage{xcolor}
+\input{../revision_macros.tex}
+\usepackage{hyperref}
+\usepackage{lineno}
+\linenumbers
+
+\hypersetup{colorlinks=true,allcolors=blue}
+
+\newcommand{\citneed}{{\color{blue}[citation needed]}}
+\newcommand{\datneed}{\text{\color{red}[data needed]}}
+\newcommand{\safeincludegraphics}[2][]{%
+  \IfFileExists{#2}{\includegraphics[#1]{#2}}{%
+    \fbox{\parbox[c][0.22\textheight][c]{0.9\linewidth}{\centering Missing figure file\\\texttt{#2}}}%
+  }%
+}
+
+\begin{document}
+\title{Transient emission dynamics and gain switching in metal nanoshell spasers}
+
+\author{Mateo Perez,\authormark{1} Karen Caicedo,\authormark{1,2,*}  Melissa Infusino,\authormark{3} Vincenzo Caligiuri,\authormark{4} Antonio De Luca,\authormark{4} and Alessandro Veltri\authormark{1,4}}
+
+\address{\authormark{1}Colegio de Ciencias e Ingenier\'ia, Universidad San Francisco de Quito, Quito, Ecuador\\
+\authormark{2}Istituto di Scienze Applicate e Sistemi Intelligenti (ISASI), Consiglio Nazionale delle Ricerche, Napoli, Italy\\
+\authormark{3}Istituto per i Processi Chimico-Fisici (IPCF), Consiglio Nazionale delle Ricerche, Messina, Italy\\
+\authormark{4}Department of Physics, University of Calabria, via P. Bucci 31c, 87036 Rende (CS), Italy}
+
+
+\email{\authormark{*}karen.caicedo@na.isasi.cnr.it}
+
+\begin{abstract*}
+We quantify emission turn-on and gain-switched pulse formation in metal nanoshell spasers using an established time-dependent model coupling the resonator polarization to the population inversion of an active core within the quasi-static approximation. Under fixed pumping, we characterize the emission turn-on time as a function of gain, probe amplitude, and applied-probe frequency. Within the sampled weak-probe regime, increasing the gain shortens the delay and broadens the excitability interval, while increasing the probe amplitude produces a crossover from weakly seeded emission to a probe-dominated response. Accounting for frequency pulling, we find that paired weak-probe frequencies yielding the same reported steady-state emission frequency and intensity can nevertheless produce different turn-on times. \minorrevised{As a separate application of the same dynamical model, sinusoidal modulation of the prescribed inversion generates gain-switched pulses whose timing and intensity depend on the coupled field growth and inversion depletion. Together, the fixed-pump turn-on analysis and the periodically pumped case study characterize complementary aspects of temporal control in a single nanoshell spaser.}
+\end{abstract*}
+
+\section{Introduction}
+\label{sec:intro}
+
+\begin{revision}
+Bringing optical functionality into compact integrated devices calls for components that can operate at small scales and interact locally with their surroundings. Subwavelength optical structures offer routes towards this goal and towards closer integration of electronics and photonics \cite{Cheben:2018,Pshenichnyuk:2019}. Metal nanoparticles provide one approach through localized surface-plasmon resonances, whose response can be tailored through the particle size, shape, and dielectric environment \cite{Kelly:2003}. The associated confinement is accompanied by losses in the metal, motivating the coupling of these resonances to a pumped gain medium to compensate losses and amplify optical excitation \cite{Lawandy:2004,Gramotnev:2010,Veltri:2012,Caligiuri:2017,Azzam:2020,Caicedo:2025}. Experimental loss mitigation in gain-assisted plasmonic mesocapsules illustrates this approach \cite{Infusino:2014}. When stimulated energy transfer from the gain medium compensates the losses of a localized plasmon mode, self-sustained oscillation can develop. This is the operating principle of a spaser: the plasmonic resonance provides the feedback, while the pumped medium supplies the energy needed to sustain the oscillation \cite{stockman:2008,Passarelli:2016,Andrianov:2015}.
+
+The combination of optical gain and localized near fields makes such sources attractive for near-field spectroscopy, sensing, and optical interconnects \cite{Ma:2019}, with experimental examples including chemical detection with a lasing plasmon nanocavity and biological probing with spasers \cite{Ma:2014Sensing,Galanzha:2017}. Here we consider a single spherical nanoshell comprising a gain-doped dielectric core, a thin metallic shell, and a passive host medium. The active core supplies energy to the dipolar plasmonic mode supported by the shell, allowing the particle to act as an amplifier or an autonomous oscillator. Assessing this source requires more than determining its steady-state emission frequency and intensity: these quantities do not specify how long emission takes to develop or how it responds when the pumping changes. A time-dependent description is therefore needed to connect the existence of emission to its temporal availability and control.
+
+Stationary studies have characterized gain-assisted nanoshell resonances, amplification, and sensing \cite{Caicedo:2022,ShiliangQu:2015-2,ShiliangQu:2015}, while dynamical models of metal spheres in extended gain media provide related methodological background \cite{Veltri:2016,Recalde:2023}. For the active-core metallic nanoshell, Aradian et al.~\cite{Aradian:2024} established a coupled field--inversion model within the quasi-static approximation, characterized the lasing threshold and transient evolution towards saturation, and developed a frequency-pulling construction relating the study frequency to the autonomous emission frequency. The supplementary analysis in that work also showed that changing a weak seed shifts the emission onset without changing the final response. These results motivate a systematic investigation of turn-on dynamics across gain, probe amplitude, and applied-probe frequency. Frequency pulling makes this question particularly relevant: different study frequencies can be associated with the same final emission frequency and intensity, but that correspondence does not determine whether the final state is reached on the same time scale.
+
+Understanding emission build-up also provides a basis for investigating pulsed operation. In gain switching, a time-dependent pump raises the gain above the oscillation threshold for a finite interval, during which the field builds up and depletes the inversion; subsequent gain reduction allows the emission to decay. Periodic modulation can thus generate a pulse train, whose shape depends on the coupled field and population dynamics. Gain switching is established in semiconductor lasers, including integrated devices \cite{Hammad:2021}, and pulsed operation has also been studied in perovskite microwires and hybrid plasmonic ZnO nanowire lasers \cite{Tian:2022,Sidiropoulos:2014}. At the level of a localized nanoparticle plasmon, Purohit and Mishra have investigated the control of temporal plasmon profiles using shaped Gaussian pump pulses in a silver nanoparticle coupled to a three-level quantum-dot gain medium \cite{Purohit:2024PumpPulse}. These related studies motivate examining pulse formation in an active-core metallic nanoshell under periodic modulation, where the emission delay and inversion evolution determine how the response develops during each pumping cycle.
+
+In this work, we use the established nanoshell model to address two connected questions. First, under constant pumping, we quantify emission turn-on times through systematic scans of gain, continuing-probe amplitude, and applied-probe frequency, using a common relative onset criterion. We characterize the crossover from weak seeding to a probe-dominated response and compare the delays of frequency-pulling branches associated with the same reported steady-state emission. Second, as a case study of temporal control, we prescribe a periodically varying equilibrium inversion while keeping the material relaxation times fixed, and characterize gain-switched pulse formation in the same nanoshell. At a fixed modulation period, we quantify how gain changes the pulse width, peak intensity, and peak timing. Together, these analyses connect the transient response under fixed pumping to pulse generation under time-dependent pumping.
+\end{revision}
+
+\section{Methods}
+\label{sec:methods}
+\label{sec:theory}
+
+\subsection{Time-dependent nanoshell-spaser model}
+\label{sec:dynamic_model}
+
+For all calculations, the nanoshell has an outer radius $a=10$~nm and a core radius $\rho a=6$~nm. The silver shell is described by a plasma frequency $\hbar\omega_{\mathrm{p}}=9.6$~eV, an ionic collision parameter $\hbar\gamma=0.0114$~eV that enters the Drude equation through the damping term $2\gamma$, and $\epsilon_{\infty}/\epsilon_0=5.3$. The silica core ($\epsilon_{\mathrm{b}}/\epsilon_0=2.1316$) contains active emitters with dipole moment $\mu=10$~D and linewidth $\hbar\Delta=2\hbar/\tau_2=0.15$~eV, giving $\tau_2\simeq0.009$~ps and $\tau_1=5\tau_2$. The host medium is water, with $\epsilon_{\mathrm{e}}/\epsilon_0=1.7689$. We set the gain-center frequency $\omega_g$ equal to the threshold emission frequency $\omega_{\mathrm{th}}$ \cite{Caicedo:2025}.
+
+We use the time-dependent model developed by Aradian et al.~\cite{Aradian:2024}. The metal polarization obeys the free-electron equation of motion, while the active core follows reduced optical--Bloch equations for a pumped two-level ensemble. Expanding the electrostatic potential and polarization field in their dipolar ($\ell=1$) components gives a first-order system for the polarization amplitudes $\mathbf q=[q_{0},q_{1},q_{2}]^{\mathsf T}$ and the population inversion $N(t)$. The potential coefficients $\mathbf p=[p_{0},p_{1},p_{2}]^{\mathsf T}$ are linear combinations of $\mathbf q$ and the applied probe amplitude $E_0$, with coefficients $p_{ij}$ specified in the Supplementary Material of that work. Index~0 refers to the dielectric core, whereas indices~1 and~2 refer to the metallic shell. The external dipolar coefficient $p_3$ is fixed by the boundary conditions and is not an additional dynamical polarization amplitude. The governing equations are
+\begin{align}
+\frac{d\mathbf q}{dt} &= \mathbf A(N)\!\cdot\!\mathbf q + \mathbf b(N), \label{eq:qmastereq}\\
+\frac{dN}{dt}+\frac{N-\widetilde{N}}{\tau_1} &= \frac{1}{n\hbar}\,\mathrm{Im}\!\left\{q_0 p_0^*\right\}. \label{eq:Nmastereq}
+\end{align}
+\minorrevised{Here, $n$ is the number density of active emitters in the core.}
+
+\revised{The geometry matrix $\mathbf A(N)$ and source vector $\mathbf b(N)$ are given in Eqs.~(S22)--(S23) of our Supplementary Information, Sec.~S1.C, with the material matrices and geometry coefficients defined in the preceding equations.} Gain-dependent terms appear in the core row of $\mathbf A(N)$ and in the core component of $\mathbf b(N)$. Every component of $\mathbf b(N)$ is proportional to $E_0$, so the source vanishes when $E_0=0$.
+
+\minorrevised{The dimensionless inversion is $N=\rho_{22}-\rho_{11}$, where $\rho_{ij}$ are the density-matrix elements of the two-level emitters and $\rho_{11}+\rho_{22}=1$.} Thus $-1\leq N\leq1$, where $N=0$ denotes equal populations and $N=1$ complete inversion; \minorrevised{$nN$ is the corresponding population inversion per unit volume.} The prescribed quantity $\widetilde N$ is the equilibrium inversion established by pumping and spontaneous relaxation in the absence of stimulated transitions. With constant pumping, the field-free solution approaches $\widetilde N$ on the energy-relaxation time $\tau_1$. Under modulation, $\widetilde N(t)$ is a moving relaxation target rather than the instantaneous inversion or an upper bound on $N(t)$. We prescribe this target while keeping $\tau_1$ fixed. The protocol is therefore phenomenological, rather than a microscopic pump-rate model in which pumping also changes $\tau_1$.
+
+The permittivities $\epsilon_{\mathrm b}$, $\epsilon_{\infty}$, $\epsilon_{\mathrm e}$, and all total material permittivities are absolute quantities in F/m; their ratios to $\epsilon_0$ are dimensionless relative permittivities. In particular, $\epsilon_{\mathrm b}=\epsilon_0(1+\chi_{\mathrm b})$ and $\epsilon_{\infty}=\epsilon_0(1+\chi_{\infty})$. Field amplitudes are complex envelopes, with the real field reconstructed as $\operatorname{Re}[\mathbf E(t)e^{-i\omega t}]$.
+
+The dimensionless gain parameter is
+\begin{equation}
+G(t)=\frac{n\mu^2\tau_2}{3\hbar\epsilon_0}\,\widetilde N(t)
+\label{eq:gain_definition}
+\end{equation}
+%
+where $n$ is the emitter concentration, $\mu$ the transition dipole moment, $\tau_2$ the phase-relaxation time, and $\epsilon_0$ the vacuum permittivity. The energy-relaxation time in Eqs.~(\ref{eq:qmastereq}) and (\ref{eq:Nmastereq}) is $\tau_1$.
+%
+Thus, $G$ is defined in terms of the prescribed equilibrium inversion $\widetilde N$. The latter is bounded between $-1$ and $0$ for absorbing media, and between $0$ and $1$ when a population inversion is present. Therefore, the fixed full-inversion gain parameter for a given active medium is
+%
+\begin{equation}
+G_{\max}\equiv\frac{n\mu^2\tau_2}{3\hbar\epsilon_0},
+\end{equation}
+which allows us to write Eq.~\ref{eq:gain_definition} as
+\begin{equation}
+G(t)=G_{\max}\widetilde N(t).
+\end{equation}
+
+With the adopted sign convention, the actual inversion enters the gain-dependent terms of the matrix $\mathbf A(N)$ and source vector $\mathbf b(N)$ in Eq.~(\ref{eq:qmastereq}) through
+\begin{equation}
+\Gamma_g N(t)=-\frac{i\epsilon_0}{\tau_2} \frac{G(t)}{\widetilde N(t)}N(t)
+=-\frac{i\epsilon_0}{\tau_2}G_{\max}N(t).
+\label{eq:gain_dynamic_coupling}
+\end{equation}
+Together with the inversion dynamics in Eq.~(\ref{eq:Nmastereq}), these terms provide the nonlinear field--population coupling of the system. Accordingly, the prescribed inversion determines $G(t)$, while the evolving inversion $N(t)$ determines the gain-dependent coupling and accounts for stimulated depletion. \minorrevised{Using $G(t)=G_{\max}\widetilde N(t)$, we evaluate the coupling directly as $\Gamma_gN(t)=-i\epsilon_0G_{\max}N(t)/\tau_2$. This expression remains well defined when the prescribed inversion $\widetilde N(t)$ is zero.} For constant pumping, both $\widetilde N$ and $G$ are constant even though $N(t)$ may evolve; for time-dependent pumping, $G_{\max}$ remains fixed while $G(t)$ follows $\widetilde N(t)$. The two parameters coincide only at full prescribed inversion, $\widetilde N=1$. This framework captures both sub-threshold amplification and above-threshold self-oscillation within a single-mode dipolar description.
+
+The threshold $G_{\mathrm{th}}$ is the minimum constant, unsaturated gain at which the unseeded state ($E_0=0$, $N=\widetilde N$) loses linear stability. At the corresponding frequency $\omega_{\mathrm{th}}$, an eigenvalue of $\mathbf A(\widetilde N)$ vanishes and $\det\mathbf A(\widetilde N)=0$, equivalent to the pole condition for the quasi-static dipolar polarizability. \minorrevised{This stationary threshold marks the onset of linear instability under constant pumping. It does not specify when the growing field reaches an observable intensity or whether a finite interval of above-threshold pumping is long enough for a pulse to develop.} The ratios $G/G_{\mathrm{th}}$ and $G_{\max}/G_{\mathrm{th}}$ use this same reference value.
+
+The boundary-condition solution gives
+\begin{equation}
+p_3(t)=p_{30}q_0(t)+p_{31}q_1(t)+p_{32}q_2(t)+p_{33}E_0,
+\label{eq:p3_coefficients}
+\end{equation}
+where the first index identifies the potential coefficient and the second indexes $(q_0,q_1,q_2,E_0)$. Thus, $p_{33}$ multiplies the imposed probe amplitude rather than a polarization variable $q_3$. The probe $E_0$ is distinct from the pumping represented by $\widetilde N$.
+
+In the same envelope convention, the external potential is
+\begin{equation}
+\phi_{\mathrm e}(r,\theta,t)=-E_0r\cos\theta
++a^3p_3(t)\frac{\cos\theta}{r^2}.
+\label{eq:external_potential}
+\end{equation}
+Consequently, $p_3$ has electric-field units, whereas the physical dipole-moment envelope along the excitation axis is $\mathcal P(t)=4\pi\epsilon_{\mathrm e}a^3p_3(t)$, with $a$ the outer radius and $\epsilon_{\mathrm e}$ the absolute host permittivity [Eqs.~(18), (21), and (59) of Ref.~\cite{Aradian:2024}].
+
+\subsection{Field and intensity normalization}
+\label{sec:normalization}
+
+We normalize all reported field amplitudes and squared-field intensities to the physical saturation-field scale
+\begin{equation}
+E_{\mathrm{sat}}=\frac{\hbar}{\mu}\sqrt{\frac{3}{\tau_1\tau_2}},
+\qquad I_{\mathrm{sat}}=E_{\mathrm{sat}}^2.
+\label{eq:saturation_scale}
+\end{equation}
+This core-field scale enters the saturated gain permittivity [Eqs.~(11)--(12) of Ref.~\cite{Aradian:2024}]. On resonance, a stationary core field of this magnitude reduces the inversion to $\widetilde N/2$. It is not a threshold for the external dipolar coefficient $p_3$ and, at fixed $\mu$, $\tau_1$, and $\tau_2$, does not depend on emitter density or gain. Throughout, $I_{\mathrm{sat}}$ denotes a squared-field normalization rather than an irradiance in W/m$^2$.
+
+\revised{For numerical fields scaled by $S=\sqrt{n\hbar\omega_{\mathrm p}/\epsilon_0}$, the saturation field obeys
+\[E_{\mathrm{sat}}/S=[G_{\max}(\omega_{\mathrm p}\tau_1)]^{-1/2}.\]
+ With $\tau_1/\tau_2=5$ and $\Delta=2/\tau_2$, its square is $(\hbar\Delta)/(10G_{\max}\hbar\omega_{\mathrm p})$. The fixed $G_{\max}$ determines this scale throughout a periodically pumped run. All revised trajectories use raw probes calculated from the stated physical ratio $E_0/E_{\mathrm{sat}}$.}
+
+The probe amplitude is reported as $E_0/E_{\mathrm{sat}}$, and the emission measure is
+\begin{equation}
+\frac{I_{\mathrm{em}}}{I_{\mathrm{sat}}}
+=\frac{|p_3|^2}{E_{\mathrm{sat}}^2}.
+\end{equation}
+Both ratios are dimensionless and independent of any auxiliary numerical units used in the implementation. Times and photon energies are reported in ps and eV. The squared-field emission measure is not a calibrated radiated power. The integration and post-processing protocol is described in Sec.~\ref{sec:numerical_protocol}.
+
+\subsection{Pumping and numerical integration}
+\label{sec:numerical_protocol}
+
+The calculations use the \texttt{numerical} routine provided by the public \texttt{nano\_geo\_matrix} code, with paper-specific modifications for the parameter sweeps and gain-switching protocol~\cite{NanoGeoMatrix:2026}.
+
+The continuously driven fixed-pump scans and gain-switching calculations start from $q_0=q_1=q_2=0$ and $N=0$, with a time-independent probe amplitude $E_0$ applied from the beginning. The probe therefore acts as a continuous coherent drive rather than an initial-condition kick.
+
+\revised{In the deterministic model, the initial state $\mathbf q=0$ remains field-free when $E_0=0$, even when it is unstable above threshold, because no spontaneous-noise term is included. A continuing coherent probe is used here as a reproducible seeding protocol, rather than as a requirement for autonomous emission. A temporary seed field or nonzero initial polarization can also initiate growth; their transient dynamics are not compared here. The continuing probe is not a stochastic noise model, and its influence beyond weak seeding is examined through the probe-amplitude scan in Sec.~\ref{sec:probe_dependence}.}
+
+For the fixed-pump calculations, the prescribed inversion is $\widetilde N=1$ from the start. Consequently, $G=G_{\max}$ remains constant, although the actual inversion $N(t)$ evolves dynamically. We use the notation $G$ when presenting these results. The frequency $\omega$ and probe amplitude $E_0$ are varied in the corresponding scans.
+
+The autonomous frequency-pulling calculation of Ref.~\cite{Aradian:2024} also starts from zero polarization, but uses a minute applied field, $E_0=10^{-8}E_{\mathrm{sat}}$, as a numerical seed for the unstable state. The final observables were verified to be insensitive to the seed amplitude. Thus, the autonomous calculation is not initialized with exactly $E_0=0$ or with a nonzero polarization.
+
+For the gain-switching calculations, the prescribed inversion instead varies sinusoidally as
+\begin{equation}
+\widetilde N(t) = \frac{1}{2}\!\left[1-\cos\!\left(\frac{2\pi t}{T}\right)\right],
+\label{eq:Ntilde}
+\end{equation}
+where $T=50\,\mathrm{ps}$ is the modulation period; $G_{\max}$ and the probe amplitude remain fixed. The target varies from $\widetilde N=0$, corresponding to equal ground- and excited-state populations, to $\widetilde N=1$, corresponding to complete inversion. The pump-defined gain $G(t)=G_{\max}\widetilde N(t)$ therefore varies during each cycle. Neither $\widetilde N(t)$ nor $G(t)$ is the actual inversion: $N(t)$ evolves according to Eq.~(\ref{eq:Nmastereq}) and enters the field dynamics through Eq.~(\ref{eq:gain_dynamic_coupling}). The gain-switching runs use $\omega=\omega_g=\omega_{\mathrm{th}}$, with $\hbar\omega_{\mathrm{th}}=2.8121971960$~eV, and $E_0/E_{\mathrm{sat}}=10^{-9}$.
+
+\revised{The coupled equations are integrated with a fixed step $\Delta(\omega_{\mathrm p}t)=1$ using sequential Runge--Kutta updates of inversion and polarization. Representative constant-pump and periodic-pump calculations were repeated with half the step; the comparisons and the distinction between integration and output sampling are documented in the Supplementary Information. No fourth-order accuracy is inferred for the coupled sequential update.}
+
+\subsection{Observable definitions and extraction}
+\label{sec:observables}
+
+We define the emission turn-on time $t_{\mathrm{on}}$ as the first time at which the dipolar-field amplitude $|p_3(t)|$ reaches $90\%$ of the maximum for that trajectory. Because $p_3$ and $\mathcal P$ differ only by a constant factor, their normalized amplitude ratios are identical. Denoting the trajectory-specific maximum by $|p_3|_{\max}$ and measuring time from the start of the simulated turn-on, we use
+\begin{equation}
+t_{\mathrm{on}}=\min\left\{t\geq 0:\frac{|p_3(t)|}{|p_3|_{\max}}\geq 0.9\right\}.
+\label{eq:turn_on_time}
+\end{equation}
+Because the reference maximum is trajectory-specific, $t_{\mathrm{on}}$ is a relative timing measure rather than a common absolute detection threshold. A shorter value therefore need not imply earlier detection at a fixed intensity. The equivalent intensity criterion is the first crossing of $81\%$ of the trajectory's maximum intensity. This definition avoids requiring steady-state settling, which can be obscured by oscillatory transients.
+
+The reference frequency of the envelope equations must be distinguished from the physical probe frequency. With the carrier written as $e^{-i\omega t}$, a monochromatic probe at frequency $\omega_{\mathrm{pr}}$ has the envelope
+\begin{equation}
+E_{\mathrm{pr}}^{\mathrm{env}}(t)=E_0e^{-i(\omega_{\mathrm{pr}}-\omega)t}.
+\label{eq:probe_carrier}
+\end{equation}
+In the inspected implementation, the input frequency enters the material coefficients, while the source vector contains a time-independent $E_0$; there is no separate probe-frequency parameter or detuning phase. For $E_0\neq0$, the implementation therefore represents a probe with $\omega_{\mathrm{pr}}=\omega$. Varying $\omega$ changes both the applied carrier and the reference frequency of the envelope equations. We interpret the recorded finite-probe scans accordingly, consistent with their documented use of the base routine, with explicit inputs retained for the revised calculations. Changing only the reference frequency while holding the physical drive fixed would instead require transforming the envelope as in Eq.~(\ref{eq:probe_carrier}).
+
+By contrast, in the autonomous construction of Sec.~6.2 of Ref.~\cite{Aradian:2024}, $\omega$ is treated as the reference parameter of the rotating-wave formulation rather than as the selected emission frequency. The minute applied field described above seeds the instability, and the final observables were verified to be insensitive to its amplitude. For a single autonomous emission component, the long-time envelope has the form $q_j(t)=Q_j e^{i\Omega t}$, so
+\begin{equation}
+q_j(t)e^{-i\omega t}=Q_j e^{-i\omega_{\mathrm{em}}t},
+\qquad \omega_{\mathrm{em}}=\omega-\Omega(\omega).
+\label{eq:frequency_pulling}
+\end{equation}
+The same relation converts a resolved envelope Fourier component into its physical frequency in a driven calculation. It does not imply that a finite-probe response contains only one component: a response at the probe frequency has $\Omega=0$ and may coexist with autonomous emission. Consequently, the exported emission-frequency coordinate for the weak-probe scans does not by itself establish injection locking, probe-independent final emission throughout the scan, or persistent frequency selection after probe removal.
+
+\revised{The two paired-frequency trajectories and all 35 trajectories used for the extended gain-dependence figure run to 200~ps. Their final intensities are averaged over the last $10^5$ saved samples, and pulse metrics are extracted from $150\leq t<200$~ps. Peaks and linearly interpolated crossings use every integration step; plotting output is sampled separately. The resonant probe-amplitude scans use a 100~ps horizon. Frequency scans allow up to 2000~ps, with convergence testing starting after 1.2 times the corresponding historical onset plus 40~ps to avoid accepting an early field-free plateau. Of 672 distinct recorded excitation energies, 649 completed the subsequent observation requirements; the remaining 23 slow cases are omitted from confirmed curves. The displayed 0--100~ps range is not the integration horizon.}
+
+The emission frequency is obtained from the Fourier spectrum of the late-time complex envelope. The recorded sweep tables contain both the envelope-frequency shift and the emitted photon energy; the figures use the latter, consistent with $\omega_{\mathrm{em}}=\omega-\Omega$. The exact estimator and Fourier window used for each exported point are not preserved, which limits retrospective numerical validation. Further extraction details are given in the Supplementary Material.
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Frequency pulling and paired branches}
+\label{sec:frequency_pulling}
+
+\minorrevised{In Fig.~\ref{fig:frequency_pulling}, $\omega$ is varied across the autonomous study-frequency curve and the emission frequency follows from $\omega_{\mathrm{em}}=\omega-\Omega(\omega)$. In the numerical spot checks, the continuing probe is applied at the selected study frequency.}
+
+Frequency pulling maps two distinct study frequencies onto a common physical emission frequency and steady-state intensity. Figure~\ref{fig:frequency_pulling} illustrates this result for $\rho=0.6$ and $G=1.2\,G_{\mathrm{th}}$, with constant pumping $\widetilde N=1$ in the autonomously emitting regime. \revised{The curves are obtained from the autonomous stationary frequency-pulling construction; five additional time-domain calculations with $E_0/E_{\mathrm{sat}}=10^{-8}$ check representative intensities. These spot checks are not a full driven-frequency sweep.} The remaining geometric and material parameters are those specified in Sec.~\ref{sec:dynamic_model}; this configuration corresponds to the $\rho=0.6$ case in Fig.~11 of Ref.~\cite{Aradian:2024}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{[OMEx]_pulling.pdf}
+    \caption{Frequency pulling of the normalized emission intensity $I_{\mathrm{em}}/I_{\mathrm{sat}}$. Colored arrows connect paired points on the broad study-frequency curve to their common emission energy in the narrow blue emission band.}
+    \label{fig:frequency_pulling}
+\end{figure}
+
+Two study frequencies on opposite sides of $\omega_{\mathrm{th}}$ can map onto a common emission frequency at the same steady-state intensity, as indicated by the horizontal arrows in Fig.~\ref{fig:frequency_pulling}. A weak field at either study frequency seeds emission at the corresponding frequency-pulled value; the emitted energy is supplied by the pumped gain medium, so this mapping should not be interpreted as passive conversion of the incident optical power. Let $\omega_{\mathrm{L}}<\omega_{\mathrm{th}}$ and $\omega_{\mathrm{R}}>\omega_{\mathrm{th}}$ denote paired study frequencies satisfying
+\begin{equation}
+\omega_{\mathrm{L}}-\Omega(\omega_{\mathrm{L}})
+=\omega_{\mathrm{R}}-\Omega(\omega_{\mathrm{R}})
+=\omega_{\mathrm{em}}.
+\label{eq:pulling_branches}
+\end{equation}
+For the paired branches considered here, the steady-state description of Ref.~\cite{Aradian:2024} gives a left--right equivalence: solutions mapped to the same emission frequency have the same steady-state observables, including the field and polarization intensities and the saturated population inversion. In particular,
+\begin{equation}
+I_{\mathrm{em}}^{\mathrm{ss}}(\omega_{\mathrm{L}})
+=I_{\mathrm{em}}^{\mathrm{ss}}(\omega_{\mathrm{R}}),
+\qquad N_{\mathrm{L}}^{\mathrm{ss}}=N_{\mathrm{R}}^{\mathrm{ss}}.
+\label{eq:pulling_steady_symmetry}
+\end{equation}
+Here, the intensity arguments identify the study frequencies used to obtain the solutions; both correspond to the same physical $\omega_{\mathrm{em}}$. The symmetry concerns steady-state observables, not the arbitrary overall phase of the complex amplitudes.
+
+This branch equivalence does not imply a mirror-symmetric emission spectrum about $\omega_{\mathrm{th}}$. Under the gain-center alignment considered here, frequency pulling folds the unstable study-frequency interval into a narrower, one-sided emission band with $\omega_{\mathrm{em}}\geq\omega_{\mathrm{th}}$, while $\Omega(\omega_{\mathrm{th}})=0$~\cite{Aradian:2024}. Nor does equality of the final states imply identical transients. The two branches can reach the same emission frequency and final intensity on different time scales. %, motivating the branch-resolved turn-on-time comparison in Sec.~\ref{sec:results}.
+
+\subsection{Emission turn-on times}
+
+Above threshold, emission develops after a finite delay rather than instantaneously. The relative turn-on time defined in Sec.~\ref{sec:observables} varies with gain, probe amplitude, and applied-probe frequency, including between branches that reach the same final emission. Because the non-emitting state is unstable in this regime, the probe controls the waiting time within the observation window rather than acting as an absolute switch between emission and no emission.
+
+\subsubsection{Probe-field dependence and the role of gain}
+\label{sec:probe_dependence}
+
+At the threshold frequency, the emission delay decreases as either the probe amplitude or the gain is increased. Figure~\ref{fig:probe_middle_single} shows this behavior at $\hbar\omega_{\mathrm{th}}\simeq2.8122\,\mathrm{eV}$ for $G/G_{\mathrm{th}}=1.05$, $1.10$, and $1.15$. The broad range of normalized probe amplitudes distinguishes weak seeding from a probe-dominated response.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{[OMEx]_probe_middle_single.pdf}
+    \caption{Emission turn-on time $t_{\mathrm{on}}$ versus normalized probe-field amplitude $E_0/E_{\mathrm{sat}}$ at $\omega=\omega_{\mathrm{th}}$, for $G/G_{\mathrm{th}}=1.05$ (blue), $1.10$ (orange), and $1.15$ (green). The horizontal axis is logarithmic.}
+    \label{fig:probe_middle_single}
+\end{figure}
+
+Within the small-signal regime, increasing the probe amplitude shortens the waiting time at each gain level, while increasing the gain accelerates turn-on for a given probe amplitude. Over the weak-probe portion of the scan, the curves are approximately linear in $\log_{10}(E_0/E_{\mathrm{sat}})$, indicating an approximately logarithmic dependence of the delay on the seed amplitude. The steeper slope at the lowest gain shows that the waiting time is more sensitive to the seed amplitude closer to threshold. This behavior is consistent with the weak-seed calculations in the supplementary material of Ref.~\cite{Aradian:2024}: the probe initiates the growth of the lasing instability and changes the time needed to establish emission without appreciably changing the final steady-state emission.
+
+For $E_0/E_{\mathrm{sat}}\gtrsim10^{-5}$, the curves depart from the weak-probe trend and begin to converge. Around $E_0/E_{\mathrm{sat}}\sim10^{-4}$ and above, their separation becomes small, indicating a crossover to a response that is increasingly controlled by the probe rather than by the gain. At the largest probe amplitudes, the turn-on time approaches approximately $0.13\,\mathrm{ps}$: the response appears almost instantaneous on the plotted scale, but its duration remains finite. These crossover amplitudes characterize the parameter configuration studied here, rather than a universal boundary of the small-signal regime.
+
+The importance of treating a strong probe as more than an initial seed is also illustrated by Cerd\'an and Manjavacas~\cite{Cerdan:2023}. In their below-threshold model of an active metallic nanoparticle, a sufficiently strong probe depletes the population inversion and suppresses the gain-enhanced optical response through saturation. Although that study addresses a different geometry and operating regime, it provides relevant context for the loss of gain sensitivity beyond the small-signal limit. The short delay in this part of Fig.~\ref{fig:probe_middle_single} should therefore be interpreted as a probe-dominated response time, not by itself as evidence for faster autonomous spasing.
+
+\revised{The probe-amplitude scan in Fig.~\ref{fig:probe_middle_single} is performed at $\omega=\omega_{\mathrm{th}}$, where the autonomous frequency-pulling relation gives $\Omega=0$ and hence $\omega_{\mathrm{em}}=\omega$. Thus, in the weak-probe autonomous limit, there is no nonzero probe--emission frequency difference to produce beating.}
+
+\subsubsection{Weak-probe-frequency dependence}
+\label{sec:excitation_dependence}
+
+In the weak-probe regime, the turn-on time is shortest at the threshold frequency and increases towards the edges of the excitability interval. Figure~\ref{fig:freq_sweep_panels} shows this frequency dependence at $E_0/E_{\mathrm{sat}}=10^{-9}$ for the same three gain levels, separately from the strong-probe crossover discussed above.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{[OMEx]_freq_sweep_panels.pdf}
+    \caption{Emission turn-on time $t_{\mathrm{on}}$ versus probe photon energy $\hbar\omega$ at $E_0/E_{\mathrm{sat}}=10^{-9}$ for (a) $G=1.05\,G_{\mathrm{th}}$, (b) $G=1.10\,G_{\mathrm{th}}$, and (c) $G=1.15\,G_{\mathrm{th}}$. The horizontal ranges differ between panels; the displayed time range is $0$--$100\,\mathrm{ps}$. The panels omit 9, 8, and 6 slow cases, respectively, that did not complete the observation requirements within 2000~ps.}
+    \label{fig:freq_sweep_panels}
+\end{figure}
+
+\revised{For all three gain levels, the frequency scan has a sharp central minimum near $\omega_{\mathrm{th}}=\omega_g$, within a broader region of relatively short delays. At the recorded central energy 2.8122~eV, turn-on times are approximately $16.27$, $8.87$, and $6.22$~ps for the three increasing gains. The exported central energy is rounded and differs slightly from the computed threshold; the resonant amplitude scan uses the computed threshold directly.}
+
+Away from the central minimum, the turn-on time increases and rises sharply towards the boundaries of the excitability range. The sampled delays increase strongly near the band boundaries; the finite samples do not establish an asymptotic divergence. Delays exceeding $100\,\mathrm{ps}$ are outside the displayed range and should not be confused with the absence of sustained emission outside the excitability interval. Increasing the gain both reduces the delay and broadens this interval, as indicated by the recorded frequency bounds of the scans. Thus, gain controls not only the fastest attainable response at the chosen probe amplitude but also the range of excitation frequencies capable of initiating sustained emission.
+
+\revised{For the weak-probe scans in Figs.~\ref{fig:freq_sweep_panels}--\ref{fig:freq_sweep_LR_panels}, additional calculations at $E_0/E_{\mathrm{sat}}=10^{-9}$ quantify late-window intensity variation over the recorded excitation-energy grids (Supplementary Information, Sec.~S5, Table~S2). At frequencies with stable late-time observations under both convergence-tolerance settings, the relative peak-to-peak intensity variations are small, supporting a nearly stationary weak-probe response (Supplementary Information, Sec.~S5, Table~S2).}
+
+\subsubsection{Paired probe frequencies: equal final emission, different turn-on times}
+\label{sec:paired_turn_on}
+
+Paired Left- and Right-branch excitations can reach the same reported emission energy while exhibiting different turn-on delays. To identify these pairs, we re-express the independently driven trajectories of Fig.~\ref{fig:freq_sweep_panels} using the emission frequency estimated from the late-time phase rotation of the same calculated dipole trajectory and the frequency-pulling relation $\omega_{\mathrm{em}}=\omega-\Omega(\omega)$ defined in Eq.~(\ref{eq:frequency_pulling}), without changing the calculated turn-on times. Figure~\ref{fig:freq_sweep_LR_panels} distinguishes the Left branch, with study frequencies $\omega<\omega_{\mathrm{th}}$, from the Right branch, with $\omega>\omega_{\mathrm{th}}$.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{[OMEx]_freq_sweep_LR_panels.pdf}
+    \caption{Emission turn-on time $t_{\mathrm{on}}$ versus emitted photon energy $\hbar\omega_{\mathrm{em}}$ at $E_0/E_{\mathrm{sat}}=10^{-9}$ for (a) $G=1.05\,G_{\mathrm{th}}$, (b) $G=1.10\,G_{\mathrm{th}}$, and (c) $G=1.15\,G_{\mathrm{th}}$. Solid (Left) and dashed (Right) curves correspond to study frequencies below and above $\omega_{\mathrm{th}}$, respectively. The horizontal ranges differ between panels. Only cases completing the observation requirements are shown, as in Fig.~\ref{fig:freq_sweep_panels}.}
+    \label{fig:freq_sweep_LR_panels}
+\end{figure}
+
+Across the common emission-frequency range, the Left branch reaches the turn-on criterion earlier than the Right branch in all three panels. The difference occurs away from the point where the branches meet at $\omega=\omega_{\mathrm{th}}$ and becomes more pronounced towards higher emitted energies within the resolved $0$--$100\,\mathrm{ps}$ range, where both delays increase steeply. As discussed in Sec.~\ref{sec:frequency_pulling}, the autonomous model associates paired reference frequencies at a common $\omega_{\mathrm{em}}$ with equal steady-state intensity; the simulated paired trajectories below provide the corresponding finite-probe comparison.
+
+At $G=1.10\,G_{\mathrm{th}}$, the paired trajectories reach the same reported emitted photon energy, $\hbar\omega_{\mathrm{em}}=2.82555\,\mathrm{eV}$, and the same final normalized intensity, $I_{\mathrm{em}}/I_{\mathrm{sat}}\simeq2.61506\times10^{-2}$, but the Left-branch signal rises earlier (Fig.~\ref{fig:paired_frequency_temporal_traces}). The corresponding study frequencies are $\hbar\omega_{\mathrm{L}}=2.5309774763$~eV and $\hbar\omega_{\mathrm{R}}=3.1201269537$~eV, obtained from the autonomous pairing relation. Their driven emission energies agree at the reported precision, rather than being asserted to be exactly identical.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{[OMEx]_paired_frequency_temporal_traces.pdf}
+    \caption{Temporal evolution of the normalized emission intensity
+$I_{\mathrm{em}}/I_{\mathrm{sat}}$ at $G=1.10\,G_{\mathrm{th}}$
+for paired probe energies $\hbar\omega_{\mathrm{L}}=2.5309774763$~eV
+(solid blue) and $\hbar\omega_{\mathrm{R}}=3.1201269537$~eV (dashed orange),
+showing different turn-on times despite equal final emission.
+Overlapping horizontal dotted lines mark $81\%$ of each trajectory's
+maximum intensity; markers and vertical dotted lines indicate the
+first upward crossings defining $t_{\mathrm{on}}$.
+}
+    \label{fig:paired_frequency_temporal_traces}
+\end{figure}
+
+The Left branch reaches the turn-on criterion approximately $3.93\,\mathrm{ps}$ earlier, with $t_{\mathrm{on,L}}=19.39\,\mathrm{ps}$ and $t_{\mathrm{on,R}}=23.32\,\mathrm{ps}$ from Eq.~(\ref{eq:turn_on_time}). Thus, the intensity evolution retains a branch-dependent delay even though the final intensity is the same.
+
+Together, Figs.~\ref{fig:probe_middle_single}--\ref{fig:paired_frequency_temporal_traces} establish a consistent progression: the probe and gain determine the emission delay, the frequency scans resolve its dependence on the excitation branch, and the paired trajectories demonstrate that different delays can lead to the same final emission. Specifying the steady-state emission frequency and intensity is therefore insufficient to determine the waiting time; the seeding conditions and the excitation branch must also be specified. 
+
+The turn-on times also suggest a possible role for transient dynamics in frequency selection. In the model of Ref.~\cite{Aradian:2024}, each study frequency is treated independently, whereas simultaneously growing spectral components in a physical system draw on a shared inversion reservoir. For comparable initial seeds, the shortest delay at $\omega=\omega_{\mathrm{th}}$ suggests a temporal advantage in accessing that reservoir. Preferential seeding at another frequency could provide an earlier onset if its probe-driven delay is shorter than the noise-seeded delay at $\omega_{\mathrm{th}}$ under the same pumping and material conditions. This comparison gives a timing criterion; establishing sustained frequency selection or suppression of competing emission requires coupled-frequency dynamics with a shared inversion.
+
+For seeded spasing, the probe-amplitude scan estimates the time to the relative turn-on criterion for a specified effective noise seed. Pump--probe coincidence detection additionally requires a window that admits the intended probe-triggered response and ends, through pump switch-off, before noise-triggered emission becomes likely. Assessing that window requires a separately specified absolute detection threshold applied to both responses under identical conditions; the relative turn-on times reported here do not determine it. Quantitative false-positive probabilities additionally require a statistical noise model rather than a single effective seed.
+
+\subsection{Gain Switching}
+\label{sec:gain_switching}
+
+Sinusoidal modulation of the prescribed inversion produces one emission pulse per cycle, delayed relative to the upward threshold crossing. We examine this pulse formation under the periodic pumping protocol of Sec.~\ref{sec:numerical_protocol}.
+%
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{[OMEx]_gain_switching_mechanism_1.1Gth.pdf}
+    \caption{Gain-switching dynamics at the fixed full-inversion gain $G_{\max}=1.10\,G_{\mathrm{th}}$, $\omega=\omega_{\mathrm{th}}$, and $E_0/E_{\mathrm{sat}}=10^{-9}$, with $T=50\,\mathrm{ps}$. (a) Actual inversion $N(t)$ (solid purple) and prescribed inversion $\widetilde N(t)$ (dashed orange). (b) Normalized emission intensity $I_{\mathrm{em}}/I_{\mathrm{sat}}$. The dotted horizontal line marks $N_{\mathrm{crit}}=G_{\mathrm{th}}/G_{\max}$; vertical dashed lines mark the first upward and subsequent downward crossings by $N(t)$. Two modulation periods are shown.}
+    \label{fig:gain_switching_mechanism}
+\end{figure}
+
+For $G_{\max}=1.10\,G_{\mathrm{th}}$, the actual inversion crosses the static threshold $N_{\mathrm{crit}}=G_{\mathrm{th}}/G_{\max}\simeq0.909$ before the emission reaches its maximum (Fig.~\ref{fig:gain_switching_mechanism}). The inversion initially follows the prescribed modulation, whereas the field builds after a delay and produces a pulse near the end of the above-threshold interval. Near the pulse maximum, the small departure of $N(t)$ from $\widetilde N(t)$ is consistent with stimulated depletion. Emission then persists briefly after the downward threshold crossing, showing that the static threshold changes the conditions for field growth rather than instantaneously extinguishing an existing field. The behavior repeats in the next cycle.
+
+With one pulse per modulation cycle, the repetition rate is $f_{\mathrm{rep}}=1/T$, corresponding here to $20\,\mathrm{GHz}$ and distinct from the optical emission frequency. Pulse duration also depends on field build-up, stimulated depletion, and decay, so it need not equal the duration of the above-threshold interval.
+
+Increasing $G_{\max}$ lowers the static inversion threshold and changes when appreciable field growth begins, but it does not shift the pulse peak monotonically earlier. In the extended sweep, the peak initially moves later up to the sampled value $G_{\max}=1.10\,G_{\mathrm{th}}$ and moves earlier only at higher gain. Because inversion depletion and field decay also change, a shorter fixed-pump turn-on time need not imply a shorter pulse. Figure~\ref{fig:gain_switching_mechanism_composite} compares $G_{\max}/G_{\mathrm{th}}=1.05$, $1.10$, and $1.15$ at fixed modulation period and probe amplitude over the first cycle.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{[OMEx]_gain_switching_mechanism_composite.pdf}
+    \caption{Gain-switching dynamics over one period, $T=50\,\mathrm{ps}$, at $\omega=\omega_{\mathrm{th}}$ and $E_0/E_{\mathrm{sat}}=10^{-9}$. Columns compare the fixed full-inversion values $G_{\max}/G_{\mathrm{th}}=1.05$, $1.10$, and $1.15$, from left to right. (a)--(c) Actual inversion $N(t)$ (solid purple) and prescribed inversion $\widetilde N(t)$ (dashed orange). (d)--(f) Normalized emission intensity on different linear scales, with the multipliers indicated above each panel. Dotted horizontal lines mark $N_{\mathrm{crit}}=G_{\mathrm{th}}/G_{\max}$.}
+    \label{fig:gain_switching_mechanism_composite}
+\end{figure}
+
+Increasing $G_{\max}$ lowers $N_{\mathrm{crit}}$ from approximately $0.952$ to $0.909$ and $0.870$, respectively. At the lowest full-inversion gain, the intensity maximum is only of order $10^{-8}$ in normalized units, and the actual inversion remains almost indistinguishable from the prescribed modulation. \revised{At the two higher values, the peak intensities are approximately $2.646\times10^{-3}$ and $5.639\times10^{-2}$, respectively}, with the largest peak occurring at $G_{\max}=1.15\,G_{\mathrm{th}}$. The lower panels use different linear intensity scales, so their plotted heights alone should not be used to compare the emission strengths. At the highest full-inversion gain, the pulse develops earlier in the cycle and the depletion of the inversion becomes pronounced, producing a clear departure from the prescribed modulation near the emission maximum. The middle column reproduces the first cycle of Fig.~\ref{fig:gain_switching_mechanism}.
+
+The extended sweep reveals a nonmonotonic pulse width: it first decreases and then broadens as $G_{\max}$ increases, while the peak time also reverses direction. Figure~\ref{fig:gain_dependence} quantifies the pulse width, peak intensity, and peak time over $1.05\leq G_{\max}/G_{\mathrm{th}}\leq1.50$.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{[OMEx]_gain_dependence_linear_extended.pdf}
+    \caption{%
+Dependence of gain-switched pulse properties on the full-inversion gain scale
+$G_{\max}/G_{\mathrm{th}}$ at $\omega=\omega_{\mathrm{th}}$,
+$T=50\,\mathrm{ps}$, and $E_0/E_{\mathrm{sat}}=10^{-9}$:
+(a) intensity full width at half maximum (FWHM),
+(b) normalized peak emission intensity $I_{\mathrm{peak}}/I_{\mathrm{sat}}$,
+and (c) peak time measured from the start of the modulation cycle.
+\minorrevised{The main axes are linear; the inset in panel (b) uses a logarithmic intensity scale to resolve weak peaks. The dark-green guide fits $\log_{10}J=m(g-1.05)+c$ over $1.05\leq g\leq1.09$, where $g=G_{\max}/G_{\mathrm{th}}$ and $J=I_{\mathrm{peak}}/I_{\mathrm{sat}}$, giving $m\simeq99.5$. Its extension beyond the fitted interval is a visual guide.} All quantities are extracted from the final
+recorded cycle, $150$--$200\,\mathrm{ps}$.
+Lines connect sampled gains as guides to the eye.
+}
+    \label{fig:gain_dependence}
+\end{figure}
+
+At low gain, the pulse width decreases from approximately $2.58\,\mathrm{ps}$ at $1.05\,G_{\mathrm{th}}$ to its lowest sampled value of approximately $2.18\,\mathrm{ps}$ at $1.10\,G_{\mathrm{th}}$, while the intensity remains small. Over the same interval, the peak moves later in the cycle, from $28.57$ to $29.77\,\mathrm{ps}$. Above this gain, the width increases, reaching $12.03\,\mathrm{ps}$ at $1.50\,G_{\mathrm{th}}$, and the peak moves earlier. Thus, even the direction of the peak-time shift under periodic pumping cannot be inferred from the monotonic reduction of the fixed-pump turn-on time.
+
+At higher gain, $I_{\mathrm{peak}}/I_{\mathrm{sat}}$ grows approximately linearly with $G_{\max}/G_{\mathrm{th}}$, particularly over the sampled interval $1.25$--$1.50$, while the peak time approaches the prescribed-inversion maximum at $T/2=25\,\mathrm{ps}$. At $1.15\,G_{\mathrm{th}}$, substantial emission develops only near this maximum, and the intensity peaks at $26.991\,\mathrm{ps}$. At $1.20$ and $1.25\,G_{\mathrm{th}}$, the rapid reduction of the actual inversion begins earlier, followed by an interval during which $N(t)$ remains close to $N_{\mathrm{crit}}$ while appreciable emission persists. The intensity peaks at $25.417$ and $25.162\,\mathrm{ps}$, respectively, and reaches $25.095\,\mathrm{ps}$ at $1.50\,G_{\mathrm{th}}$. This behavior is consistent with a crossover from delayed field build-up toward a response that follows the pump near its maximum: at sufficiently high gain, emission has time to develop before the prescribed inversion reaches its peak. The approximately linear intensity dependence is compatible with this interpretation, but does not by itself demonstrate that the periodically driven system reaches the constant-pump steady state. \minorrevised{The semilogarithmic inset in Fig.~\ref{fig:gain_dependence}(b) resolves the weakest peaks, which span several orders of magnitude. Writing $g=G_{\max}/G_{\mathrm{th}}$ and $J=I_{\mathrm{peak}}/I_{\mathrm{sat}}$, a fit over the five sampled gains $1.05\leq g\leq1.09$ gives $\log_{10}J\simeq99.53(g-1.05)-7.6993$ ($R^2\simeq0.9982$). This describes an approximately exponential increase with gain over that limited interval, not a temporal growth rate or an exact scaling law. The subsequent bending marks a crossover towards the approximately linear high-gain dependence: over $1.25\leq g\leq1.50$, $J\simeq0.423786g-0.423829$.}
+
+Pulse broadening in this regime is asymmetric. Between $1.15$ and $1.25\,G_{\mathrm{th}}$, the rising half-maximum crossing advances from $26.159$ to $23.308\,\mathrm{ps}$, whereas the falling half-maximum crossing moves from $29.783$ to $30.394\,\mathrm{ps}$. Most of the increase in FWHM from $3.62$ to $7.09\,\mathrm{ps}$ therefore comes from the earlier rise, with a smaller contribution from the later decay. Across the higher-gain samples, the width continues to grow with decreasing slope. Increasing gain both lowers the static inversion threshold and changes the depletion and recovery of the actual inversion; the curvature of the width dependence cannot be assigned to faster stimulated depletion alone. The trajectories instead support a picture in which earlier emission build-up and inversion remaining near threshold extend the interval of substantial emission.
+
+The approach of the peak time to $T/2$ is a trend across gain values, rather than a slow drift over successive modulation cycles. For the cases $G_{\max}/G_{\mathrm{th}}=1.15$, $1.20$, and $1.25$, overlays of the four recorded cycles show closely repeating intensity and inversion traces. The peak times within each cycle span at most $6.4\times10^{-5}$~ps, and the relative peak-intensity span is below $2.0\times10^{-8}\%$ in the retained numerical records. These checks support repeatability of the simulated trajectories, including the first pulse, but are not a test of integration-step convergence.
+
+These results establish gain-dependent pulse shaping for the specified waveform, $T=50\,\mathrm{ps}$, and seeding conditions. The width minimum is restricted to the sampled gains; the calculation does not establish a minimum gain for pulse generation, an optimal modulation period, or independent control of pulse duration and repetition rate. Mapping those limits requires varying the period and waveform as well as the gain, while allowing sufficient time for emission to develop and the system to recover between cycles.
+
+Control over pulse duration and repetition rate is central to the usefulness of gain switching in conventional semiconductor-laser photonic integrated circuits (PICs). Direct modulation of the laser gain provides a compact way to generate pulse trains with an externally set repetition rate; with suitable optical injection to control coherence, it also enables integrated optical frequency combs for multi-carrier communications~\cite{Hammad:2021}. Our calculation shows that the underlying gain-switching mechanism can likewise produce pulsed emission in a single, deeply subwavelength nanoshell, rather than requiring a conventional extended laser cavity.
+
+The near-field localization characteristic of a spaser~\cite{stockman:2008} makes gain-switched operation a candidate for pulsed nanoscale excitation in sensing, spectroscopy, and miniaturized optical circuitry. Dielectric Mie-resonant elements provide a related platform for subwavelength light control~\cite{Rybin2024Metaphotonics}; coupling a gain-switched nanoshell to such elements is a possible extension proposed here. These applications remain prospects: the present intensity traces do not quantify pulsed near-field enhancement or coupling to neighboring components, which require spatially resolved field calculations.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+We have characterized transient emission in a metal nanoshell spaser using an established time-dependent, quasi-static model under fixed and periodically modulated pumping. Within the sampled weak-probe regime under fixed pumping, increasing gain shortens the turn-on time and broadens the excitability interval, while increasing probe amplitude drives a crossover from weakly seeded emission to a probe-dominated response. In the weak-probe calculations, paired probe frequencies can yield the same reported steady-state emission frequency and intensity yet different turn-on times, showing that the transient retains a dependence on the initiating conditions that is absent from the final intensity spectrum.
+
+Under periodic pumping, the coupled field--inversion dynamics produces gain-switched pulses in a single nanoshell. At $T=50\,\mathrm{ps}$, the gain sweep reveals a sampled pulse-width minimum followed by broadening, approximately linear growth of the normalized peak intensity at higher gain, and peak timing approaching the prescribed-inversion maximum. The trajectories are consistent with a crossover from delayed build-up toward emission that follows the pump near its maximum, with inversion remaining close to threshold during substantial emission. Together, these results connect emission delays to pulse formation and establish transient dynamics as an essential part of assessing temporal control in nanoscale optical sources.
+
+Further developments could include full stochastic-noise simulations to quantify turn-on-time distributions and detection reliability, coupled-frequency dynamics with a shared inversion reservoir to test mode competition and frequency selection, and spatially resolved near-field coupling calculations to assess energy transfer to neighboring emitters or photonic components.
+
+\begin{backmatter}
+\bmsection{Funding}
+Funding information will be entered in Prism at submission.
+
+\bmsection{Acknowledgments}
+The authors acknowledge helpful discussions within their ongoing collaboration on nanoshell-spaser dynamics.
+
+\bmsection{Disclosures}
+The authors declare no conflicts of interest.
+
+\bmsection{Data availability}
+The data underlying the results presented in this paper are not publicly available at this time but may be obtained from the authors upon reasonable request.
+\end{backmatter}
+
+\bibliography{updated_2025}
+
+\end{document}

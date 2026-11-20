@@ -1,0 +1,9 @@
+{
+  "observed_delta_ps": 3.9283341706325636,
+  "linear_delta_ps": 3.7522060642879467,
+  "symmetric_growth_rate_contribution_ps": 3.732153322978055,
+  "symmetric_seed_contribution_ps": 0.020052760936033642,
+  "symmetric_own_peak_level_contribution_ps": -1.962613698713289e-08,
+  "remaining_nonlinear_approach_contribution_ps": 0.17612810634461695,
+  "note": "Algebraic decomposition of asymptotic linear extrapolation; remaining term measured from nonlinear crossing, not a separately simulated mechanism."
+}

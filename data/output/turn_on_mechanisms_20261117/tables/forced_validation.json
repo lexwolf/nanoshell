@@ -1,0 +1,20 @@
+[
+  {
+    "case": "pair_left_dt1",
+    "time_interval_ps": [
+      0,
+      4
+    ],
+    "relative_L2_complex_dipole_error": 0.0007022706387421681,
+    "comparison": "continuous ODE linear, undepleted inversion, vs split-step nonlinear; native historical labels shifted forward by dt"
+  },
+  {
+    "case": "pair_right_dt1",
+    "time_interval_ps": [
+      0,
+      4
+    ],
+    "relative_L2_complex_dipole_error": 0.0005619629241518576,
+    "comparison": "continuous ODE linear, undepleted inversion, vs split-step nonlinear; native historical labels shifted forward by dt"
+  }
+]

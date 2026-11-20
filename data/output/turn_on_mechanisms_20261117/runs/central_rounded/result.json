@@ -1,0 +1,20 @@
+{
+  "config": {
+    "name": "central_rounded",
+    "energy": 2.8122,
+    "dt": 1,
+    "T": 40,
+    "gain": 1.1,
+    "E0_over_Esat": 1e-09,
+    "pump": "step",
+    "cadence_ps": 0.001,
+    "initial_N": 0,
+    "initial_q": [
+      0,
+      0,
+      0
+    ],
+    "binary_sha256": "51bfc40275f12947ba576513fa196672aa434d5e3488951c84574faab52adeb4"
+  },
+  "returncode": 0
+}

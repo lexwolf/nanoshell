@@ -1,0 +1,16 @@
+[
+  "g++",
+  "-O3",
+  "-std=c++17",
+  "-I/home/alessandro/GitHub/Academia/GEO_MATRIX/nanoshell/extern/nano_geo_matrix/include",
+  "-I/home/alessandro/GitHub/Academia/GEO_MATRIX/nanoshell/extern/nano_geo_matrix/modules",
+  "-I/home/alessandro/GitHub/Academia/GEO_MATRIX/nanoshell/extern/nano_geo_matrix/modules/cup",
+  "-I/usr/include/eigen3",
+  "/home/alessandro/GitHub/Academia/GEO_MATRIX/nanoshell/src/[OMEx]_turn_on_matrix.cxx",
+  "-o",
+  "/home/alessandro/GitHub/Academia/GEO_MATRIX/nanoshell/data/output/turn_on_mechanisms_20261117/turn_on_matrix.bin",
+  "-lgsl",
+  "-lgslcblas",
+  "-lm",
+  "-larmadillo"
+]

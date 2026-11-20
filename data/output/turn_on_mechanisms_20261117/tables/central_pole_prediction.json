@@ -1,0 +1,7 @@
+{
+  "amplitude_sigma_ps_inv": 1.486829345549473,
+  "d_nu_d_energy_ps_inv_per_eV": 1519.2696545007789,
+  "modal_forcing_width_eV": 0.0009786474317740746,
+  "predicted_even_quadratic_coefficient_ps_per_eV2": 351120.63938622037,
+  "assumptions": "Locally freeze sigma, modal forcing numerator, output criterion and inversion-ramp correction; vary imaginary pole detuning. Diagnostic approximation, not an exact nonlinear law."
+}

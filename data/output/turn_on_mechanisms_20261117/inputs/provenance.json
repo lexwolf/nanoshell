@@ -1,0 +1,13 @@
+{
+  "HEAD": "2ad04c25681fee2aee02482094ff4a43503afcc4",
+  "branch": "analysis/turn-on-mechanisms",
+  "submodule": "9689dad9c276cf107a8e26d3b93baeeade7e8df7",
+  "status": "?? src/[OMEx]_turn_on_matrix.cxx\n",
+  "compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "sha256": {
+    "src/[OMEx]_gain_switching.cxx": "030e100fa4e5d233d32ea029e3796378409e29f7ff37ce50bc6953b60c153205",
+    "src/[OMEx]_turn_on_matrix.cxx": "41e49d2fc64a35acaf4c615a333e614a79f325da645a5c7478eccef763100140",
+    "data/output/turn_on_mechanisms_20261117/gain_switching.bin": "51bfc40275f12947ba576513fa196672aa434d5e3488951c84574faab52adeb4",
+    "data/output/turn_on_mechanisms_20261117/turn_on_matrix.bin": "88c394a0a85a2dfc6aee21665dd3729ca11892c27f848de9ca2626011ba885a5"
+  }
+}
