@@ -53,7 +53,7 @@ div=10**power
 
 scaleY(y)=y/(div*Isat)
 
-set pixmap 3 sprintf("../data/output/pulling/%s.png", rho) at graph 0.21, graph 0.8 width screen 0.09
+set pixmap 3 sprintf("../img/output/pulling/%s.png", rho) at graph 0.21, graph 0.8 width screen 0.09
 set label sprintf("{/Symbol r} = %s", rho) at graph 0.05, graph 0.875 left
 
 set ylabel "I_{em}/I_{sat}"

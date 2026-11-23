@@ -16,6 +16,7 @@ LIBS="-lgsl -lgslcblas -lm -larmadillo"
 
 compile_requested=false
 out_dir="../data/output/pulling"
+sketch_dir="../img/output/pulling"
 
 show_help() {
     echo "Usage: bash $0 [-c] [-h] [-o output_dir]"
@@ -23,7 +24,8 @@ show_help() {
     echo "Options:"
     echo "  -c, --compile   Compile required executables before running"
     echo "  -h, --help      Show this help message and exit"
-    echo "  -o, --output    Output directory, default: $out_dir"
+    echo "  -o, --output    Data and log directory, default: $out_dir"
+    echo "  Sketch images are written to $sketch_dir."
 }
 
 while [ $# -gt 0 ]; do
@@ -125,7 +127,7 @@ fi
 input_file="../data/input/nanosphere_eV.dat"
 [ -f "$input_file" ] || { echo "Error: input file not found: $input_file" >&2; exit 1; }
 
-mkdir -p "$out_dir" "../data/output/oGp"
+mkdir -p "$out_dir" "$sketch_dir" "../data/output/oGp"
 
 input_backup="$(mktemp)"
 cp -f "$input_file" "$input_backup"
@@ -200,7 +202,7 @@ fi
     echo "Error: $sketch_script did not produce ../img/nanoshell.png" >&2
     exit 1
 }
-mv -f "../img/nanoshell.png" "$out_dir/$rho.png"
+mv -f "../img/nanoshell.png" "$sketch_dir/$rho.png"
 
 {
     echo "# pulling.bash metadata"
@@ -214,6 +216,6 @@ mv -f "../img/nanoshell.png" "$out_dir/$rho.png"
 echo "> Wrote $out_dir/ns_intensity_SS.dat"
 echo "> Wrote $out_dir/ome_p3.dat"
 echo "> Wrote $out_dir/omeB.dat"
-echo "> Wrote $out_dir/$rho.png"
+echo "> Wrote $sketch_dir/$rho.png"
 echo "> Wrote $out_dir/pulling.info"
 echo "> Done. Original input restored automatically."
