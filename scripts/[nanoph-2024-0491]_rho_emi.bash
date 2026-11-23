@@ -29,7 +29,7 @@ show_help() {
     echo "  -rho  --rho-range  Space-separated, increasing positive numbers for rho values (default: 0.4 0.5 0.6 0.7 0.8)"
     echo "                    (NOTE: quote the list, e.g. -rho \"0.4 0.6 0.8\")"
     echo "  --branch MODE      Branch selection: bright, secondary, lowest, highest (default: bright)"
-    echo "  --dark             Alias for --branch secondary"
+    echo "  --dark             Select the secondary branch and produce the META26 dark figure"
     echo "  --secondary        Alias for --branch secondary"
 }
 
@@ -90,7 +90,11 @@ fi
 # ---- required files ----
 bin_targets=(../bin/rho2ome_sp ../bin/oap)
 src_targets=(../src/rho2ome_sp.cxx ../src/nanoshell_ome_al_p3.cxx)
-gp_scripts=("[nanoph-2024-0491]_rho_emi.gp" "nano-shell-sketch.bash")
+dark_plot_script="[META26]_rho_emi_dark_PRODUCTION.gp"
+gp_scripts=("nano-shell-sketch.bash")
+if [ "$branch_mode" = "secondary" ]; then
+    gp_scripts+=("$dark_plot_script")
+fi
 
 missing=()
 missing_exec=false
@@ -143,7 +147,7 @@ tmp_backup="$(mktemp)"
 cp -f "$input_file" "$tmp_backup" || exit 1
 cleanup() {
     cp -f "$tmp_backup" "$input_file" >/dev/null 2>&1 || true
-    rm -f "$tmp_backup" >/dev/null 2>&1 || true
+    rm -f "$tmp_backup" ${temp_plot_script:+"$temp_plot_script"} >/dev/null 2>&1 || true
 }
 trap cleanup EXIT
 
@@ -282,6 +286,25 @@ else
     fi
 fi
 
+plot_script="[nanoph-2024-0491]_rho_emi.gp"
+plot_pdf="../img/output/[nanoph-2024-0491]_rho.pdf"
+use_dark_production=false
+if [ "$branch_mode" = "secondary" ]; then
+    plot_pdf="../img/output/[META26]_rho_dark_PRODUCTION.pdf"
+    if [ "${rho_values[*]}" = "0.4 0.5 0.6 0.7 0.8" ] &&
+       [ "$metal" = "silver" ] && [ -z "$range_override" ] &&
+       (( $(f_le 2.8 "$omeG_min") && $(f_le "$omeG_max" 4.6) )); then
+        use_dark_production=true
+        plot_omi=2.8
+        plot_oma=4.6
+    else
+        plot_omi="$omi"
+        plot_oma="$oma"
+        temp_plot_script="$(mktemp)" || exit 1
+        plot_script="$temp_plot_script"
+    fi
+fi
+
 for idx in "${!rho_values[@]}"; do
     rho="${rho_values[$idx]}"
     omeG="${omeG_values[$idx]}"
@@ -338,6 +361,12 @@ for idx in "${!rho_values[@]}"; do
 done
 
 echo "> Input file will now be restored (trap)."
+
+if [ "$use_dark_production" = true ]; then
+    gnuplot "$dark_plot_script" || { echo "Error: gnuplot failed" >&2; exit 1; }
+    echo "Image ready in $plot_pdf"
+    exit 0
+fi
 
 # ---- find maxima for labels (numeric-only, initialized) ----
 xmax_list=()
@@ -484,7 +513,7 @@ label_x_list_str="${label_x[*]}"
 label_y_list_str="${label_y[*]}"
 
 # ---- write gnuplot script (your original content preserved) ----
-cat > "[nanoph-2024-0491]_rho_emi.gp" <<EOF
+cat > "$plot_script" <<EOF
 reset
 omin=${plot_omi}
 omax=${plot_oma}
@@ -527,7 +556,7 @@ unset colorbox
 # DONE
 
 set term pdf color enhanced size 10cm, 8cm;
-set output "../img/output/[nanoph-2024-0491]_rho.pdf"
+set output "${plot_pdf}"
 
 set multiplot
 # PLOTTING THE VISIBLE SPECTRUM
@@ -582,6 +611,6 @@ unset output
 EOF
 
 echo "> Producing the image..."
-gnuplot "[nanoph-2024-0491]_rho_emi.gp" || { echo "Error: gnuplot failed" >&2; exit 1; }
-echo "image ready in img/output/"
+gnuplot "$plot_script" || { echo "Error: gnuplot failed" >&2; exit 1; }
+echo "Image ready in $plot_pdf"
 exit 0
