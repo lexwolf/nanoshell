@@ -13,22 +13,15 @@
 #define CUP_BACKEND_QUASI_STATIC
 #include <cup/cup.hpp>
 
-int main(int argc, char** argv) {
-    if (argc != 2) throw std::runtime_error("expected the archived pulling table path, --detuning, or --dark");
-    constexpr double rho = 0.6;
+int check(const std::string& argument, double rho) {
     nanosphere shell{};
     shell.a = 10;
     shell.Dome = 0.15;
     shell.init();
     shell.set_metal("silver", "drude");
     const double core = shell.set_host("silica"), exterior = shell.set_host("water");
-    const bool dark = std::string(argv[1]) == "--dark";
-    const auto aligned = shell.frohlich(dark ? 3.9 : 2.7, dark ? 4.0 : 2.9,
-                                        core, exterior, rho);
-    const double threshold = aligned[0], aligned_gain = aligned[1];
-    shell.ome_g = threshold;
     const std::unique_ptr<double[]> nv(shell.normalized_variables());
-    const double tau1 = nv[0], tau2 = nv[1], gamma = nv[2], gain_center = nv[3];
+    const double tau1 = nv[0], tau2 = nv[1], gamma = nv[2];
     using Complex = std::complex<double>;
     const std::unique_ptr<Complex[]> p0(pcfc0(shell.eps_inf, core, exterior, rho));
     const std::unique_ptr<Complex[]> p1(pcfc1(shell.eps_inf, core, exterior, rho));
@@ -61,7 +54,73 @@ int main(int argc, char** argv) {
         const double ry = (-dxi.imag()-ratio*dxi.real())/(tau2*xi.imag());
         return StationaryPoint{xi, ratio/tau2, rx, ry, 1+2*v*rx+2*gamma*ry, tau1/xi.imag()};
     };
-    if (std::string(argv[1]) == "--detuning") {
+    if (argument == "--geometry") {
+        for (int j = 0; j < 2; ++j) {
+            const double pole = poles[j].real();
+            const double pole_center = std::sqrt(gamma*gamma-pole);
+            double lo = pole_center-gamma, hi = pole_center+gamma;
+            double left = stationary(lo, 0).xi.real();
+            double right = stationary(hi, 0).xi.real();
+            std::cout << rho << ',' << (j == 0 ? "bright" : "dark");
+            // Search for a narrow crossing pair if the linewidth
+            // endpoints have the same sign. Keep the crossing nearest the pole.
+            if (left*right > 0) {
+                const double other_center = std::sqrt(-poles[1-j].real());
+                const double span = std::abs(other_center-pole_center)/2;
+                double nearest = span;
+                double previous = pole_center-span;
+                double previous_value = stationary(previous, 0).xi.real();
+                for (int k = 1; k <= 8000; ++k) {
+                    const double next = pole_center-span+2*span*k/8000;
+                    const double value = stationary(next, 0).xi.real();
+                    const double distance = std::abs((previous+next)/2-pole_center);
+                    if (previous_value*value <= 0 && distance < nearest) {
+                        nearest = distance;
+                        lo = previous;
+                        hi = next;
+                        left = previous_value;
+                        right = value;
+                    }
+                    previous = next;
+                    previous_value = value;
+                }
+            }
+            if (left*right > 0) {
+                std::cout << ",no_crossing_found,,,,,,,\n";
+                continue;
+            }
+            for (int step = 0; step < 45; ++step) {
+                const double mid = (lo+hi)/2;
+                const double value = stationary(mid, 0).xi.real();
+                if (value*left > 0) {
+                    lo = mid;
+                    left = value;
+                } else {
+                    hi = mid;
+                }
+            }
+            const double v = (lo+hi)/2;
+            const Complex z(-v*v, -2*gamma*v);
+            const auto point = stationary(v, 0);
+            const double e = shell.Ome_p*v;
+            const auto f = F(shell.metal(e), exterior, rho*rho*rho);
+            if (std::abs(f.real()-core) > 1e-7 || std::abs(point.required_gain+f.imag()) > 1e-7)
+                throw std::runtime_error("geometry scan threshold cross-check failed");
+            const double near = (-residues[j]/std::pow(z-poles[j], 2)).real();
+            const double far = (-residues[1-j]/std::pow(z-poles[1-j], 2)).real();
+            std::cout << ",aligned," << e << ',' << point.required_gain << ','
+                      << std::abs((z-poles[j]).real()/z.imag()) << ',' << near << ',' << far
+                      << ',' << point.denominator << ',' << point.rx/point.denominator/shell.Ome_p
+                      << '\n';
+        }
+        return 0;
+    }
+    const bool dark = argument == "--dark";
+    const auto aligned = shell.frohlich(dark ? 3.9 : 2.7, dark ? 4.0 : 2.9,
+                                        core, exterior, rho);
+    const double threshold = aligned[0], aligned_gain = aligned[1];
+    const double gain_center = threshold/shell.Ome_p;
+    if (argument == "--detuning") {
         // Parameterize the zero-offset branch by its emitted energy.
         // Invert the phase condition on the bright component around alignment.
         auto solve = [&](double ug, double s, double v) {
@@ -150,7 +209,7 @@ int main(int argc, char** argv) {
         return 0;
     }
 
-    std::ifstream table(argv[1]);
+    std::ifstream table(argument);
     if (!table) throw std::runtime_error("could not open archived pulling table");
     std::string header;
     std::getline(table, header);
@@ -189,4 +248,16 @@ int main(int argc, char** argv) {
     if (!(predicted > 0) || below_center != 0 || max_residual_eV > 1e-6
         || std::abs(closest_fit/predicted-1) > 1e-3)
         throw std::runtime_error("curvature check failed");
+    return 0;
+}
+
+int main(int argc, char** argv) {
+    if (argc != 2)
+        throw std::runtime_error("expected archived table path, --detuning, --dark, or --geometry");
+    const std::string argument = argv[1];
+    if (argument != "--geometry") return check(argument, 0.6);
+    std::cout << std::setprecision(12)
+              << "rho,branch,status,threshold_eV,Gth,pole_distance_over_linewidth,"
+                 "near_slope,far_slope,denominator,C_per_eV\n";
+    for (int i = 1; i < 1000; ++i) check(argument, i/1000.0);
 }

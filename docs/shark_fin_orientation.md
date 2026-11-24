@@ -143,3 +143,41 @@ curvature of the dark branch.
 
 After building the diagnostic as above, use
 `/tmp/nanoshell-shark-fin-orientation --dark` to evaluate the dark root.
+
+## Radius-ratio scan and sign criterion
+
+At alignment, \(\Re\xi=0\). For real poles \(p_j\) and residues \(a_j\),
+write \(d_j=x-p_j\) and \(S_j=a_j(y^2-d_j^2)/(d_j^2+y^2)^2\).
+Then the curvature in normalized units is
+\[
+\frac{dv}{d(\Omega^2)}=
+\frac{S_1+S_2}{\tau_2\Im\xi\,[1+2vR_x+2\gamma R_y]}.
+\]
+Thus, with positive \(\Im\xi\) and a positive implicit denominator,
+the nearby pole ensures an upward bend if it lies within one
+\(|y|\) of \(x\), has positive residue, and its contribution
+exceeds the magnitude of the distant pole's opposing contribution.
+
+The scan used silver, a silica gain core and water outside. It sampled
+999 radius ratios from 0.001 to 0.999 in steps of 0.001. For each pole,
+it searched for \(\Re\xi=0\) first within \(|x-p_j|\le |y|\).
+Where those endpoints shared a sign, it also sampled a wider
+pole-local interval for sign changes. For each crossing selected,
+the separate Fröhlich geometry kernel reproduced the aligned
+threshold condition and threshold gain to within \(10^{-7}\)
+absolute in its dimensionless quantities.
+
+| Branch | Sampled ratios with a crossing | Largest pole distance in units of linewidth | Smallest nearby-to-distant slope magnitude ratio | Smallest implicit denominator | Curvature range (eV⁻¹) |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Bright | 0.176–0.999 (824) | 0.824 | 9.18 | 2.077 | +0.08202 to +2.38381 |
+| Dark | 0.001–0.974 (974) | 0.884 | 515.14 | 1.825 | +0.05334 to +0.11407 |
+
+The sign criterion held for all 1,798 crossings found. The pole-local
+search found no crossing for the bright pole at sampled ratios
+0.001–0.175 or the dark pole at 0.975–0.999. Those endpoint regions
+carry no curvature assignment. A bracketed sign scan checks the
+sampled configurations and can miss coalescing or tangential roots.
+The result concerns the initial bend at alignment.
+
+After building the diagnostic as above, use
+`/tmp/nanoshell-shark-fin-orientation --geometry` to emit the CSV.
