@@ -181,3 +181,49 @@ The result concerns the initial bend at alignment.
 
 After building the diagnostic as above, use
 `/tmp/nanoshell-shark-fin-orientation --geometry` to emit the CSV.
+
+## Constant-damping reversal
+
+At \(\rho=0.6\), keep the silver Drude plasma energy and background
+permittivity fixed and scale only the constant damping
+\(\Gamma=\hbar(2\gamma_{\rm physical})\). The diagnostic clears the two
+denominators in \(\Re\xi=0\) to obtain a quartic in \(v^2\) and follows the
+higher-energy positive root of the pair below the midpoint of the two
+bare pole frequencies. The ordinary-silver result agrees with the
+archived alignment. Each retained root is cross-checked against the
+separate Fröhlich kernel.
+
+A log scan of 4,001 factors from 0.01 to 100 brackets the curvature
+zero. Bisection gives a factor of 93.28360, corresponding to
+\(\Gamma=2.1268661\) eV, aligned energy 2.0702165 eV and
+\(G_{\rm th}=12.32311\). The implicit denominator is 1.03325
+there. The bright root remains regular through the reversal. At
+the zero, the nearby pole still lies within one linewidth
+(distance ratio 0.82280). Its positive contribution
+\(\partial_x\Re\xi\simeq+166.06\) cancels the distant pole's
+\(-166.06\). The distant term takes over before the local pole term
+changes sign.
+
+Following the stationary phase solution in pulling-offset steps
+of 0.5 meV at \(G=1.20G_{\rm th}\) also reverses the full sampled
+intensity curve. The peak remains at the zero-offset output, and
+the emitting wing is followed to \(N_{\rm ss}=1\). The signed span
+below is the first grid point at that boundary relative to the peak.
+
+| Damping factor | Aligned energy (eV) | \(G_{\rm th}\) | Initial curvature (eV⁻¹) | Signed span (meV) | Peak \(I/I_{\rm sat}\) |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 1 | 2.812197 | 0.134907 | +0.154330 | +32.159 | 0.08474 |
+| 94 | 2.054184 | 12.494335 | −0.000251 | −1.665 | 0.04609 |
+| 100 | 1.908571 | 14.125002 | −0.002487 | −3.597 | 0.04494 |
+
+At 100 times damping, halving the continuation step preserved the
+strictly decreasing emitted-energy map and the span at the scale
+reported above. The calculation establishes a positive-amplitude
+stationary counterexample within Jade's reduced model. The extreme
+damping and threshold gain, and the absence of a dynamical stability
+check, limit its interpretation as a physical operating regime.
+
+After building the diagnostic, use
+`--damping` for the scan, `--damping FACTOR` for an individual threshold,
+or `--damping-fin FACTOR` for the stationary intensity curve. Each mode
+writes CSV to standard output.

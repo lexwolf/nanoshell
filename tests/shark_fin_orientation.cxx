@@ -1,5 +1,7 @@
 // Stationary curvature check for Jade's reduced, constant-background Drude model.
 #include <algorithm>
+#include <array>
+#include <gsl/gsl_poly.h>
 #include <cmath>
 #include <complex>
 #include <fstream>
@@ -9,16 +11,18 @@
 #include <stdexcept>
 #include <string>
 #include <nano_geo_matrix/core/mathNN.hpp>
+#include <nano_geo_matrix/core/saturation_scale.hpp>
 #include <nano_geo_matrix/quasi_static/geometry/nanoshell.hpp>
 #define CUP_BACKEND_QUASI_STATIC
 #include <cup/cup.hpp>
 
-int check(const std::string& argument, double rho) {
+int check(const std::string& argument, double rho, double damping_ratio = 1) {
     nanosphere shell{};
     shell.a = 10;
     shell.Dome = 0.15;
     shell.init();
     shell.set_metal("silver", "drude");
+    shell.Gam_d *= damping_ratio;
     const double core = shell.set_host("silica"), exterior = shell.set_host("water");
     const std::unique_ptr<double[]> nv(shell.normalized_variables());
     const double tau1 = nv[0], tau2 = nv[1], gamma = nv[2];
@@ -54,6 +58,94 @@ int check(const std::string& argument, double rho) {
         const double ry = (-dxi.imag()-ratio*dxi.real())/(tau2*xi.imag());
         return StationaryPoint{xi, ratio/tau2, rx, ry, 1+2*v*rx+2*gamma*ry, tau1/xi.imag()};
     };
+    if (argument == "--damping" || argument == "--damping-fin") {
+        // Clear the two positive Lorentzian denominators in Re(xi)=0.
+        // Their coefficients are in t=v^2, with v in plasma units.
+        std::array<std::array<double, 3>, 2> d{};
+        for (int j = 0; j < 2; ++j) {
+            const double p = poles[j].real();
+            d[j] = {p*p, 2*p+4*gamma*gamma, 1};
+        }
+        std::array<double, 5> polynomial{};
+        for (int j = 0; j < 3; ++j)
+            for (int k = 0; k < 3; ++k)
+                polynomial[j+k] += tau1*p0[0].real()*d[0][j]*d[1][k];
+        for (int j = 0; j < 2; ++j) {
+            for (int k = 0; k < 3; ++k) {
+                polynomial[k] -= residues[j].real()*poles[j].real()*d[1-j][k];
+                polynomial[k+1] -= residues[j].real()*d[1-j][k];
+            }
+        }
+        std::array<double, 8> roots{};
+        const std::unique_ptr<gsl_poly_complex_workspace, decltype(&gsl_poly_complex_workspace_free)>
+            workspace(gsl_poly_complex_workspace_alloc(5), gsl_poly_complex_workspace_free);
+        if (gsl_poly_complex_solve(polynomial.data(), 5, workspace.get(), roots.data()) != 0)
+            throw std::runtime_error("damping threshold polynomial failed");
+        const double bright_limit = (std::sqrt(-poles[0].real())+std::sqrt(-poles[1].real()))/2;
+        // The aligned bright root is the higher-energy member of the
+        // pair below the midpoint between the two bare pole frequencies.
+        double v = 0;
+        int count = 0;
+        for (int j = 0; j < 4; ++j) {
+            const double t = roots[2*j];
+            if (std::abs(roots[2*j+1]) < 1e-11 && t > 0 && t < bright_limit*bright_limit) {
+                ++count;
+                v = std::max(v, std::sqrt(t));
+            }
+        }
+        if (argument == "--damping") std::cout << damping_ratio << ',' << shell.Gam_d << ',' << count;
+        if (count != 2) {
+            if (argument == "--damping-fin") throw std::runtime_error("bright root pair unavailable");
+            std::cout << ",,,,,,\n";
+            return 0;
+        }
+        const auto state = stationary(v, 0);
+        const double energy = v*shell.Ome_p;
+        const auto f = F(shell.metal(energy), exterior, rho*rho*rho);
+        if (std::abs(f.real()-core) > 1e-6 || std::abs(state.required_gain+f.imag()) > 1e-6
+            || std::abs(state.ratio*shell.Ome_p) > 1e-6 || !(state.required_gain > 0))
+            throw std::runtime_error("damping threshold cross-check failed");
+        if (argument == "--damping-fin") {
+            const double gain = 1.2*state.required_gain;
+            const nano_geo_matrix::saturation::Inputs inputs{shell.Ome_p, shell.Dome, gain};
+            const double isat = nano_geo_matrix::saturation::calculate(inputs).Isat_normalized;
+            const std::unique_ptr<Complex[]> p3(pcfc3(shell.eps_inf, core, exterior, rho));
+            const double step_eV = 0.0005;
+            const double center = v;
+            std::cout << std::setprecision(15)
+                      << "offset_eV,emitted_eV,N_ss,I_over_Isat,C_per_eV\n";
+            for (int j = 0; j <= 6000; ++j) {
+                const double offset_eV = j*step_eV;
+                const double omega = offset_eV/shell.Ome_p;
+                const double s = omega*omega;
+                for (int iteration = 0;; ++iteration) {
+                    const auto point = stationary(v, s);
+                    const double residual = v-center-point.ratio;
+                    if (std::abs(residual) < 1e-12) break;
+                    if (iteration == 30 || !(point.denominator > 0))
+                        throw std::runtime_error("damping fin continuation lost its regular branch");
+                    v -= residual/point.denominator;
+                }
+                const auto point = stationary(v, s);
+                const double inversion = point.required_gain/gain;
+                const Complex z(-v*v+s, -2*gamma*v);
+                const Complex det = (z-poles[0])*(z-poles[1]);
+                const Complex g1 = ((z-p2[2])*p1[0]+p1[2]*p2[0])/det;
+                const Complex g2 = (p2[1]*p1[0]+(z-p1[1])*p2[0])/det;
+                const double intensity = std::norm(p3[0]+p3[1]*g1+p3[2]*g2)
+                                         *std::max(0.0, 1-inversion)/point.xi.imag();
+                std::cout << offset_eV << ',' << v*shell.Ome_p << ',' << inversion << ','
+                          << intensity/isat << ',' << point.rx/point.denominator/shell.Ome_p << '\n';
+                if (inversion >= 1) return 0;
+            }
+            throw std::runtime_error("damping fin did not reach its amplitude boundary");
+        }
+        const double distance = std::abs((-v*v-poles[0].real())/(2*gamma*v));
+        std::cout << ',' << energy << ',' << state.required_gain << ',' << distance
+                  << ',' << state.rx << ',' << state.denominator
+                  << ',' << state.rx/state.denominator/shell.Ome_p << '\n';
+        return 0;
+    }
     if (argument == "--geometry") {
         for (int j = 0; j < 2; ++j) {
             const double pole = poles[j].real();
@@ -252,9 +344,26 @@ int check(const std::string& argument, double rho) {
 }
 
 int main(int argc, char** argv) {
-    if (argc != 2)
-        throw std::runtime_error("expected archived table path, --detuning, --dark, or --geometry");
+    if (argc < 2 || argc > 3)
+        throw std::runtime_error("expected archived table path, --detuning, --dark, --geometry, --damping [factor], or --damping-fin factor");
     const std::string argument = argv[1];
+    if (argument == "--damping-fin" || (argument == "--damping" && argc == 3)) {
+        if (argc != 3) throw std::runtime_error("expected damping factor");
+        const double factor = std::stod(argv[2]);
+        if (!std::isfinite(factor) || factor <= 0)
+            throw std::runtime_error("damping factor must be positive and finite");
+        if (argument == "--damping-fin") return check(argument, 0.6, factor);
+    } else if (argc != 2) {
+        throw std::runtime_error("unexpected argument");
+    }
+    if (argument == "--damping") {
+        std::cout << std::setprecision(15)
+                  << "damping_factor,Gamma_eV,bright_region_roots,threshold_eV,Gth,"
+                     "pole_distance_over_linewidth,R_x,denominator,C_per_eV\n";
+        if (argc == 3) return check(argument, 0.6, std::stod(argv[2]));
+        for (int i = -2000; i <= 2000; ++i) check(argument, 0.6, std::pow(10.0, i/1000.0));
+        return 0;
+    }
     if (argument != "--geometry") return check(argument, 0.6);
     std::cout << std::setprecision(12)
               << "rho,branch,status,threshold_eV,Gth,pole_distance_over_linewidth,"
