@@ -74,3 +74,44 @@ g++ -std=c++17 -O2 -I"$lib/include" -I"$lib/modules" -I"$lib/modules/cup" \
 /tmp/nanoshell-shark-fin-orientation \
     data/output/gain_switching_corrected_20261114/tables/pulling_corrected.tsv
 ```
+
+## Gain-center detuning
+
+Keep the geometry and metal fixed. For each gain center \(u_g\), solve
+\(v-u_g-R(-v^2+s,-2\gamma v)=0\) by continuation on the bright branch.
+At nonzero detuning the zero-offset output \(v(s=0)\) differs from the
+gain center. The curvature measures the bend relative to that output.
+
+The stationary inversion and required gain are
+\[
+N_{\rm ss}=\frac{G_{\rm req}}{G},\qquad G_{\rm req}=\frac{\tau_1}{\Im\xi}.
+\]
+These follow by substituting the stationary phase condition into the
+shared stationary intensity expression. With \(\Im\xi>0\), a solution
+has positive stationary amplitude when \(0<N_{\rm ss}<1\).
+
+The zero-offset scan covered gain-center detunings of ±0.50 eV from
+2.812197196 eV in 0.50 meV steps. Its curvature stayed between
++0.1536212 and +0.1543695 \(\mathrm{eV}^{-1}\). A separate solve at a
+2 meV pulling offset agreed with the derivative to better than
+\(3.5\times10^{-8}\ \mathrm{eV}^{-1}\) across the scan.
+
+At fixed \(G=1.20G_{\rm th,aligned}=0.1618880\), the zero-offset
+solution has positive amplitude for detunings between approximately
+−38.52 and +38.74 meV, with boundaries interpolated between scan points.
+For each of the 155 emitting centers, continuation in 1 meV steps of
+the pulling offset reached the positive-amplitude boundary. Both
+signs of the offset correspond to the same stationary response in
+this Drude model. Across the 66,735 positive-amplitude wing samples,
+the curvature stayed positive. Its smallest sampled value was
++0.1503556 \(\mathrm{eV}^{-1}\). The broad zero-offset scan also keeps
+its positive sign when interpreted at the level of stationary
+solutions with gain adjusted to exceed the local threshold.
+
+The sampled bright branch therefore retains its higher-energy bend
+under detuning in this case. The criterion is stationary amplitude.
+Dynamical stability, other geometries, and other material parameters
+are outside this check.
+
+After building the diagnostic as above, use
+`/tmp/nanoshell-shark-fin-orientation --detuning` to emit the CSV.

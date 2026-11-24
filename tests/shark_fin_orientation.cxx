@@ -14,7 +14,7 @@
 #include <cup/cup.hpp>
 
 int main(int argc, char** argv) {
-    if (argc != 2) throw std::runtime_error("expected the archived pulling table path");
+    if (argc != 2) throw std::runtime_error("expected the archived pulling table path or --detuning");
     constexpr double rho = 0.6;
     nanosphere shell{};
     shell.a = 10;
@@ -22,7 +22,8 @@ int main(int argc, char** argv) {
     shell.init();
     shell.set_metal("silver", "drude");
     const double core = shell.set_host("silica"), exterior = shell.set_host("water");
-    const double threshold = shell.frohlich(2.7, 2.9, core, exterior, rho)[0];
+    const auto aligned = shell.frohlich(2.7, 2.9, core, exterior, rho);
+    const double threshold = aligned[0], aligned_gain = aligned[1];
     shell.ome_g = threshold;
     const std::unique_ptr<double[]> nv(shell.normalized_variables());
     const double tau1 = nv[0], tau2 = nv[1], gamma = nv[2], gain_center = nv[3];
@@ -42,12 +43,88 @@ int main(int argc, char** argv) {
     auto response = [&](Complex z) {
         return tau1*(p0[0]+numerator(z)/((z-poles[0])*(z-poles[1])));
     };
+    const Complex residues[] = {tau1*numerator(poles[0])/(poles[0]-poles[1]),
+                                tau1*numerator(poles[1])/(poles[1]-poles[0])};
+    struct StationaryPoint {
+        Complex xi;
+        double ratio, rx, ry, denominator, required_gain;
+    };
+    auto stationary = [&](double v, double s) {
+        const Complex z(-v*v+s, -2*gamma*v);
+        const Complex xi = response(z);
+        const Complex dxi = -residues[0]/std::pow(z-poles[0], 2)
+                           -residues[1]/std::pow(z-poles[1], 2);
+        const double ratio = xi.real()/xi.imag();
+        const double rx = (dxi.real()-ratio*dxi.imag())/(tau2*xi.imag());
+        const double ry = (-dxi.imag()-ratio*dxi.real())/(tau2*xi.imag());
+        return StationaryPoint{xi, ratio/tau2, rx, ry, 1+2*v*rx+2*gamma*ry, tau1/xi.imag()};
+    };
+    if (std::string(argv[1]) == "--detuning") {
+        // Parameterize the zero-offset branch by its emitted energy.
+        // Invert the phase condition on the bright component around alignment.
+        auto solve = [&](double ug, double s, double v) {
+            for (int i = 0; i < 30; ++i) {
+                const auto state = stationary(v, s);
+                const double residual = v-ug-state.ratio;
+                if (std::abs(residual) < 1e-13) return v;
+                if (!(state.denominator > 0)) throw std::runtime_error("lost regular branch");
+                v -= residual/state.denominator;
+            }
+            throw std::runtime_error("stationary continuation did not converge");
+        };
+        const double ep = shell.Ome_p;
+        const double fixed_gain = 1.2*aligned_gain;
+        std::cout << std::setprecision(12)
+                  << "detuning_eV,gain_center_eV,emitted_eV,G_required,N_fixed,"
+                     "R_x,denominator,C_per_eV,C_check_per_eV,emitting_samples,"
+                     "min_branch_C_per_eV,max_branch_shift_eV\n";
+        double v = solve(gain_center-.5/ep, 0, gain_center);
+        for (int i = -1000; i <= 1000; ++i) {
+            const double detuning = i*.0005;
+            const double ug = gain_center+detuning/ep;
+            v = solve(ug, 0, v);
+            const auto state = stationary(v, 0);
+            const double c = state.rx/state.denominator/ep;
+            constexpr double offset_eV = .002;
+            const double s = std::pow(offset_eV/ep, 2);
+            const double numerical = ep*(solve(ug, s, v)-v)/(offset_eV*offset_eV);
+            if (!(state.required_gain > 0) || !(state.denominator > 0)
+                || std::abs(numerical-c) > 2e-6)
+                throw std::runtime_error("detuned curvature check failed");
+            int emitting = 0;
+            double min_branch_c = c, max_branch_shift = 0;
+            if (state.required_gain < fixed_gain) {
+                double wing = v;
+                bool closed = false;
+                for (int j = 1; j <= 1000; ++j) {
+                    const double offset = j*.001/ep;
+                    wing = solve(ug, offset*offset, wing);
+                    const auto point = stationary(wing, offset*offset);
+                    if (!(point.required_gain > 0) || !(point.denominator > 0))
+                        throw std::runtime_error("invalid emitting branch");
+                    if (point.required_gain >= fixed_gain) {
+                        closed = true;
+                        break;
+                    }
+                    ++emitting;
+                    min_branch_c = std::min(min_branch_c, point.rx/point.denominator/ep);
+                    max_branch_shift = std::max(max_branch_shift, ep*(wing-v));
+                }
+                if (!closed) throw std::runtime_error("emitting branch exceeded offset range");
+            }
+            std::cout << detuning << ',' << ug*ep << ',' << v*ep << ','
+                      << state.required_gain << ',' << state.required_gain/fixed_gain << ','
+                      << state.rx << ',' << state.denominator << ',' << c << ',' << numerical
+                      << ',' << emitting << ',' << min_branch_c << ',' << max_branch_shift << '\n';
+        }
+        return 0;
+    }
     const Complex z(-gain_center*gain_center, -2*gamma*gain_center);
     const Complex xi = response(z);
     Complex derivative{};
     std::cout << std::setprecision(12);
     for (int j = 0; j < 2; ++j) {
-        const Complex residue = tau1*numerator(poles[j])/(poles[j]-poles[1-j]);
+        const Complex residue = residues[j];
         const Complex delta = z-poles[j];
         const Complex term = -residue/(delta*delta);
         derivative += term;
@@ -57,12 +134,9 @@ int main(int argc, char** argv) {
     }
     if (std::abs(xi.real()/xi.imag()) > 1e-7)
         throw std::runtime_error("threshold and stationary alignment disagree");
-    auto ratio_derivative = [&](Complex dxi) {
-        return (dxi.real() - xi.real()/xi.imag()*dxi.imag())/(tau2*xi.imag());
-    };
-    const double rx = ratio_derivative(derivative);
-    const double ry = ratio_derivative(Complex(0, 1)*derivative);
-    const double denominator = 1+2*gain_center*rx+2*gamma*ry;
+    const auto center = stationary(gain_center, 0);
+    const double rx = center.rx, denominator = center.denominator;
+    const double ry = center.ry;
     const double predicted = rx/denominator/shell.Ome_p;
     std::cout << "threshold_eV " << threshold << "\nxi " << xi << "\nR_x " << rx
               << "\nR_y " << ry << "\ndenominator " << denominator
