@@ -14,7 +14,7 @@
 #include <cup/cup.hpp>
 
 int main(int argc, char** argv) {
-    if (argc != 2) throw std::runtime_error("expected the archived pulling table path or --detuning");
+    if (argc != 2) throw std::runtime_error("expected the archived pulling table path, --detuning, or --dark");
     constexpr double rho = 0.6;
     nanosphere shell{};
     shell.a = 10;
@@ -22,7 +22,9 @@ int main(int argc, char** argv) {
     shell.init();
     shell.set_metal("silver", "drude");
     const double core = shell.set_host("silica"), exterior = shell.set_host("water");
-    const auto aligned = shell.frohlich(2.7, 2.9, core, exterior, rho);
+    const bool dark = std::string(argv[1]) == "--dark";
+    const auto aligned = shell.frohlich(dark ? 3.9 : 2.7, dark ? 4.0 : 2.9,
+                                        core, exterior, rho);
     const double threshold = aligned[0], aligned_gain = aligned[1];
     shell.ome_g = threshold;
     const std::unique_ptr<double[]> nv(shell.normalized_variables());
@@ -141,6 +143,12 @@ int main(int argc, char** argv) {
     std::cout << "threshold_eV " << threshold << "\nxi " << xi << "\nR_x " << rx
               << "\nR_y " << ry << "\ndenominator " << denominator
               << "\npredicted_per_eV " << predicted << '\n';
+
+    if (dark) {
+        if (!(predicted > 0) || !(denominator > 0))
+            throw std::runtime_error("unexpected dark-branch curvature");
+        return 0;
+    }
 
     std::ifstream table(argv[1]);
     if (!table) throw std::runtime_error("could not open archived pulling table");

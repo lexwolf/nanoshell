@@ -115,3 +115,31 @@ are outside this check.
 
 After building the diagnostic as above, use
 `/tmp/nanoshell-shark-fin-orientation --detuning` to emit the CSV.
+
+## Aligned dark branch
+
+At the same \(\rho=0.6\) and with the same silver parameters, aligning
+the gain to the higher-frequency threshold exchanges the roles of
+the two poles.
+
+| Aligned branch | Threshold (eV) | Lower pole contribution to \(\partial_x\Re\xi\) | Upper pole contribution | Curvature (\(\mathrm{eV}^{-1}\)) |
+| --- | ---: | ---: | ---: | ---: |
+| Bright | 2.812197196 | \(+6.8181\times10^6\) | \(-5.5793\times10^2\) | +0.15433049 |
+| Dark | 3.954146883 | \(-4.6933\times10^2\) | \(+4.0938\times10^6\) | +0.10972969 |
+
+For the dark branch, \(R_x=7.97434\) and the implicit derivative's
+denominator is \(7.57006\). The nearby upper pole sets the positive
+sign just as the nearby lower pole does on the bright branch.
+
+The archived \(\rho=0.6\) spectra in Karen's \(\rho\)-sweep directory
+agree with that direction. The bright spectrum peaks at 2.81220 eV
+and extends to 2.84428 eV. The dark spectrum peaks at 3.95415 eV
+and extends to 3.98468 eV. These are extrema of the stored
+positive-intensity rows. The dark table also contains rows down
+to 3.95398 eV, about 0.17 meV below the aligned threshold. These
+tables record emitted energy and intensity, so this comparison
+checks the tail direction without fitting the reference-to-emission
+curvature of the dark branch.
+
+After building the diagnostic as above, use
+`/tmp/nanoshell-shark-fin-orientation --dark` to evaluate the dark root.
